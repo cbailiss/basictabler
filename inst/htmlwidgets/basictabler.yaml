@@ -1,0 +1,4 @@
+dependencies:
+  - name: basictabler
+    version: 0.1.0
+    src: htmlwidgets/lib/basictabler-0.1.0
