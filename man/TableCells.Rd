@@ -19,7 +19,7 @@ table.
 \section{Fields}{
 
 \describe{
-\item{\code{parentTable}}{Owning pivot table.}
+\item{\code{parentTable}}{Owning table.}
 
 \item{\code{rows}}{The rows of cells in the table.}
 }}
@@ -29,13 +29,13 @@ table.
 \describe{
   \item{Documentation}{For more complete explanations and examples please see
   the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new set of pivot table cells, specifying
+  \item{\code{new(...)}}{Create a new set of table cells, specifying
   the field values documented above.}
 
   \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
-  column coordinates in the pivot table.}
+  column coordinates in the table.}
   \item{\code{setCell(r, c, cell))}}{Set the TableCell at the specified row
-  and column coordinates in the pivot table.}
+  and column coordinates in the table.}
   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
   of row and/or column numbers.}
@@ -46,11 +46,11 @@ table.
   \item{\code{getColumnWidths())}}{Retrieve the width of the longest value
   (in characters) in each column.}
   \item{\code{asMatrix(rawValue=TRUE))}}{Get a matrix containing all of the
-  numerical values from the body of the pivot table (for rawValue=TRUE) or
+  numerical values from the body of the table (for rawValue=TRUE) or
   all of the formatted (i.e. character) values (for rawValue=FALSE).}
-  \item{\code{asList())}}{Get a list representation of the pivot table
+  \item{\code{asList())}}{Get a list representation of the table
   cells.}
-  \item{\code{asJSON()}}{Get a JSON representation of the pivot table cells.}
+  \item{\code{asJSON()}}{Get a JSON representation of the table cells.}
 }
 }
 

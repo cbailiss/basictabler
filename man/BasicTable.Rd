@@ -35,7 +35,7 @@ the table.}
 \item{\code{theme}}{The name of the theme currently applied to the table.}
 
 \item{\code{styles}}{A TableStyles object containing the styles used to theme the
-pivot table.}
+table.}
 
 \item{\code{allowExternalStyles}}{Enable support for external styles, when producing
 content for external systems.}

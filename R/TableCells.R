@@ -12,20 +12,20 @@
 #' @examples
 #' # This class should only be created by the table.
 #' # It is not intended to be created outside of the table.
-#' @field parentTable Owning pivot table.
+#' @field parentTable Owning table.
 #' @field rows The rows of cells in the table.
 
 #' @section Methods:
 #' \describe{
 #'   \item{Documentation}{For more complete explanations and examples please see
 #'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(...)}}{Create a new set of pivot table cells, specifying
+#'   \item{\code{new(...)}}{Create a new set of table cells, specifying
 #'   the field values documented above.}
 #'
 #'   \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
-#'   column coordinates in the pivot table.}
+#'   column coordinates in the table.}
 #'   \item{\code{setCell(r, c, cell))}}{Set the TableCell at the specified row
-#'   and column coordinates in the pivot table.}
+#'   and column coordinates in the table.}
 #'   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
 #'   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
 #'   of row and/or column numbers.}
@@ -36,11 +36,11 @@
 #'   \item{\code{getColumnWidths())}}{Retrieve the width of the longest value
 #'   (in characters) in each column.}
 #'   \item{\code{asMatrix(rawValue=TRUE))}}{Get a matrix containing all of the
-#'   numerical values from the body of the pivot table (for rawValue=TRUE) or
+#'   numerical values from the body of the table (for rawValue=TRUE) or
 #'   all of the formatted (i.e. character) values (for rawValue=FALSE).}
-#'   \item{\code{asList())}}{Get a list representation of the pivot table
+#'   \item{\code{asList())}}{Get a list representation of the table
 #'   cells.}
-#'   \item{\code{asJSON()}}{Get a JSON representation of the pivot table cells.}
+#'   \item{\code{asJSON()}}{Get a JSON representation of the table cells.}
 #' }
 
 TableCells <- R6::R6Class("TableCells",
@@ -280,10 +280,10 @@ TableCells <- R6::R6Class("TableCells",
      }
      # check the row and column coordinates
      if(length(rowNumbers[rowNumbers > self$rowCount])>0) {
-       stop("TableCells$getCells():  All rowNumbers should be less than or equal to the row count in the pivot table.", call. = FALSE)
+       stop("TableCells$getCells():  All rowNumbers should be less than or equal to the row count in the table.", call. = FALSE)
      }
      if(length(columnNumbers[columnNumbers > self$columnCount])>0) {
-       stop("TableCells$getCells():  All columnNumbers should be less than or equal to the column count in the pivot table.", call. = FALSE)
+       stop("TableCells$getCells():  All columnNumbers should be less than or equal to the column count in the table.", call. = FALSE)
      }
      cellRowNumbers <- sapply(cellCoordinates, function(x) { return(x[1]) })
      cellColumnNumbers <- sapply(cellCoordinates, function(x) { return(x[2]) })
@@ -291,10 +291,10 @@ TableCells <- R6::R6Class("TableCells",
        stop("TableCells$getCells():  Each element in the cellCoordinates list must be a vector of length two (i.e. c(rowNumber, columnNumber)).", call. = FALSE)
      }
      if(length(cellRowNumbers[cellRowNumbers > self$rowCount])>0) {
-       stop("TableCells$getCells():  All row numbers in cellCoordinates should be less than or equal to the row count in the pivot table.", call. = FALSE)
+       stop("TableCells$getCells():  All row numbers in cellCoordinates should be less than or equal to the row count in the table.", call. = FALSE)
      }
      if(length(cellColumnNumbers[cellColumnNumbers > self$columnCount])>0) {
-       stop("TableCells$getCells():  All column numbers in cellCoordinates should be less than or equal to the column count in the pivot table.", call. = FALSE)
+       stop("TableCells$getCells():  All column numbers in cellCoordinates should be less than or equal to the column count in the table.", call. = FALSE)
      }
      # iterate the cells and return
      if(length(private$p_rows) > 0) {

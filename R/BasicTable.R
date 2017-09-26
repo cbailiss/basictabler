@@ -50,7 +50,7 @@
 #'   the table.
 #' @field theme The name of the theme currently applied to the table.
 #' @field styles A TableStyles object containing the styles used to theme the
-#'   pivot table.
+#'   table.
 #' @field allowExternalStyles Enable support for external styles, when producing
 #'   content for external systems.
 #' @field allTimings The time taken for various activities related to
@@ -134,11 +134,11 @@ BasicTable <- R6::R6Class("BasicTable",
         private$p_traceFile <- file(traceFile, open="w")
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Creating new Basic Table...")
-      # Create the basic parts of the pivot table
+      # Create the basic parts of the table
       private$p_styles <- getTheme(parentTable=self, themeName="default")
       private$p_cells <- TableCells$new(self)
       private$p_htmlRenderer <- TableHtmlRenderer$new(parentTable=self)
-      # private$p_openxlsxRenderer <- PivotOpenXlsxRenderer$new(parentTable=self)
+      # private$p_openxlsxRenderer <-TableOpenXlsxRenderer$new(parentTable=self)
       private$p_timings <- list()
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Created new Basic Table.")
       return(invisible())
@@ -289,11 +289,11 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$createInlineStyle", "Creating inline style...")
       if(is.null(baseStyleName)) {
-        style <- PivotStyle$new(parentTable=self, styleName="", declarations=declarations)
+        style <- TableStyle$new(parentTable=self, styleName="", declarations=declarations)
       }
       else {
         baseStyle <- private$p_styles$getStyle(styleName=baseStyleName)
-        style <- PivotStyle$new(parentTable=self, styleName="", declarations=baseStyle$declarations)
+        style <- TableStyle$new(parentTable=self, styleName="", declarations=baseStyle$declarations)
         style$setPropertyValues(declarations=declarations)
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$createInlineStyle", "Created inline style.")
@@ -586,8 +586,8 @@ BasicTable <- R6::R6Class("BasicTable",
       # basic css
       cssStr1 <- "<style>h1 { font: 2.5em arial; font-weight: bold; } p { font: 0.9em arial; }</style>"
       cssStr2 <- paste0("<style>", self$getCss(styleNamePrefix=styleNamePrefix), "</style>")
-      #pgHtml <- htmltools::tags$html(htmltools::tags$head(htmltools::tags$title('R Pivot Table')), htmltools::HTML(cssStr),
-      pgHtml <- htmltools::tags$html(htmltools::HTML("<head>"), htmltools::tags$title('R Pivot Table'), htmltools::HTML(cssStr1), htmltools::HTML(cssStr2), htmltools::HTML("</head>"),
+      #pgHtml <- htmltools::tags$html(htmltools::tags$head(htmltools::tags$title('R Table')), htmltools::HTML(cssStr),
+      pgHtml <- htmltools::tags$html(htmltools::HTML("<head>"), htmltools::tags$title('R Table'), htmltools::HTML(cssStr1), htmltools::HTML(cssStr2), htmltools::HTML("</head>"),
                  htmltools::tags$body(
                    htmltools::h1("R Table"),
                    htmlTable,
@@ -635,7 +635,7 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", mapStylesFromCSS, missing(mapStylesFromCSS), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       }
       if (!requireNamespace("openxlsx", quietly = TRUE)) {
-        stop("BasicTable$writeToExcelWorksheet():  The openxlsx package is needed to write the pivot table to an Excel file.  Please install it.", call. = FALSE)
+        stop("BasicTable$writeToExcelWorksheet():  The openxlsx package is needed to write the table to an Excel file.  Please install it.", call. = FALSE)
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$writeToExcelWorksheet", "Writing to worksheet...")
       private$p_openxlsxRenderer$writeToWorksheet(wb=wb, wsName=wsName, topRowNumber=topRowNumber,
@@ -710,10 +710,10 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       else {
         if(private$p_argumentCheckMode > 0) {
-          checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "theme", value, missing(value), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("character", "PivotStyles"))
+          checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "theme", value, missing(value), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("character", "TableStyles"))
         }
         if("character" %in% class(value)) private$p_styles <- getTheme(parentTable=self, themeName=value)
-        else if("PivotStyles" %in% class(value)) private$p_styles <- value
+        else if("TableStyles" %in% class(value)) private$p_styles <- value
         return(invisible())
       }
     },
@@ -721,7 +721,7 @@ BasicTable <- R6::R6Class("BasicTable",
       if(missing(value)) return(invisible(private$p_styles))
       else {
         if(private$p_argumentCheckMode > 0) {
-          checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "styles", value, missing(value), allowMissing=FALSE, allowNull=FALSE, allowedClasses="PivotStyles")
+          checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "styles", value, missing(value), allowMissing=FALSE, allowNull=FALSE, allowedClasses="TableStyles")
         }
         private$p_styles <- value
         return(invisible())
