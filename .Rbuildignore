@@ -3,3 +3,5 @@
 ^\.travis\.yml$
 ^cran-comments\.md$
 ^README\.Rmd$
+^devnotes\.txt$
+^dev\.R$

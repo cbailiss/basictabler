@@ -50,6 +50,8 @@ TableCells <- R6::R6Class("TableCells",
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableCells", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
      }
      private$p_parentTable <- parentTable
+     private$p_rows <- NULL
+     private$p_columnCount <- 0
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$new", "Creating new TableCells...")
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$new", "Created new TableCells.")
    },
@@ -75,21 +77,127 @@ TableCells <- R6::R6Class("TableCells",
      if(length(private$p_rows[[r]]) < c) return(invisible(NULL))
      return(invisible(private$p_rows[[r]][[c]]))
    },
+   addCell = function(r, c, cellType="cell", rawValue=NULL, formattedValue=NULL) {
+     cell <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType=cellType, rawValue=rawValue, formattedValue=formattedValue)
+     self$setCell(r, c, cell)
+     return(invisible(cell))
+   },
+   addBlankCell = function(r, c, cellType="cell", visible=TRUE) {
+     cell <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType=cellType, visible=visible, rawValue=NULL, formattedValue=NULL)
+     self$setCell(r, c, cell)
+     return(invisible(cell))
+   },
+   deleteCell = function(r, c) {
+     cell <- self$addBlankCell(r, c, visible=FALSE)
+     return(invisible(cell))
+   },
+   extendCells = function(rowCount=NULL, columnCount=NULL) {
+     if(private$p_parentTable$argumentCheckMode > 0) {
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", rowCount, missing(rowCount), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", columnCount, missing(columnCount), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
+       rFrom <- max(1, self$rowCount)
+       cFrom <- max(1, self$columnCount)
+       rTo <- max(self$rowCount, rowCount)
+       cTo <- max(self$columnCount, columnCount)
+       for(r in rFrom:rTo) {
+         if(r > length(private$p_rows)) private$p_rows[[r]] <- list()
+         for(c in cFrom:cTo) {
+           if(c > length(private$p_rows[[r]])) {
+             private$p_rows[[r]][[c]] <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType="cell", visible=FALSE, rawValue=NULL, formattedValue=NULL)
+           }
+         }
+       }
+       private$p_columnCount <- cTo
+     }
+     return(invisible())
+   },
    setCell = function(r, c, cell) {
      if(private$p_parentTable$argumentCheckMode > 0) {
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=length(private$p_rowGroups))
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", c, missing(c), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=length(private$p_columnGroups))
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", c, missing(c), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", cell, missing(cell), allowMissing=FALSE, allowNull=FALSE, allowedClasses="TableCell")
      }
      if(r < 1)
        stop(paste0("TableCells$setCell(): r (", r, ") must be must be greater than or equal to 1."), call. = FALSE)
-     if(r > self$rowCount)
-       private$p_rows[[r]] <- list()
      if(c < 1)
        stop(paste0("TableCells$setCell(): c (", c, ") must be must be greater than or equal to 1."), call. = FALSE)
-     if(c > self$columnCount)
-       private$p_columnCount <- c
+     if((r > self$rowCount)||(c > self$columnCount)) self$extendCells(r, c)
      private$p_rows[[r]][[c]] <- cell
+     return(invisible())
+   },
+   insertRow = function(rowNumber=NULL) {
+     if(private$p_parentTable$argumentCheckMode > 0) {
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
+     }
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertRow", "Inserting row...")
+     for(r in self$rowCount:rowNumber) {
+       for(c in 1:self$columnCount) {
+         cell <- self$getCell(r, c)
+         cell$updatePosition(r + 1, c)
+         self$setCell(r + 1, c, cell)
+       }
+     }
+     for(c in 1:self$columnCount) {
+       self$addBlankCell(rowNumber, c)
+     }
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertRow", "Inserted row.")
+     return(invisible())
+   },
+   deleteRow = function(rowNumber) {
+     if(private$p_parentTable$argumentCheckMode > 0) {
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "deleteRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
+     }
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteRow", "Deleting row...")
+     if(rowNumber < self$rowCount) {
+       for(r in rowNumber:(self$rowCount - 1)) {
+         for(c in 1:self$columnCount) {
+           cell <- self$getCell(r + 1, c)
+           cell$updatePosition(r, c)
+           self$setCell(r, c, cell)
+         }
+       }
+     }
+     private$p_rows[[self$rowCount]] <- NULL # can set last cell in the list to NULL to shorten the array
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteRow", "Deleted row.")
+     return(invisible())
+   },
+   insertColumn = function(columnNumber=NULL) {
+     if(private$p_parentTable$argumentCheckMode > 0) {
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
+     }
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertColumn", "Inserting column...")
+     for(c in self$columnCount:columnNumber) {
+       for(r in 1:self$rowCount) {
+         cell <- self$getCell(r, c)
+         cell$updatePosition(r, c + 1)
+         self$setCell(r, c + 1, cell)
+       }
+     }
+     for(r in 1:self$rowCount) {
+       self$addBlankCell(r, columnNumber)
+     }
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertColumn", "Inserted column")
+     return(invisible())
+   },
+   deleteColumn = function(columnNumber) {
+     if(private$p_parentTable$argumentCheckMode > 0) {
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "deleteColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
+     }
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteColumn", "Deleting column...")
+     if(columnNumber < self$columnCount) {
+       for(c in columnNumber:(self$columnCount - 1)) {
+         for(r in 1:self$rowCount) {
+           cell <- self$getCell(r, c + 1)
+           cell$updatePosition(r, c)
+           self$setCell(r, c, cell)
+         }
+       }
+     }
+     for(r in 1:self$rowCount) {
+       private$p_rows[[r]][[self$columnCount]] <- NULL # can set last cell in the list to NULL to shorten the array
+     }
+     private$p_columnCount <- private$p_columnCount - 1
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteColumn", "Deleted column.")
      return(invisible())
    },
    getCells = function(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL) {
@@ -224,7 +332,7 @@ TableCells <- R6::R6Class("TableCells",
            for(c in 1:length(private$p_rows[[r]])) {
              # b) column number tests
              if(!is.null(columnNumbers)) {
-               if(!(r %in% columnNumbers)) next
+               if(!(c %in% columnNumbers)) next
              }
              cell <- private$p_rows[[r]][[c]]
              if(is.null(cell)) next
@@ -285,30 +393,6 @@ TableCells <- R6::R6Class("TableCells",
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$getColumnWidths", "Got column widths.")
      return(invisible(widths))
-   },
-   asMatrix = function(rawValue=TRUE) {
-     if(private$p_parentTable$argumentCheckMode > 0) {
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "asMatrix", rawValue, missing(rawValue), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
-     }
-     if((self$rowCount==0)||(self$columnCount==0)) return(matrix())
-     m <- matrix(data=NA, nrow=self$rowCount, ncol=self$columnCount)
-     for(r in 1:self$rowCount) {
-       if(length(private$p_rows[[r]])==0) next
-       for(c in 1:self$columnCount) {
-         if(is.null(private$p_rows[[r]][[c]])) next
-         if(rawValue==TRUE) {
-           v <- private$p_rows[[r]][[c]]$rawValue
-           if(!(("integer" %in% class(v))||("numeric" %in% class(v)))) v <- NA
-         }
-         else {
-           v <- private$p_rows[[r]][[c]]$formattedValue
-         }
-         if(is.null(v)) v <- NA
-         else if(length(v)==0) v <- NA
-         m[r, c] <- v
-       }
-     }
-     return(m)
    },
    asList = function() {
      lst <- list()

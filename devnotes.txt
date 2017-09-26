@@ -1,0 +1,18 @@
+To generate the bhmsummary sample data:
+
+library(dplyr)
+library(pivottabler)
+library(lubridate)
+head(bhmtrains)
+bhmsummary <- bhmtrains %>%
+  mutate(GbttDate=as.Date(OriginGbttDeparture),
+         GbttWeekDate=floor_date(GbttDate, unit="week"),
+         GbttMonth=make_date(year=year(GbttDate), month=month(GbttDate), day=1)) %>%
+  group_by(Status, TOC, TrainCategory, PowerType, SchedSpeedMPH, GbttWeekDate, GbttMonth, Origin, Destination) %>%
+  summarise(TrainCount=n(),
+            OnTimeArrivals=sum(if_else(GbttArrival>=ActualArrival, 1, 0), na.rm=TRUE),
+            OnTimeDepartures=sum(if_else(GbttDeparture>=ActualDeparture, 1, 0), na.rm=TRUE),
+            TotalArrivalDelayMinutes=sum(if_else(GbttArrival<ActualArrival, difftime(ActualArrival, GbttArrival, units="mins"), 0), na.rm=TRUE),
+            TotalDepartureDelayMinutes=sum(if_else(GbttDeparture<ActualDeparture, difftime(ActualDeparture, GbttDeparture, units="mins"), 0), na.rm=TRUE)) %>%
+  ungroup()
+devtools::use_data(bhmsummary, compress="xz")
