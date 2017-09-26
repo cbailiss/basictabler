@@ -100,3 +100,16 @@ tbl$viewJSON()
 # df <- tbl$asDataFrame(firstRowAsColumnNames=TRUE, rawValue=FALSE)
 # df <- tbl$asDataFrame(firstRowAsColumnNames=TRUE, rawValue=TRUE)
 # df <- tbl$asDataFrame(firstRowAsColumnNames=TRUE, firstColumnAsRowNames=TRUE, rawValue=TRUE)
+
+
+
+# Excel Export
+
+# library(openxlsx)
+# wb <- createWorkbook(creator = Sys.getenv("USERNAME"))
+# addWorksheet(wb, "Data")
+# tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
+#                          topRowNumber=1, leftMostColumnNumber=1,
+#                          applyStyles=TRUE, mapStylesFromCSS=TRUE)
+#
+# saveWorkbook(wb, file="C:\\test.xlsx", overwrite = TRUE)

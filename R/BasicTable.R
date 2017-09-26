@@ -138,7 +138,7 @@ BasicTable <- R6::R6Class("BasicTable",
       private$p_styles <- getTheme(parentTable=self, themeName="default")
       private$p_cells <- TableCells$new(self)
       private$p_htmlRenderer <- TableHtmlRenderer$new(parentTable=self)
-      # private$p_openxlsxRenderer <-TableOpenXlsxRenderer$new(parentTable=self)
+      private$p_openxlsxRenderer <-TableOpenXlsxRenderer$new(parentTable=self)
       private$p_timings <- list()
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Created new Basic Table.")
       return(invisible())
