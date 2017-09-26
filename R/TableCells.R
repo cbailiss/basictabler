@@ -99,11 +99,14 @@ TableCells <- R6::R6Class("TableCells",
        cFrom <- max(1, self$columnCount)
        rTo <- max(self$rowCount, rowCount)
        cTo <- max(self$columnCount, columnCount)
-       for(r in rFrom:rTo) {
+       for(r in 1:rTo) {
          if(r > length(private$p_rows)) private$p_rows[[r]] <- list()
-         for(c in cFrom:cTo) {
-           if(c > length(private$p_rows[[r]])) {
-             private$p_rows[[r]][[c]] <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType="cell", visible=FALSE, rawValue=NULL, formattedValue=NULL)
+         for(c in 1:cTo) {
+           addCell <- FALSE
+           if(c > length(private$p_rows[[r]])) addCell <- TRUE
+           else if(is.null(private$p_rows[[r]][[c]])) addCell <- TRUE
+           if(addCell) {
+            private$p_rows[[r]][[c]] <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType="cell", visible=FALSE, rawValue=NULL, formattedValue=NULL)
            }
          }
        }
@@ -127,14 +130,16 @@ TableCells <- R6::R6Class("TableCells",
    },
    insertRow = function(rowNumber=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertRow", "Inserting row...")
-     for(r in self$rowCount:rowNumber) {
-       for(c in 1:self$columnCount) {
-         cell <- self$getCell(r, c)
-         cell$updatePosition(r + 1, c)
-         self$setCell(r + 1, c, cell)
+     if(rowNumber<=self$rowCount) {
+       for(r in self$rowCount:rowNumber) {
+         for(c in 1:self$columnCount) {
+           cell <- self$getCell(r, c)
+           cell$updatePosition(r + 1, c)
+           self$setCell(r + 1, c, cell)
+         }
        }
      }
      for(c in 1:self$columnCount) {
@@ -163,14 +168,16 @@ TableCells <- R6::R6Class("TableCells",
    },
    insertColumn = function(columnNumber=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertColumn", "Inserting column...")
-     for(c in self$columnCount:columnNumber) {
-       for(r in 1:self$rowCount) {
-         cell <- self$getCell(r, c)
-         cell$updatePosition(r, c + 1)
-         self$setCell(r, c + 1, cell)
+     if(columnNumber<=self$columnCount) {
+       for(c in self$columnCount:columnNumber) {
+         for(r in 1:self$rowCount) {
+           cell <- self$getCell(r, c)
+           cell$updatePosition(r, c + 1)
+           self$setCell(r, c + 1, cell)
+         }
        }
      }
      for(r in 1:self$rowCount) {

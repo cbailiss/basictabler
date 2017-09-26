@@ -27,14 +27,13 @@ tbl$renderTable()
 
 
 
-
-
 tbl$viewJSON()
 
 
 
 
 # Testing adding and removing rows/columns/cells
+# need to test adding cells within, just on the edge of and well outside the existing table
 
 # tbl$cells$insertRow(4)
 # tbl$cells$addCell(4, 3, rawValue=123.45, formattedValue="123.45")
