@@ -22,22 +22,36 @@
 #'   \item{\code{new(...)}}{Create a new set of table cells, specifying
 #'   the field values documented above.}
 #'
+#'   \item{\code{reset())}}{Clears and removes all of the cells.}
 #'   \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
 #'   column coordinates in the table.}
+#'   \item{\code{addCell(r, c, cellType="cell", rawValue=NULL,
+#'   formattedValue=NULL)}}{Add a new cell to the table.}
+#'   \item{\code{addBlankCell(r, c, cellType="cell", visible=TRUE)}}{Add an
+#'   empty cell to the table.}
+#'   \item{\code{deleteCell(r, c)}}{Remove a cell from the table (replacing it
+#'   with a blank one).}
+#'   \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
+#'   value of a cell.}
+#'   \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
 #'   \item{\code{setCell(r, c, cell))}}{Set the TableCell at the specified row
 #'   and column coordinates in the table.}
+#'   \item{\code{insertRow(rowNumber=NULL)}}{Insert a new row (moving the rows
+#'   underneath down).}
+#'   \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
+#'   underneath up.}
+#'   \item{\code{insertColumn(columnNumber=NULL)}}{Insert a new column (moving
+#'   other columns rightwards.}
+#'   \item{\code{deleteColumn(columnNumber=NULL)}}{Delete a column (moving other
+#'   columns leftwards.}
 #'   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
 #'   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
 #'   of row and/or column numbers.}
-#'   \item{\code{findCells(variableNames=NULL, variableValues=NULL,
-#'   totals="include", calculationNames=NULL, minValue=NULL, maxValue=NULL,
-#'   exactValues=NULL, includeNull=TRUE, includeNA=TRUE)}}{Find cells matching
-#'   the specified criteria.}
+#'   \item{\code{findCells(rowNumbers=NULL, columnNumbers=NULL, minValue=NULL,
+#'   maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE)}}{Find
+#'   cells matching the specified criteria.}
 #'   \item{\code{getColumnWidths())}}{Retrieve the width of the longest value
 #'   (in characters) in each column.}
-#'   \item{\code{asMatrix(rawValue=TRUE))}}{Get a matrix containing all of the
-#'   numerical values from the body of the table (for rawValue=TRUE) or
-#'   all of the formatted (i.e. character) values (for rawValue=FALSE).}
 #'   \item{\code{asList())}}{Get a list representation of the table
 #'   cells.}
 #'   \item{\code{asJSON()}}{Get a JSON representation of the table cells.}
@@ -91,27 +105,39 @@ TableCells <- R6::R6Class("TableCells",
      cell <- self$addBlankCell(r, c, visible=FALSE)
      return(invisible(cell))
    },
+   setValue = function(r, c, rawValue=NULL, formattedValue=NULL) {
+     if(private$p_parentTable$argumentCheckMode > 0) {
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setValue", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setValue", c, missing(c), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setValue", rawValue, missing(rawValue), allowMissing=FALSE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "complex", "character", "factor", "Date", "POSIXct", "POSIXlt"))
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setValue", formattedValue, missing(formattedValue), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "complex", "character", "factor", "Date", "POSIXct", "POSIXlt"))
+     }
+     cell <- self$getCell(r=r, c=c)
+     cell$rawValue <- rawValue
+     if(missing(formattedValue)) cell$formattedValue <- rawValue
+     else cell$formattedValue <- formattedValue
+   },
    extendCells = function(rowCount=NULL, columnCount=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", rowCount, missing(rowCount), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", columnCount, missing(columnCount), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
-       rFrom <- max(1, self$rowCount)
-       cFrom <- max(1, self$columnCount)
-       rTo <- max(self$rowCount, rowCount)
-       cTo <- max(self$columnCount, columnCount)
-       for(r in 1:rTo) {
-         if(r > length(private$p_rows)) private$p_rows[[r]] <- list()
-         for(c in 1:cTo) {
-           addCell <- FALSE
-           if(c > length(private$p_rows[[r]])) addCell <- TRUE
-           else if(is.null(private$p_rows[[r]][[c]])) addCell <- TRUE
-           if(addCell) {
-            private$p_rows[[r]][[c]] <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType="cell", visible=FALSE, rawValue=NULL, formattedValue=NULL)
-           }
+     }
+     rFrom <- max(1, self$rowCount)
+     cFrom <- max(1, self$columnCount)
+     rTo <- max(self$rowCount, rowCount)
+     cTo <- max(self$columnCount, columnCount)
+     for(r in 1:rTo) {
+       if(r > length(private$p_rows)) private$p_rows[[r]] <- list()
+       for(c in 1:cTo) {
+         addCell <- FALSE
+         if(c > length(private$p_rows[[r]])) addCell <- TRUE
+         else if(is.null(private$p_rows[[r]][[c]])) addCell <- TRUE
+         if(addCell) {
+          private$p_rows[[r]][[c]] <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType="cell", visible=FALSE, rawValue=NULL, formattedValue=NULL)
          }
        }
-       private$p_columnCount <- cTo
      }
+     private$p_columnCount <- cTo
      return(invisible())
    },
    setCell = function(r, c, cell) {
@@ -148,7 +174,7 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertRow", "Inserted row.")
      return(invisible())
    },
-   deleteRow = function(rowNumber) {
+   deleteRow = function(rowNumber=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "deleteRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
      }
@@ -186,7 +212,7 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertColumn", "Inserted column")
      return(invisible())
    },
-   deleteColumn = function(columnNumber) {
+   deleteColumn = function(columnNumber=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "deleteColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
      }

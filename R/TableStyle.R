@@ -48,7 +48,7 @@ TableStyle <- R6::R6Class("TableStyle",
      if(parentTable$argumentCheckMode > 0) {
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableStyle", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableStyle", "initialize", styleName, missing(styleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
-       checkArgument(parentTable$argumentCheckMode, FALSE, "TableStyle", "initialize", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses="character")
+       checkArgument(parentTable$argumentCheckMode, FALSE, "TableStyle", "initialize", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
      }
      private$p_parentTable <- parentTable
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$new", "Creating new Table Style...", list())
@@ -62,7 +62,7 @@ TableStyle <- R6::R6Class("TableStyle",
             val <- declarations[[i]]
             if(is.null(nme)) next
             if(is.null(val)) next
-            private$p_declarations[[tolower(trimws(nme))]] <- val
+            private$p_declarations[[tolower(trimws(nme))]] <- as.character(val)
          }
        }
      }

@@ -226,6 +226,7 @@ BasicTable <- R6::R6Class("BasicTable",
           value <- dataFrame[[r, c]]
           if(is.null(columnFormats)) formattedValue <- value
           else if(is.null(columnFormats[[c]])) formattedValue <- value
+          else if(is.na(columnFormats[[c]])) formattedValue <- value
           else formattedValue <- self$formatValue(value, columnFormats[[c]])
           if(firstColumnAsRowHeaders && (c==1)) cellType <- "rowHeader"
           else cellType <- "cell"
@@ -242,14 +243,14 @@ BasicTable <- R6::R6Class("BasicTable",
     },
     formatValue = function(value=NULL, format=NULL) {
       if(private$p_argumentCheckMode > 0) {
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "formatValue", value, missing(value), allowMissing=FALSE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "formatValue", value, missing(value), allowMissing=FALSE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "complex", "character", "factor", "Date", "POSIXct", "POSIXlt"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "formatValue", format, missing(format), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$formatValue", "Formatting value...")
       if(is.null(value)) return(invisible(NULL))
       if(is.null(format)) return(value)
       clsv <- class(value)
-      if(("numeric" %in% clsv)||("integer" %in% clsv)) {
+      if(("numeric" %in% clsv)||("integer" %in% clsv)||("complex" %in% clsv)) {
         clsf <- class(format)
         if("character" %in% clsf) value <- sprintf(format, value)
         else if ("list" %in% clsf) {
