@@ -32,22 +32,36 @@ table.
   \item{\code{new(...)}}{Create a new set of table cells, specifying
   the field values documented above.}
 
+  \item{\code{reset())}}{Clears and removes all of the cells.}
   \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
   column coordinates in the table.}
+  \item{\code{addCell(r, c, cellType="cell", rawValue=NULL,
+  formattedValue=NULL)}}{Add a new cell to the table.}
+  \item{\code{addBlankCell(r, c, cellType="cell", visible=TRUE)}}{Add an
+  empty cell to the table.}
+  \item{\code{deleteCell(r, c)}}{Remove a cell from the table (replacing it
+  with a blank one).}
+  \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
+  value of a cell.}
+  \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
   \item{\code{setCell(r, c, cell))}}{Set the TableCell at the specified row
   and column coordinates in the table.}
+  \item{\code{insertRow(rowNumber=NULL)}}{Insert a new row (moving the rows
+  underneath down).}
+  \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
+  underneath up.}
+  \item{\code{insertColumn(columnNumber=NULL)}}{Insert a new column (moving
+  other columns rightwards.}
+  \item{\code{deleteColumn(columnNumber=NULL)}}{Delete a column (moving other
+  columns leftwards.}
   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
   of row and/or column numbers.}
-  \item{\code{findCells(variableNames=NULL, variableValues=NULL,
-  totals="include", calculationNames=NULL, minValue=NULL, maxValue=NULL,
-  exactValues=NULL, includeNull=TRUE, includeNA=TRUE)}}{Find cells matching
-  the specified criteria.}
+  \item{\code{findCells(rowNumbers=NULL, columnNumbers=NULL, minValue=NULL,
+  maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE)}}{Find
+  cells matching the specified criteria.}
   \item{\code{getColumnWidths())}}{Retrieve the width of the longest value
   (in characters) in each column.}
-  \item{\code{asMatrix(rawValue=TRUE))}}{Get a matrix containing all of the
-  numerical values from the body of the table (for rawValue=TRUE) or
-  all of the formatted (i.e. character) values (for rawValue=FALSE).}
   \item{\code{asList())}}{Get a list representation of the table
   cells.}
   \item{\code{asJSON()}}{Get a JSON representation of the table cells.}
