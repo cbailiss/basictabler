@@ -121,8 +121,8 @@ BasicTable <- R6::R6Class("BasicTable",
       checkArgument(4, TRUE, "BasicTable", "initialize", traceEnabled, missing(traceEnabled), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       checkArgument(4, TRUE, "BasicTable", "initialize", traceFile, missing(traceFile), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
       if(argumentCheckMode=="auto") {
-        if (length(strsplit(packageDescription("BasicTabler")$Version, "\\.")[[1]]) > 3) {
-          message("Development version of BasicTabler detected: Using argumentCheckMode=full.\nThis may reduce performance. To override, specify the argumentCheckMode explicitly.\nargumentCheckMode values: none, minimal, basic, balanced (the normal default), full.")
+        if (length(strsplit(packageDescription("basictabler")$Version, "\\.")[[1]]) > 3) {
+          message("Development version of basictabler detected: Using argumentCheckMode=full.\nThis may reduce performance. To override, specify the argumentCheckMode explicitly.\nargumentCheckMode values: none, minimal, basic, balanced (the normal default), full.")
           private$p_argumentCheckMode <- 4
         }
         else private$p_argumentCheckMode <- 3
