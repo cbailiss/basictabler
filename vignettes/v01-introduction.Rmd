@@ -25,9 +25,10 @@ The `basictabler` package enables basic tables to be created and rendered/export
 
 The `basictabler` package:
 
-- provides an easy way of creating basic tables.
-- Provide an especially easy way of generating tables from data frames and matrices.
-- Provide styling options so the basic tables can be themed/branded as needed.
+- Provides an easy way of creating basic tables, especially from data frames and matrices.
+- Provides flexibility so that the structure/content of the table can be easily built/modified. 
+- Provides formatting options to simplify rendering/exporting data.
+- Provides styling options so the basic tables can be themed/branded as needed.
 
 The tables are rendered as htmlwidgets or plain text. The HTML/text can be exported for use outside of R.
 

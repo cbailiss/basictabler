@@ -1,7 +1,7 @@
 Package: basictabler
 Type: Package
 Title: Create Basic Tables in R
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("Christopher", "Bailiss", email = "cbailiss@gmail.com",
   role = c("aut", "cre"))
 Description: Create basic tables with just a few lines of R.
