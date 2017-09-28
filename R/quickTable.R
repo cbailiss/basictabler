@@ -40,7 +40,7 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
   checkArgument(3, TRUE, "", "qtbl", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
   argumentCheckMode <- arguments$argumentCheckMode
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode)
   if("data.frame" %in% class(dataFrameOrMatrix)) {
     tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
@@ -97,10 +97,10 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
   checkArgument(3, TRUE, "", "qhtbl", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
   # stop(paste0("cmbdebug02: ", class(arguments)))
   argumentCheckMode <- arguments$argumentCheckMode
-  stop("cmbdebug03")
+  #stop("cmbdebug03")
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
   warning("cmbdebug04")
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode)
   stop("cmbdebug05")
   if("data.frame" %in% class(dataFrameOrMatrix)) {
     tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
