@@ -101,7 +101,7 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
   warning("cmbdebug04")
   tbl <- BasicTable$new()
-  warning("cmbdebug05")
+  stop("cmbdebug05")
   if("data.frame" %in% class(dataFrameOrMatrix)) {
     tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
