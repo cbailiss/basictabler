@@ -1,42 +1,35 @@
----
-title: "basictabler"
-output: github_document
----
+basictabler
+================
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-[![Build Status](https://travis-ci.org/cbailiss/basictabler.svg?branch=master)](https://travis-ci.org/cbailiss/basictabler)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/basictabler)](https://cran.r-project.org/package=basictabler)
+[![Build Status](https://travis-ci.org/cbailiss/basictabler.svg?branch=master)](https://travis-ci.org/cbailiss/basictabler) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/basictabler)](https://cran.r-project.org/package=basictabler)
 
 The `basictabler` package enables basic tables to be created and rendered/exported with just a few lines of R.
 
 The `basictabler` package:
 
-- provides an easy way of creating basic tables.
-- Provide an especially easy way of generating tables from data frames and matrices.
-- Provide styling options so the basic tables can be themed/branded as needed.
+-   provides an easy way of creating basic tables.
+-   Provide an especially easy way of generating tables from data frames and matrices.
+-   Provide styling options so the basic tables can be themed/branded as needed.
 
 The tables are rendered as htmlwidgets or plain text. The HTML/text can be exported for use outside of R.
 
 The tables can also be exported to Excel, including the styling/formatting.
 
-`basictabler` is a companion package to the `pivottabler` package.  `pivottabler` is focussed on generating pivot tables and can aggregate data.  `basictabler` does not aggregate data but offers more control of table structure.
+`basictabler` is a companion package to the `pivottabler` package. `pivottabler` is focussed on generating pivot tables and can aggregate data. `basictabler` does not aggregate data but offers more control of table structure.
 
 ### Installation
 
 You can install:
 
-* the latest released version from CRAN with
+-   the latest released version from CRAN with
 
-```{r eval=FALSE}
+``` r
 install.packages("basictabler")
 ```
 
-* the latest development version from github with
+-   the latest development version from github with
 
-```{r eval=FALSE}
+``` r
 devtools::install_github("cbailiss/basictabler", build_vignettes = TRUE)
 ```
 
@@ -46,7 +39,7 @@ devtools::install_github("cbailiss/basictabler", build_vignettes = TRUE)
 
 Creating a tiny HTML table from a data frame and immediately rendering it as a htmlwidget:
 
-```{r, message=FALSE, warning=FALSE, eval=FALSE, comment=""}
+``` r
 library(basictabler)
 qhtbl(data.frame(a=1:2, b=3:4))
 ```
@@ -55,7 +48,7 @@ qhtbl(data.frame(a=1:2, b=3:4))
 
 Creating a table from a data frame, specifying column names and value formats:
 
-```{r eval=FALSE}
+``` r
 # aggregate the sample data to make a small data frame
 library(basictabler)
 library(dplyr)
@@ -83,7 +76,7 @@ qhtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
             columnFormats=columnFormats)
 ```
 
-![http://cbailiss.me.uk/basictablerreadmeimgs/example1.png](http://cbailiss.me.uk/basictablerreadmeimgs/example1.png)
+![<http://cbailiss.me.uk/basictablerreadmeimgs/example1.png>](http://cbailiss.me.uk/basictablerreadmeimgs/example1.png)
 
 Tables can be further manipulated once created, including adding/removing cells/rows/columns and specifying styling and formatting.
 
@@ -93,13 +86,11 @@ It is also possible to create tables row-by-row, column-by-column and/or cell-by
 
 See the package vignettes for more information:
 
-```{r eval=FALSE}
+``` r
 # to see a list of available package vignettes:
 vignette(package="basictabler")
 # to open a specific vignette
 vignette(topic="v01-introduction", package="basictabler")
 ```
 
-The vignettes can also be read on CRAN at:
-https://cran.r-project.org/package=basictabler
-
+The vignettes can also be read on CRAN at: <https://cran.r-project.org/package=basictabler>
