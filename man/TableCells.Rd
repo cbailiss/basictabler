@@ -35,19 +35,34 @@ table.
   \item{\code{reset())}}{Clears and removes all of the cells.}
   \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
   column coordinates in the table.}
-  \item{\code{addCell(r, c, cellType="cell", rawValue=NULL,
-  formattedValue=NULL)}}{Add a new cell to the table.}
-  \item{\code{addBlankCell(r, c, cellType="cell", visible=TRUE)}}{Add an
-  empty cell to the table.}
+  \item{\code{getValue(r, c))}}{Get the value at the specified row and
+  column coordinates in the table.}
+  \item{\code{getRowValues(rowNumber=NULL, columnNumbers=NULL,
+  formattedValue=FALSE, asList=FALSE, rebase=TRUE)}}{Get a vector or list of
+  the values in a row.}
+  \item{\code{getColumnValues(columnNumber=NULL, rowNumbers=NULL,
+  formattedValue=FALSE, asList=FALSE, rebase=TRUE)}}{Get a vector or list of
+  the values in a column.}
+  \item{\code{setCell(r, c, cellType="cell", rawValue=NULL,
+  formattedValue=NULL, visible=TRUE)}}{Set the details of a cell in the
+  table.}
+  \item{\code{setBlankCell(r, c, cellType="cell", visible=TRUE)}}{Set a
+  cell to be empty in the table.}
   \item{\code{deleteCell(r, c)}}{Remove a cell from the table (replacing it
   with a blank one).}
   \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
   value of a cell.}
   \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
-  \item{\code{setCell(r, c, cell))}}{Set the TableCell at the specified row
+  \item{\code{moveCell(r, c, cell))}}{Move the cell to the specified row
   and column coordinates in the table.}
   \item{\code{insertRow(rowNumber=NULL)}}{Insert a new row (moving the rows
   underneath down).}
+  \item{\code{setRow(rowNumber=NULL, startAtColumnNumber=1, cellTypes=NULL,
+  rawValues=NULL, formattedValues=NULL, visiblity=TRUE)}}{Set multiple cells
+  across a row at once.}
+  \item{\code{setColumn(columnNumber=NULL, startAtRowNumber=1, cellTypes=NULL,
+  rawValues=NULL, formattedValues=NULL, visiblity=TRUE)}}{Set multiple cells
+  down a column at once.}
   \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
   underneath up.}
   \item{\code{insertColumn(columnNumber=NULL)}}{Insert a new column (moving

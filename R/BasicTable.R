@@ -160,6 +160,10 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addData", "Adding data to Table...")
       dfRowCount <- nrow(dataFrame)
       dfColumnCount <- ncol(dataFrame)
+      # clear any cells that may be present
+      private$p_cells$reset()
+      # check there are some columns
+      if(dfColumnCount==0) return(invisible())
       # check the formats
       if(!is.null(columnFormats)) {
         if(length(columnFormats) != dfColumnCount) {
@@ -206,40 +210,42 @@ BasicTable <- R6::R6Class("BasicTable",
                                 rowNumber=rowNumber, columnNumber=columnNumber,
                                 rawValue=columnHeaders[c],
                                 formattedValue=columnHeaders[c])
-          cells$setCell(rowNumber, columnNumber, cell)
+          cells$moveCell(rowNumber, columnNumber, cell)
         }
       }
       # generate the rows
-      for(r in 1:dfRowCount) {
-        rowNumber <- rowNumber + 1
-        columnNumber <- 0
-        if(!is.null(rowHeaders)) {
-          columnNumber <- columnNumber + 1
-          cell <- TableCell$new(parentTable=self, cellType="rowHeader",
-                                rowNumber=rowNumber, columnNumber=columnNumber,
-                                rawValue=rowHeaders[r],
-                                formattedValue=rowHeaders[r])
-          cells$setCell(rowNumber, columnNumber, cell)
-        }
-        for(c in 1:dfColumnCount) {
-          columnNumber <- columnNumber + 1
-          value <- dataFrame[[r, c]]
-          if(is.null(columnFormats)) formattedValue <- value
-          else if(is.null(columnFormats[[c]])) formattedValue <- value
-          else if(is.na(columnFormats[[c]])) formattedValue <- value
-          else formattedValue <- self$formatValue(value, columnFormats[[c]])
-          if(firstColumnAsRowHeaders && (c==1)) cellType <- "rowHeader"
-          else cellType <- "cell"
-          cell <- TableCell$new(parentTable=self, cellType=cellType,
-                                rowNumber=rowNumber, columnNumber=columnNumber,
-                                rawValue=value,
-                                formattedValue=formattedValue)
-          cells$setCell(rowNumber, columnNumber, cell)
+      if(dfRowCount>0) {
+        for(r in 1:dfRowCount) {
+          rowNumber <- rowNumber + 1
+          columnNumber <- 0
+          if(!is.null(rowHeaders)) {
+            columnNumber <- columnNumber + 1
+            cell <- TableCell$new(parentTable=self, cellType="rowHeader",
+                                  rowNumber=rowNumber, columnNumber=columnNumber,
+                                  rawValue=rowHeaders[r],
+                                  formattedValue=rowHeaders[r])
+            cells$moveCell(rowNumber, columnNumber, cell)
+          }
+          for(c in 1:dfColumnCount) {
+            columnNumber <- columnNumber + 1
+            value <- dataFrame[[r, c]]
+            if(is.null(columnFormats)) formattedValue <- value
+            else if(is.null(columnFormats[[c]])) formattedValue <- value
+            else if(is.na(columnFormats[[c]])) formattedValue <- value
+            else formattedValue <- self$formatValue(value, columnFormats[[c]])
+            if(firstColumnAsRowHeaders && (c==1)) cellType <- "rowHeader"
+            else cellType <- "cell"
+            cell <- TableCell$new(parentTable=self, cellType=cellType,
+                                  rowNumber=rowNumber, columnNumber=columnNumber,
+                                  rawValue=value,
+                                  formattedValue=formattedValue)
+            cells$moveCell(rowNumber, columnNumber, cell)
+          }
         }
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addData", "Added data to Table.")
       private$addTiming(paste0("addData()"), timeStart)
-      return(invisible(private$p_data))
+      return(invisible())
     },
     formatValue = function(value=NULL, format=NULL) {
       if(private$p_argumentCheckMode > 0) {
@@ -366,6 +372,7 @@ BasicTable <- R6::R6Class("BasicTable",
               cell <- cells$getCell(r, c)
               if(is.null(cell)) next
               if(is.null(cell$formattedValue)) next
+              if(length(cell$formattedValue)==0) next
               if(is.na(cell$formattedValue)) next
               columnWidths[c] <- max(columnWidths[c], nchar(cell$formattedValue))
             }
@@ -395,6 +402,7 @@ BasicTable <- R6::R6Class("BasicTable",
               cell <- cells$getCell(r, c)
               if(is.null(cell)) currentLine <- paste0(currentLine, repStr(" ", columnWidths[c]))
               else if(is.null(cell$formattedValue)) currentLine <- paste0(currentLine, repStr(" ", columnWidths[c]))
+              else if(length(cell$formattedValue)==0) currentLine <- paste0(currentLine, repStr(" ", columnWidths[c]))
               else if(is.na(cell$formattedValue)) currentLine <- paste0(currentLine, repStr(" ", columnWidths[c]))
               else currentLine <- paste0(currentLine, repStr(" ", columnWidths[c] - 2 - nchar(cell$formattedValue)), cell$formattedValue, "  ")
             }

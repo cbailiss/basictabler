@@ -41,8 +41,10 @@ one line of R.
 }
 \examples{
 qhtbl(head(bhmsummary))
-qhtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount", "OnTimeArrivals")])
-qhtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount", "OnTimeArrivals")],
-  columnNamesAsColumnHeaders=FALSE, explicitColumnHeaders=c("Week", "From", "To", "Trains", "On-Time"))
+qhtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount",
+  "OnTimeArrivals")])
+qhtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount",
+  "OnTimeArrivals")], columnNamesAsColumnHeaders=FALSE,
+  explicitColumnHeaders=c("Week", "From", "To", "Trains", "On-Time"))
 
 }
