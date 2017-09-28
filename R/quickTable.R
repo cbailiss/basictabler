@@ -95,9 +95,9 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
   checkArgument(3, TRUE, "", "qhtbl", firstColumnAsRowHeaders, missing(firstColumnAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
   checkArgument(3, TRUE, "", "qhtbl", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
   checkArgument(3, TRUE, "", "qhtbl", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
-  stop(paste0("cmbdebug02: ", class(arguments)))
+  # stop(paste0("cmbdebug02: ", class(arguments)))
   argumentCheckMode <- arguments$argumentCheckMode
-  warning("cmbdebug03")
+  stop("cmbdebug03")
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
   warning("cmbdebug04")
   tbl <- BasicTable$new()
