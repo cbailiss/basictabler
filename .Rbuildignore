@@ -4,4 +4,5 @@
 ^cran-comments\.md$
 ^README\.Rmd$
 ^devnotes\.txt$
+^example1\.png$
 ^dev\.R$
