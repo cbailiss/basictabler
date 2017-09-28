@@ -85,7 +85,9 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
 qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
                   rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
                   columnFormats=NULL, ...) {
+  warning("cmbdebug00")
   arguments <- list(...)
+  warning("cmbdebug01")
   checkArgument(3, TRUE, "", "qhtbl", dataFrameOrMatrix, missing(dataFrameOrMatrix), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("data.frame", "matrix"))
   checkArgument(3, TRUE, "", "qhtbl", columnNamesAsColumnHeaders, missing(columnNamesAsColumnHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
   checkArgument(3, TRUE, "", "qhtbl", explicitColumnHeaders, missing(explicitColumnHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
@@ -93,9 +95,13 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
   checkArgument(3, TRUE, "", "qhtbl", firstColumnAsRowHeaders, missing(firstColumnAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
   checkArgument(3, TRUE, "", "qhtbl", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
   checkArgument(3, TRUE, "", "qhtbl", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
+  warning("cmbdebug02")
   argumentCheckMode <- arguments$argumentCheckMode
+  warning("cmbdebug03")
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
+  warning("cmbdebug04")
   tbl <- BasicTable$new()
+  warning("cmbdebug05")
   if("data.frame" %in% class(dataFrameOrMatrix)) {
     tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
@@ -105,6 +111,8 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
     tbl$addMatrix(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, explicitRowHeaders=explicitRowHeaders, columnFormats=columnFormats)
   }
+  warning("cmbdebug06")
   w <- tbl$renderTable()
+  warning("cmbdebug07")
   return(w)
 }

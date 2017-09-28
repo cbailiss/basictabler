@@ -45,6 +45,7 @@ To build some example tables, we will use the `bhmsummary` data frame.  This sum
 ```{r, message=FALSE}
 # the qhtbl() function is explained later in this vignette
 library(basictabler)
+warning("cmbdebugstart")
 qhtbl(t(bhmsummary[1:4,]), rowNamesAsRowHeaders=TRUE)
 ```
 
