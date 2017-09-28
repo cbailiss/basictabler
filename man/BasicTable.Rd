@@ -61,6 +61,10 @@ constructing the table, where the elapsed time > 0.1 seconds.}
   firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
   columnFormats=NULL)}}{Generate the table from a data frame, specifying
   headers and value formatting.}
+  \item{\code{addMatrix(matrix=NULL, columnNamesAsColumnHeaders=TRUE,
+  explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
+  explicitRowHeaders=NULL, columnFormats=NULL)}}{Generate the table from a
+  matrix, specifying headers and value formatting.}
   \item{\code{formatValue(value=NULL, format=NULL)}}{Format a value for
   display, using either sprintf(), format() or a custom formatting function.}
   \item{\code{addStyle(styleName, declarations)}}{Define a new TableStyle and

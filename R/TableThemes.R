@@ -1,36 +1,35 @@
 #' Get a built-in theme for styling a table.
 #'
-#' \code{getTheme} returns the specified theme.
+#' \code{getTblTheme} returns the specified theme.
 #'
 #' @export
 #' @param parentTable Owning table.
 #' @param themeName The name of the theme to retrieve.
 #' @return A TableStyles object.
-getTheme <- function(parentTable, themeName=NULL) {
+getTblTheme <- function(parentTable, themeName=NULL) {
   if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
   else argumentCheckMode <- 4
   if(argumentCheckMode > 0) {
-    checkArgument(argumentCheckMode, TRUE, "", "getTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
-    checkArgument(argumentCheckMode, TRUE, "", "getTheme", themeName, missing(themeName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getTblTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+    checkArgument(argumentCheckMode, TRUE, "", "getTblTheme", themeName, missing(themeName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
   }
-  if(themeName=="default") return(getDefaultTheme(parentTable=parentTable))
-  else if(themeName=="largeplain") return(getLargePlainTheme(parentTable=parentTable))
-  else if(themeName=="compact") return(getCompactTheme(parentTable=parentTable))
-  else stop(paste0("getTheme(): Theme '", themeName, "' is not a recognised theme."), call.=FALSE)
+  if(themeName=="default") return(getDefaultTblTheme(parentTable=parentTable))
+  else if(themeName=="largeplain") return(getLargePlainTblTheme(parentTable=parentTable))
+  else if(themeName=="compact") return(getCompactTblTheme(parentTable=parentTable))
+  else stop(paste0("getTblTheme(): Theme '", themeName, "' is not a recognised theme."), call.=FALSE)
 }
 
 #' Get the default theme for styling a table.
 #'
-#' @export
 #' @param parentTable Owning table.
 #' @param themeName The name to use as the new theme name.
 #' @return A TableStyles object.
-getDefaultTheme <- function(parentTable, themeName="default") {
+getDefaultTblTheme <- function(parentTable, themeName="default") {
   if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
   else argumentCheckMode <- 4
   if(argumentCheckMode > 0) {
-    checkArgument(argumentCheckMode, TRUE, "", "getPlainTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
-    checkArgument(argumentCheckMode, TRUE, "", "getPlainTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getDefaultTblTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+    checkArgument(argumentCheckMode, TRUE, "", "getDefaultTblTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
   }
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(
@@ -66,27 +65,35 @@ getDefaultTheme <- function(parentTable, themeName="default") {
       "vertical-align"="middle",
       "text-align"="right"
     ))
+  TableStyles$addStyle(styleName="Total", list(
+      "font-family"="Arial",
+      "font-size"="0.75em",
+      padding="2px 2px 2px 8px",
+      border="1px solid lightgray",
+      "vertical-align"="middle",
+      "text-align"="right",
+      "font-weight"="bold"
+    ))
   TableStyles$tableStyle <- "Table"
   TableStyles$rootStyle <- "RowHeader"
   TableStyles$rowHeaderStyle <- "RowHeader"
   TableStyles$colHeaderStyle <- "ColumnHeader"
   TableStyles$cellStyle <- "Cell"
-  TableStyles$totalStyle <- "Cell"
+  TableStyles$totalStyle <- "Total"
   return(invisible(TableStyles))
 }
 
 #' Get the large plain theme for styling a table.
 #'
-#' @export
 #' @param parentTable Owning table.
 #' @param themeName The name to use as the new theme name.
 #' @return A TableStyles object.
-getLargePlainTheme <- function(parentTable, themeName="largeplain") {
+getLargePlainTblTheme <- function(parentTable, themeName="largeplain") {
   if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
   else argumentCheckMode <- 4
   if(argumentCheckMode > 0) {
-    checkArgument(argumentCheckMode, TRUE, "", "getPlainTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
-    checkArgument(argumentCheckMode, TRUE, "", "getPlainTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getLargePlainTblTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+    checkArgument(argumentCheckMode, TRUE, "", "getLargePlainTblTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
   }
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(
@@ -134,16 +141,15 @@ getLargePlainTheme <- function(parentTable, themeName="largeplain") {
 
 #' Get the compact theme for styling a table.
 #'
-#' @export
 #' @param parentTable Owning table.
 #' @param themeName The name to use as the new theme name.
 #' @return A TableStyles object.
-getCompactTheme <- function(parentTable, themeName="compact") {
+getCompactTblTheme <- function(parentTable, themeName="compact") {
   if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
   else argumentCheckMode <- 4
   if(argumentCheckMode > 0) {
-    checkArgument(argumentCheckMode, TRUE, "", "getPlainTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
-    checkArgument(argumentCheckMode, TRUE, "", "getPlainTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getCompactTblTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+    checkArgument(argumentCheckMode, TRUE, "", "getCompactTblTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
   }
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(
@@ -198,14 +204,14 @@ getCompactTheme <- function(parentTable, themeName="compact") {
 #' @param colors The set of colours to use when generating the theme (see the Styling vignette for details).
 #' @param fontName The name of the font to use, or a comma separated list (for font-fall-back).
 #' @return A TableStyles object.
-getSimpleColoredTheme <- function(parentTable, themeName="coloredTheme", colors, fontName) {
+getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colors, fontName) {
   if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
   else argumentCheckMode <- 4
   if(argumentCheckMode > 0) {
-    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
-    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
-    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTheme", colors, missing(colors), allowMissing=FALSE, allowNull=FALSE, allowedClasses="list", allowedListElementClasses="character")
-    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTheme", fontName, missing(fontName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", colors, missing(colors), allowMissing=FALSE, allowNull=FALSE, allowedClasses="list", allowedListElementClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", fontName, missing(fontName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
   }
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(

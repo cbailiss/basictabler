@@ -1,0 +1,299 @@
+---
+title: "02. Working with Cells"
+author: "Chris Bailiss"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{01. Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## In This Vignette
+
+* Table Cells
+* Properies of a Table Cell
+* Creating a Table Cell-by-Cell
+* Creating a Table Column-by-Column
+* Creating a Table Row-by-Row
+* Retrieving Cell values
+* Retrieving Cells
+* Manipulating Tables
+* Summary of Table Cells Functions
+* Further Reading
+
+## Table Cells
+
+Every `basictabler` table contains a TableCells object, which contains all of the cells in the table.  Each cell is a TableCell object, e.g. a table of 3 rows and 5 columns will have 15 TableCell objects in the cells collection.
+
+The cells collection offers a set of functions that make working with individual or groups of cells easier.  These are described in this vignette and summarised at the end of the vignette.
+
+The cells collection is accessed via `tbl$cells`.
+
+## Properies of a Table Cell
+
+Each TableCell object has the following basic properies:
+
+- rowNumber - the number of the row where the cell exists in the table.
+- columnNumber - the number of the column where the cell exists in the table.
+- cellType - one of: root, rowHeader, columnHeader, cell, total.  Controls the type of default styling applied to the cell when the table is rendered/exported.
+- visible - TRUE/FALSE, controls whether the cell is output during rendering/exporting.
+- rawValue - the unformatted value of the cell.
+- formattedValue - the formatted value of the cell used during most rendering/exporting.
+- baseStyleName - allows a different named style to be applied to the cell when rendering/exporting (if not specified, the default style based on the cellType will be used).
+- style - a TableStyle object that contains specific style rules just for this cell (which take precedence over the baseStyleName).
+
+Most the above properties are rarely accessed directly.  Instead, helper functions are used to manipulate them.  Nonetheless, understanding what each cell is composed of helps to understand tables and make working with tables easier.
+
+## Creating a Table Cell-by-Cell
+
+Instead of constructing a table in one-line from a data frame or matrix, a table can be constructed call-by-cell, though this requires many lines of code:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
+tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
+tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
+tbl$cells$setCell(1, 4, cellType="columnHeader", rawValue="Price")
+tbl$cells$setCell(2, 1, cellType="rowHeader", rawValue=5334)
+tbl$cells$setCell(2, 2, cellType="cell", rawValue="Apple")
+tbl$cells$setCell(2, 3, cellType="cell", rawValue=5)
+tbl$cells$setCell(2, 4, cellType="cell", rawValue=0.34)
+tbl$cells$setCell(3, 1, cellType="rowHeader", rawValue=5336)
+tbl$cells$setCell(3, 2, cellType="cell", rawValue="Orange")
+tbl$cells$setCell(3, 3, cellType="cell", rawValue=8)
+tbl$cells$setCell(3, 4, cellType="cell", rawValue=0.47)
+tbl$cells$setCell(4, 1, cellType="rowHeader", rawValue=5338)
+tbl$cells$setCell(4, 2, cellType="cell", rawValue="Banana")
+tbl$cells$setCell(4, 3, cellType="cell", rawValue=6)
+tbl$cells$setCell(4, 4, cellType="cell", rawValue=1.34)
+tbl$renderTable()
+```
+
+## Creating a Table Column-by-Column
+
+Less code is required to construct a table column-by-column from vectors:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
+tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
+tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
+tbl$cells$setCell(1, 4, cellType="columnHeader", rawValue="Price")
+tbl$cells$setColumn(1, cellTypes="rowHeader", rawValues=saleIds)
+tbl$cells$setColumn(2, cellTypes="cell", rawValues=items)
+tbl$cells$setColumn(3, cellTypes="cell", rawValues=quantities)
+tbl$cells$setColumn(4, cellTypes="cell", rawValues=prices,
+                    formats=list("%.2f"))
+tbl$renderTable()
+```
+
+By default the `tbl$cells$setColumn()` function starts from row 2, i.e. it assumes there is one row of column headings in the table.  This behaviour can be changed by setting the value of the `startAtRowNumber` parameter.
+
+## Creating a Table Row-by-Row
+
+Similarly, it is possible to construct a table row-by-row, though typically this requires lists to be used, since rows often contain multiple types of data:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+# cell types for the cells in each row
+cellTypes <- c("rowHeader", "cell", "cell", "cell")
+
+# formats for the values in each row
+# (only the value in the fourth column needs formatting)
+formats <- list(NULL, NULL, NULL, "%.2f")
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
+tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
+tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
+tbl$cells$setCell(1, 4, cellType="columnHeader", rawValue="Price")
+tbl$cells$setRow(2, cellTypes=cellTypes, formats=formats,
+                 rawValues=list(5334, "Apple", 5, 0.34452354))
+tbl$cells$setRow(3, cellTypes=cellTypes, formats=formats,
+                 rawValues=list(5336, "Orange", 8, 0.4732543))
+tbl$cells$setRow(4, cellTypes=cellTypes, formats=formats,
+                 rawValues=list(5338, "Banana", 6, 1.3443243))
+tbl$renderTable()
+```
+
+NB:  It is possible to use vectors or lists for the `rawValues` argument for both the `tbl$cells$setColumn()` and `tbl$cells$setRow()` functions.
+
+## Retrieving Cell Values
+
+It is possible to retrieve the values of individual cells or ranges of cells:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+tbl$renderTable()
+
+# get the raw value of the cell in row 2 column 4
+cat(tbl$cells$getValue(2, 4))
+
+# get the formatted value of the cell in row 2 column 4
+cat(tbl$cells$getValue(2, 4, formattedValue=TRUE))
+
+# get the values in row 2 (as a list due to different data types)
+rowValues <- tbl$cells$getRowValues(2, asList=TRUE)
+cat(class(rowValues), ": ", paste(rowValues, collapse=", "))
+
+# get the values in column 3
+columnValues <- tbl$cells$getColumnValues(3)
+cat(class(columnValues), ": ", paste(columnValues, collapse=", "))
+```
+
+## Retrieving Cells
+
+Table Cell objects can be retrieved using the `tbl$cells$getCell()` function:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+tbl$renderTable()
+
+# get the cell in row 2 column 4
+cell <- tbl$cells$getCell(2, 4)
+
+# output the cell properties
+summary <- list(rowNumber=cell$rowNumber, columnNumber=cell$columnNumber, cellType=cell$cellType,
+                visible=cell$visible, rawValue=cell$rawValue, formattedValue=cell$formattedValue,
+                baseStyleName=cell$baseStyleName, style=ifelse(is.null(cell$style), "", cell$style$asCSSRule()))
+description <- paste(paste(names(summary), unlist(summary), sep="="), collapse="\n")
+cat(description)
+```
+
+## Manipulating Tables
+
+It is also possible to insert and delete rows/columns:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# row formats
+formats <- list(NULL, NULL, NULL, NULL, "%.2f")
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+tbl$renderTable()
+
+tbl$cells$insertColumn(3)
+tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Variety")
+tbl$cells$setColumn(3, rawValues=c("Gala", "Jaffa", "Yellow"))
+tbl$renderTable()
+
+tbl$cells$insertRow(3)
+tbl$cells$setRow(3, cellTypes=c("rowHeader", "cell", "cell", "cell", "cell"),
+                 rawValues=list(5335, "Pear", "Marit", 2, 0.89),
+                 formats=formats)
+tbl$renderTable()
+
+tbl$cells$insertRow(5)
+tbl$cells$setRow(5, cellTypes=c("rowHeader", "cell", "cell", "cell", "cell"),
+                 rawValues=list(5337, "Plum", "Sweet", 5, 1.59),
+                 formats=formats)
+tbl$renderTable()
+
+tbl$cells$setCell(1, 6, cellType="columnHeader", rawValue="Total")
+qty <- tbl$cells$getColumnValues(4)
+price <- tbl$cells$getColumnValues(5)
+total <- qty * price
+tbl$cells$setColumn(6, cellType="cell", rawValues=total, formats="%.2f")
+tbl$renderTable()
+
+tbl$cells$deleteRow(3)
+tbl$renderTable()
+
+tbl$cells$deleteColumn(3)
+tbl$renderTable()
+
+tbl$cells$deleteCell(3, 2)
+tbl$renderTable()
+```
+
+## Summary of Table Cells Functions
+
+The following functions exist on the TableCells collection:
+
+- reset()
+- getCell(r, c)
+- getValue(r, c, formattedValue=FALSE)
+- getRowValues(rowNumber, columnNumbers, formattedValue=FALSE, asList=FALSE, rebase=TRUE)
+- getColumnValues(columnNumber, rowNumbers, formattedValue=FALSE, asList=FALSE, rebase=TRUE)
+- setCell(r, c, cellType="cell", rawValue, formattedValue=NULL, visible=TRUE)
+- setRow(rowNumber, startAtColumnNumber=1, cellTypes="cell", rawValues, formattedValues=NULL, formats=NULL, visiblity=TRUE)
+- setColumn(columnNumber, startAtRowNumber=2, cellTypes="cell", rawValues, formattedValues=NULL, formats=NULL, visiblity=TRUE)
+- setValue(r, c, rawValue, formattedValue=NULL)
+- setBlankCell(r, c, cellType="cell", visible=TRUE) 
+- deleteCell(r, c)
+- extendCells(rowCount, columnCount)
+- moveCell(r, c, cell)
+- insertRow(rowNumber) 
+- deleteRow(rowNumber)
+- insertColumn(columnNumber) 
+- deleteColumn(columnNumber)
+
+The following functions also exist on the TableCells collection, but are discussed in the [Finding and Formatting](v05-findingandformatting.html) vignette:
+
+- getCells(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL)
+- findCells(rowNumbers=NULL, columnNumbers=NULL, minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE)
+
+Shortcuts to the above two functions also exist directly on the table object, i.e. any of the following ways of calling the functions work:
+
+- `tbl$getCells(...)`
+- `tbl$cells$getCells(...)`
+- `tbl$findCells(...)`
+- `tbl$cells$findCells(...)`
+
+## Further Reading
+
+The full set of vignettes is:
+
+1. [Introduction](v01-introduction.html)
+2. [Working with Cells](v02-workingwithcells.html)
+3. [Outputs](v03-outputs.html)
+4. [Styling](v04-styling.html)
+5. [Finding and Formatting](v05-findingandformatting.html)
+6. [Shiny](v06-shiny.html)
+7. [Excel Export](v07-excelexport.html)

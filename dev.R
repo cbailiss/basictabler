@@ -19,7 +19,7 @@ columnFormats[[3]] <- list(big.mark=",")
 columnFormats[[4]] <- list(big.mark=",")
 columnFormats[[5]] <- "%.1f"
 columnFormats[[6]] <- "%.1f"
-tbl$addData(tocsummary, columnNamesAsColumnHeaders=FALSE, firstColumnAsRowHeaders=TRUE,
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
             explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
                                     "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
             columnFormats=columnFormats)
@@ -31,6 +31,11 @@ tbl$viewJSON()
 
 
 
+
+# m <- matrix(1:6, 2, 3, dimnames=list(c("r1", "r2"), c("c1", "c2", "c3")))
+# tbl <- BasicTable$new()
+# tbl$addMatrix(m, rowNamesAsRowHeaders=TRUE, columnNamesAsColumnHeaders=TRUE)
+# tbl$renderTable()
 
 # Testing adding and removing rows/columns/cells
 # need to test adding cells within, just on the edge of and well outside the existing table

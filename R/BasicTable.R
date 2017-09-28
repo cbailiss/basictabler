@@ -71,6 +71,10 @@
 #'   firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
 #'   columnFormats=NULL)}}{Generate the table from a data frame, specifying
 #'   headers and value formatting.}
+#'   \item{\code{addMatrix(matrix=NULL, columnNamesAsColumnHeaders=TRUE,
+#'   explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
+#'   explicitRowHeaders=NULL, columnFormats=NULL)}}{Generate the table from a
+#'   matrix, specifying headers and value formatting.}
 #'   \item{\code{formatValue(value=NULL, format=NULL)}}{Format a value for
 #'   display, using either sprintf(), format() or a custom formatting function.}
 #'   \item{\code{addStyle(styleName, declarations)}}{Define a new TableStyle and
@@ -135,7 +139,7 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Creating new Basic Table...")
       # Create the basic parts of the table
-      private$p_styles <- getTheme(parentTable=self, themeName="default")
+      private$p_styles <- getTblTheme(parentTable=self, themeName="default")
       private$p_cells <- TableCells$new(self)
       private$p_htmlRenderer <- TableHtmlRenderer$new(parentTable=self)
       private$p_openxlsxRenderer <-TableOpenXlsxRenderer$new(parentTable=self)
@@ -172,7 +176,7 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       # get the column headers
       columnHeaders <- NULL
-      if(columnNamesAsColumnHeaders) {
+      if(is.null(explicitColumnHeaders) && columnNamesAsColumnHeaders) {
         columnHeaders <- names(dataFrame)
       }
       else if(!is.null(explicitColumnHeaders)) {
@@ -183,7 +187,7 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       # get the row headers
       rowHeaders <- NULL
-      if(rowNamesAsRowHeaders) {
+      if(is.null(explicitRowHeaders) && rowNamesAsRowHeaders) {
         rowHeaders <- row.names(dataFrame)
       }
       else if(!is.null(explicitRowHeaders)) {
@@ -202,7 +206,7 @@ BasicTable <- R6::R6Class("BasicTable",
         columnNumber <- 0
         if(!is.null(rowHeaders)) {
           columnNumber <- columnNumber + 1
-          cells$addBlankCell(r, c, cellType="root")
+          cells$setBlankCell(rowNumber, columnNumber, cellType="root")
         }
         for(c in 1:length(columnHeaders)) {
           columnNumber <- columnNumber + 1
@@ -245,6 +249,106 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addData", "Added data to Table.")
       private$addTiming(paste0("addData()"), timeStart)
+      return(invisible())
+    },
+    addMatrix = function(matrix=NULL,
+                       columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
+                       rowNamesAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL) {
+      timeStart <- proc.time()
+      if(private$p_argumentCheckMode > 0) {
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", matrix, missing(matrix), allowMissing=FALSE, allowNull=FALSE, allowedClasses="matrix")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", columnNamesAsColumnHeaders, missing(columnNamesAsColumnHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", explicitColumnHeaders, missing(explicitColumnHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", rowNamesAsRowHeaders, missing(rowNamesAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addMatrix", "Adding matrix to Table...")
+      mRowCount <- nrow(matrix)
+      mColumnCount <- ncol(matrix)
+      # clear any cells that may be present
+      private$p_cells$reset()
+      # check there are some columns
+      if(mColumnCount==0) return(invisible())
+      # check the formats
+      if(!is.null(columnFormats)) {
+        if(length(columnFormats) != mColumnCount) {
+          stop("BasicTable$addMatrix():  Length of columnFormats must match the number of columns in the matrix!", call. = FALSE)
+        }
+      }
+      # get the column headers
+      columnHeaders <- NULL
+      if(is.null(explicitColumnHeaders) && columnNamesAsColumnHeaders) {
+        columnHeaders <- colnames(matrix)
+      }
+      else if(!is.null(explicitColumnHeaders)) {
+        if(length(explicitColumnHeaders) != mColumnCount) {
+          stop("BasicTable$addMatrix():  Length of explicitColumnHeaders must match the number of columns in the matrix!", call. = FALSE)
+        }
+        columnHeaders <- explicitColumnHeaders
+      }
+      # get the row headers
+      rowHeaders <- NULL
+      if(is.null(explicitRowHeaders) && rowNamesAsRowHeaders) {
+        rowHeaders <- rownames(matrix)
+      }
+      else if(!is.null(explicitRowHeaders)) {
+        if(length(explicitRowHeaders) != mRowCount) {
+          stop("BasicTable$addMatrix():  Length of explicitRowHeaders must match the number of rows in the matrix!", call. = FALSE)
+        }
+        rowHeaders <- explicitRowHeaders
+      }
+      # position cursors
+      cells <- private$p_cells
+      rowNumber <- 0
+      columnNumber <- 0
+      # generate the column header row (if present)
+      if(!is.null(columnHeaders)) {
+        rowNumber <- rowNumber + 1
+        columnNumber <- 0
+        if(!is.null(rowHeaders)) {
+          columnNumber <- columnNumber + 1
+          cells$setBlankCell(rowNumber, columnNumber, cellType="root")
+        }
+        for(c in 1:length(columnHeaders)) {
+          columnNumber <- columnNumber + 1
+          cell <- TableCell$new(parentTable=self, cellType="columnHeader",
+                                rowNumber=rowNumber, columnNumber=columnNumber,
+                                rawValue=columnHeaders[c],
+                                formattedValue=columnHeaders[c])
+          cells$moveCell(rowNumber, columnNumber, cell)
+        }
+      }
+      # generate the rows
+      if(mRowCount>0) {
+        for(r in 1:mRowCount) {
+          rowNumber <- rowNumber + 1
+          columnNumber <- 0
+          if(!is.null(rowHeaders)) {
+            columnNumber <- columnNumber + 1
+            cell <- TableCell$new(parentTable=self, cellType="rowHeader",
+                                  rowNumber=rowNumber, columnNumber=columnNumber,
+                                  rawValue=rowHeaders[r],
+                                  formattedValue=rowHeaders[r])
+            cells$moveCell(rowNumber, columnNumber, cell)
+          }
+          for(c in 1:mColumnCount) {
+            columnNumber <- columnNumber + 1
+            value <- matrix[[r, c]]
+            if(is.null(columnFormats)) formattedValue <- value
+            else if(is.null(columnFormats[[c]])) formattedValue <- value
+            else if(is.na(columnFormats[[c]])) formattedValue <- value
+            else formattedValue <- self$formatValue(value, columnFormats[[c]])
+            cell <- TableCell$new(parentTable=self, cellType="cell",
+                                  rowNumber=rowNumber, columnNumber=columnNumber,
+                                  rawValue=value,
+                                  formattedValue=formattedValue)
+            cells$moveCell(rowNumber, columnNumber, cell)
+          }
+        }
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addMatrix", "Added data to Table.")
+      private$addTiming(paste0("addMatrix()"), timeStart)
       return(invisible())
     },
     formatValue = function(value=NULL, format=NULL) {
@@ -721,7 +825,7 @@ BasicTable <- R6::R6Class("BasicTable",
         if(private$p_argumentCheckMode > 0) {
           checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "theme", value, missing(value), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("character", "TableStyles"))
         }
-        if("character" %in% class(value)) private$p_styles <- getTheme(parentTable=self, themeName=value)
+        if("character" %in% class(value)) private$p_styles <- getTblTheme(parentTable=self, themeName=value)
         else if("TableStyles" %in% class(value)) private$p_styles <- value
         return(invisible())
       }

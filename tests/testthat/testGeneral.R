@@ -298,6 +298,81 @@ test_that("data type tests", {
 })
 
 
+context("MATRIX TESTS")
+
+
+test_that("empty matrix (1 NA value)", {
+
+  m <- matrix()
+
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addMatrix(m)
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getHtml()))
+	str <- "  "
+	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"Cell\">NA</td>\n  </tr>\n</table>"
+
+	expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+test_that("1 col, 1 row matrix", {
+
+  m <- matrix(5)
+
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addMatrix(m)
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getHtml()))
+	str <- "5  "
+	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"Cell\">5</td>\n  </tr>\n</table>"
+
+	expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+test_that("2x3 matrix (numeric)", {
+
+  m <- matrix(1:6, 2, 3, dimnames=list(c("r1", "r2"), c("c1", "c2", "c3")))
+
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addMatrix(m, rowNamesAsRowHeaders=TRUE, columnNamesAsColumnHeaders=TRUE)
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getHtml()))
+	str <- "    c1  c2  c3  \nr1   1   3   5  \nr2   2   4   6  "
+	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"RowHeader\"></td>\n    <td class=\"ColumnHeader\">c1</td>\n    <td class=\"ColumnHeader\">c2</td>\n    <td class=\"ColumnHeader\">c3</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">r1</td>\n    <td class=\"Cell\">1</td>\n    <td class=\"Cell\">3</td>\n    <td class=\"Cell\">5</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">r2</td>\n    <td class=\"Cell\">2</td>\n    <td class=\"Cell\">4</td>\n    <td class=\"Cell\">6</td>\n  </tr>\n</table>"
+
+  expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+test_that("2x3 matrix (character)", {
+
+  m <- matrix(as.character(1:6), 2, 3, dimnames=list(c("r1", "r2"), c("c1", "c2", "c3")))
+
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addMatrix(m, rowNamesAsRowHeaders=TRUE, columnNamesAsColumnHeaders=TRUE)
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getHtml()))
+	str <- "    c1  c2  c3  \nr1   1   3   5  \nr2   2   4   6  "
+	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"RowHeader\"></td>\n    <td class=\"ColumnHeader\">c1</td>\n    <td class=\"ColumnHeader\">c2</td>\n    <td class=\"ColumnHeader\">c3</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">r1</td>\n    <td class=\"Cell\">1</td>\n    <td class=\"Cell\">3</td>\n    <td class=\"Cell\">5</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">r2</td>\n    <td class=\"Cell\">2</td>\n    <td class=\"Cell\">4</td>\n    <td class=\"Cell\">6</td>\n  </tr>\n</table>"
+
+  expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
 context("CONSTRUCTION TESTS")
 
 
@@ -449,6 +524,264 @@ test_that("manipulation 2", {
   # prepStr(as.character(tbl$getHtml()))
 	str <- "Sale ID    Item  Variety  Quantity  Total  \n   5334   Apple     Gala         5    1.7  \n   5336  Orange    Jaffa         8   3.76  \n   5337    Plum    Sweet         5   7.95  \n   5338  Banana   Yellow         6   8.04  "
 	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"RowHeader\">Sale ID</td>\n    <td class=\"ColumnHeader\">Item</td>\n    <td class=\"ColumnHeader\">Variety</td>\n    <td class=\"ColumnHeader\">Quantity</td>\n    <td class=\"ColumnHeader\">Total</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5334</td>\n    <td class=\"Cell\">Apple</td>\n    <td class=\"Cell\">Gala</td>\n    <td class=\"Cell\">5</td>\n    <td class=\"Cell\">1.7</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5336</td>\n    <td class=\"Cell\">Orange</td>\n    <td class=\"Cell\">Jaffa</td>\n    <td class=\"Cell\">8</td>\n    <td class=\"Cell\">3.76</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5337</td>\n    <td class=\"Cell\">Plum</td>\n    <td class=\"Cell\">Sweet</td>\n    <td class=\"Cell\">5</td>\n    <td class=\"Cell\">7.95</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5338</td>\n    <td class=\"Cell\">Banana</td>\n    <td class=\"Cell\">Yellow</td>\n    <td class=\"Cell\">6</td>\n    <td class=\"Cell\">8.04</td>\n  </tr>\n</table>"
+
+	expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+context("THEMING TESTS")
+
+
+test_that("2x3 matrix (character)", {
+
+  # define the colours
+  orangeColors <- list(
+    headerBackgroundColor = "rgb(237, 125, 49)",
+    headerColor = "rgb(255, 255, 255)",
+    cellBackgroundColor = "rgb(255, 255, 255)",
+    cellColor = "rgb(0, 0, 0)",
+    totalBackgroundColor = "rgb(248, 198, 165)",
+    totalColor = "rgb(0, 0, 0)",
+    borderColor = "rgb(198, 89, 17)"
+  )
+
+  # data for the table
+  saleIds <- c(5334, 5336, 5338)
+  items <- c("Apple", "Orange", "Banana")
+  quantities <- c(5, 8, 6)
+  prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+  # construct the table
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addData(data.frame(saleIds, items, quantities, prices),
+              firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+              columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+  # theme the table and render
+  theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=orangeColors, fontName="Garamond, arial")
+  tbl$theme <- theme
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getCss()))
+  # prepStr(as.character(tbl$getHtml()))
+	str <- "Sale ID    Item  Quantity  Price  \n   5334   Apple         5   0.34  \n   5336  Orange         8   0.47  \n   5338  Banana         6   1.34  "
+	css <- ".Table {border-collapse: collapse; border: 2px solid rgb(198, 89, 17); }\r\n.ColumnHeader {font-family: Garamond, arial; font-size: 0.75em; padding: 2px; border: 1px solid rgb(198, 89, 17); vertical-align: middle; text-align: center; font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(237, 125, 49); }\r\n.RowHeader {font-family: Garamond, arial; font-size: 0.75em; padding: 2px 8px 2px 2px; border: 1px solid rgb(198, 89, 17); vertical-align: middle; text-align: left; font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(237, 125, 49); }\r\n.Cell {font-family: Garamond, arial; font-size: 0.75em; padding: 2px 2px 2px 8px; border: 1px solid rgb(198, 89, 17); vertical-align: middle; text-align: right; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); }\r\n.Total {font-family: Garamond, arial; font-size: 0.75em; padding: 2px 2px 2px 8px; border: 1px solid rgb(198, 89, 17); vertical-align: middle; text-align: right; color: rgb(0, 0, 0); background-color: rgb(248, 198, 165); }\r\n"
+	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"ColumnHeader\">Sale ID</td>\n    <td class=\"ColumnHeader\">Item</td>\n    <td class=\"ColumnHeader\">Quantity</td>\n    <td class=\"ColumnHeader\">Price</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5334</td>\n    <td class=\"Cell\">Apple</td>\n    <td class=\"Cell\">5</td>\n    <td class=\"Cell\">0.34</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5336</td>\n    <td class=\"Cell\">Orange</td>\n    <td class=\"Cell\">8</td>\n    <td class=\"Cell\">0.47</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5338</td>\n    <td class=\"Cell\">Banana</td>\n    <td class=\"Cell\">6</td>\n    <td class=\"Cell\">1.34</td>\n  </tr>\n</table>"
+
+  expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getCss()), css)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+context("EXPORT TESTS")
+
+
+test_that("export as matrix (no headings)", {
+
+  # data for the table
+  saleIds <- c(5334, 5336, 5338)
+  items <- c("Apple", "Orange", "Banana")
+  quantities <- c(5, 8, 6)
+  prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+  # construct the table
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addData(data.frame(saleIds, items, quantities, prices),
+              firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+              columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+  # output as matrix
+  m <- tbl$asMatrix()
+  # prepStr(paste(as.character(m), sep=" ", collapse=" "))
+	mdata <- "Sale ID 5334 5336 5338 Item Apple Orange Banana Quantity 5 8 6 Price 0.34 0.47 1.34"
+
+  expect_identical(paste(as.character(m), sep=" ", collapse=" "), mdata)
+})
+
+
+test_that("export as matrix (with headings)", {
+
+  # data for the table
+  saleIds <- c(5334, 5336, 5338)
+  items <- c("Apple", "Orange", "Banana")
+  quantities <- c(5, 8, 6)
+  prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+  # construct the table
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addData(data.frame(saleIds, items, quantities, prices),
+              firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+              columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+  # output as matrix
+  m <- tbl$asMatrix(firstRowAsColumnNames=TRUE, firstColumnAsRowNames=TRUE)
+  # prepStr(paste(as.character(m), sep=" ", collapse=" "))
+	mdata <- "Apple Orange Banana 5 8 6 0.34 0.47 1.34"
+
+  expect_identical(paste(as.character(m), sep=" ", collapse=" "), mdata)
+})
+
+
+test_that("export as data frame", {
+
+  # data for the table
+  saleIds <- c(5334, 5336, 5338)
+  items <- c("Apple", "Orange", "Banana")
+  quantities <- c(5, 8, 6)
+  prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+  # construct the table
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addData(data.frame(saleIds, items, quantities, prices),
+              firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+              columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+  # output as data frame
+  df <- tbl$asDataFrame(firstRowAsColumnNames=TRUE, rawValue=TRUE)
+  # prepStr(paste(as.character(df), sep=" ", collapse=" "))
+	text <- "c(5334, 5336, 5338) c(1, 3, 2) c(5, 8, 6) c(0.34452354, 0.4732543, 1.3443243)"
+
+	expect_identical(paste(as.character(df), sep=" ", collapse=" "), text)
+})
+
+
+context("GET CELLS TESTS")
+
+
+test_that("getting a mixture of rows, columns and cells when `specifyCellsAsList=TRUE`", {
+
+  # aggregate the sample data to make a small data frame
+  library(basictabler)
+  library(dplyr)
+  tocsummary <- bhmsummary %>%
+    group_by(TOC) %>%
+    summarise(OnTimeArrivals=sum(OnTimeArrivals),
+              OnTimeDepartures=sum(OnTimeDepartures),
+              TotalTrains=sum(TrainCount)) %>%
+    ungroup() %>%
+    mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+           OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+    arrange(TOC)
+
+  # formatting values (explained in the introduction vignette)
+  columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+  # create the table
+  tbl <- BasicTable$new()
+  tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                      "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+              columnFormats=columnFormats)
+
+  # get the cells and apply styling
+  highlight <- tbl$createInlineStyle(declarations=list("background-color"="#FFCC66"))
+  cells <- tbl$getCells(specifyCellsAsList=TRUE, rowNumbers=2, columnNumbers=4, cellCoordinates=list(c(5, 6)))
+  lst <- lapply(cells, function(cell) {cell$style <- highlight})
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getHtml()))
+	str <- "                TOC  On-Time Arrivals  On-Time Departures  Total Trains  On-Time Arrival %  On-Time Departure %  \nArriva Trains Wales             1,404               2,348         3,909               35.9                 60.1  \n       CrossCountry             5,799              10,246        22,928               25.3                 44.7  \n     London Midland            13,036              17,184        48,279               27.0                 35.6  \n      Virgin Trains             3,289               3,864         8,594               38.3                 45.0  "
+	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"ColumnHeader\">TOC</td>\n    <td class=\"ColumnHeader\">On-Time Arrivals</td>\n    <td class=\"ColumnHeader\">On-Time Departures</td>\n    <td class=\"ColumnHeader\" style=\"background-color: #FFCC66; \">Total Trains</td>\n    <td class=\"ColumnHeader\">On-Time Arrival %</td>\n    <td class=\"ColumnHeader\">On-Time Departure %</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\" style=\"background-color: #FFCC66; \">Arriva Trains Wales</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">1,404</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">2,348</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">3,909</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">35.9</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">60.1</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">CrossCountry</td>\n    <td class=\"Cell\">5,799</td>\n    <td class=\"Cell\">10,246</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">22,928</td>\n    <td class=\"Cell\">25.3</td>\n    <td class=\"Cell\">44.7</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">London Midland</td>\n    <td class=\"Cell\">13,036</td>\n    <td class=\"Cell\">17,184</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">48,279</td>\n    <td class=\"Cell\">27.0</td>\n    <td class=\"Cell\">35.6</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">Virgin Trains</td>\n    <td class=\"Cell\">3,289</td>\n    <td class=\"Cell\">3,864</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">8,594</td>\n    <td class=\"Cell\">38.3</td>\n    <td class=\"Cell\" style=\"background-color: #FFCC66; \">45.0</td>\n  </tr>\n</table>"
+
+	expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+test_that("getting a mixture of rows, columns and cells when `specifyCellsAsList=FALSE`", {
+
+  # aggregate the sample data to make a small data frame
+  library(basictabler)
+  library(dplyr)
+  tocsummary <- bhmsummary %>%
+    group_by(TOC) %>%
+    summarise(OnTimeArrivals=sum(OnTimeArrivals),
+              OnTimeDepartures=sum(OnTimeDepartures),
+              TotalTrains=sum(TrainCount)) %>%
+    ungroup() %>%
+    mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+           OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+    arrange(TOC)
+
+  # formatting values (explained in the introduction vignette)
+  columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+  # create the table
+  tbl <- BasicTable$new()
+  tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                      "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+              columnFormats=columnFormats)
+
+  # get the cells and apply styling
+  highlight <- tbl$createInlineStyle(declarations=list("background-color"="#00FF00"))
+  cells <- tbl$getCells(specifyCellsAsList=FALSE, rowNumbers=c(2, NA, 5), columnNumbers=c(NA, 4, 6))
+  lst <- lapply(cells, function(cell) {cell$style <- highlight})
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getHtml()))
+	str <- "                TOC  On-Time Arrivals  On-Time Departures  Total Trains  On-Time Arrival %  On-Time Departure %  \nArriva Trains Wales             1,404               2,348         3,909               35.9                 60.1  \n       CrossCountry             5,799              10,246        22,928               25.3                 44.7  \n     London Midland            13,036              17,184        48,279               27.0                 35.6  \n      Virgin Trains             3,289               3,864         8,594               38.3                 45.0  "
+	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"ColumnHeader\">TOC</td>\n    <td class=\"ColumnHeader\">On-Time Arrivals</td>\n    <td class=\"ColumnHeader\">On-Time Departures</td>\n    <td class=\"ColumnHeader\" style=\"background-color: #00FF00; \">Total Trains</td>\n    <td class=\"ColumnHeader\">On-Time Arrival %</td>\n    <td class=\"ColumnHeader\">On-Time Departure %</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\" style=\"background-color: #00FF00; \">Arriva Trains Wales</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">1,404</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">2,348</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">3,909</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">35.9</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">60.1</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">CrossCountry</td>\n    <td class=\"Cell\">5,799</td>\n    <td class=\"Cell\">10,246</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">22,928</td>\n    <td class=\"Cell\">25.3</td>\n    <td class=\"Cell\">44.7</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">London Midland</td>\n    <td class=\"Cell\">13,036</td>\n    <td class=\"Cell\">17,184</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">48,279</td>\n    <td class=\"Cell\">27.0</td>\n    <td class=\"Cell\">35.6</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">Virgin Trains</td>\n    <td class=\"Cell\">3,289</td>\n    <td class=\"Cell\">3,864</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">8,594</td>\n    <td class=\"Cell\">38.3</td>\n    <td class=\"Cell\" style=\"background-color: #00FF00; \">45.0</td>\n  </tr>\n</table>"
+
+	expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+context("FINDING CELLS TESTS")
+
+
+test_that("conditional formatting", {
+
+  library(basictabler)
+  library(dplyr)
+  tocsummary <- bhmsummary %>%
+    group_by(TOC) %>%
+    summarise(OnTimeArrivals=sum(OnTimeArrivals),
+              OnTimeDepartures=sum(OnTimeDepartures),
+              TotalTrains=sum(TrainCount)) %>%
+    ungroup() %>%
+    mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+           OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+    arrange(TOC)
+
+  # formatting values (explained in the introduction vignette)
+  columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+  # create the table
+  tbl <- BasicTable$new()
+  tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                      "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+              columnFormats=columnFormats)
+
+  # apply the red formatting
+  redStyle <- tbl$createInlineStyle(declarations=list("background-color"="#FFC7CE", "color"="#9C0006"))
+  cells <- tbl$findCells(columnNumbers=5:6, minValue=0, maxValue=40, includeNull=FALSE, includeNA=FALSE)
+  lst <- lapply(cells, function(cell) {cell$style <- redStyle})
+  # apply the yellow formatting
+  yellowStyle <- tbl$createInlineStyle(declarations=list("background-color"="#FFEB9C", "color"="#9C5700"))
+  cells <- tbl$findCells(columnNumbers=5:6, minValue=40, maxValue=60, includeNull=FALSE, includeNA=FALSE)
+  lst <- lapply(cells, function(cell) {cell$style <- yellowStyle})
+  # apply the green formatting
+  greenStyle <- tbl$createInlineStyle(declarations=list("background-color"="#C6EFCE", "color"="#006100"))
+  cells <- tbl$findCells(columnNumbers=5:6, minValue=60, maxValue=100, includeNull=FALSE, includeNA=FALSE)
+  lst <- lapply(cells, function(cell) {cell$style <- greenStyle})
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getHtml()))
+	str <- "                TOC  On-Time Arrivals  On-Time Departures  Total Trains  On-Time Arrival %  On-Time Departure %  \nArriva Trains Wales             1,404               2,348         3,909               35.9                 60.1  \n       CrossCountry             5,799              10,246        22,928               25.3                 44.7  \n     London Midland            13,036              17,184        48,279               27.0                 35.6  \n      Virgin Trains             3,289               3,864         8,594               38.3                 45.0  "
+	html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"ColumnHeader\">TOC</td>\n    <td class=\"ColumnHeader\">On-Time Arrivals</td>\n    <td class=\"ColumnHeader\">On-Time Departures</td>\n    <td class=\"ColumnHeader\">Total Trains</td>\n    <td class=\"ColumnHeader\">On-Time Arrival %</td>\n    <td class=\"ColumnHeader\">On-Time Departure %</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">Arriva Trains Wales</td>\n    <td class=\"Cell\">1,404</td>\n    <td class=\"Cell\">2,348</td>\n    <td class=\"Cell\">3,909</td>\n    <td class=\"Cell\" style=\"background-color: #FFC7CE; color: #9C0006; \">35.9</td>\n    <td class=\"Cell\" style=\"background-color: #C6EFCE; color: #006100; \">60.1</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">CrossCountry</td>\n    <td class=\"Cell\">5,799</td>\n    <td class=\"Cell\">10,246</td>\n    <td class=\"Cell\">22,928</td>\n    <td class=\"Cell\" style=\"background-color: #FFC7CE; color: #9C0006; \">25.3</td>\n    <td class=\"Cell\" style=\"background-color: #FFEB9C; color: #9C5700; \">44.7</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">London Midland</td>\n    <td class=\"Cell\">13,036</td>\n    <td class=\"Cell\">17,184</td>\n    <td class=\"Cell\">48,279</td>\n    <td class=\"Cell\" style=\"background-color: #FFC7CE; color: #9C0006; \">27.0</td>\n    <td class=\"Cell\" style=\"background-color: #FFC7CE; color: #9C0006; \">35.6</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">Virgin Trains</td>\n    <td class=\"Cell\">3,289</td>\n    <td class=\"Cell\">3,864</td>\n    <td class=\"Cell\">8,594</td>\n    <td class=\"Cell\" style=\"background-color: #FFC7CE; color: #9C0006; \">38.3</td>\n    <td class=\"Cell\" style=\"background-color: #FFEB9C; color: #9C5700; \">45.0</td>\n  </tr>\n</table>"
 
 	expect_identical(tbl$print(asCharacter=TRUE), str)
   expect_identical(as.character(tbl$getHtml()), html)

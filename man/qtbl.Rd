@@ -4,14 +4,14 @@
 \alias{qtbl}
 \title{Quickly build a basic table.}
 \usage{
-qtbl(dataFrame, columnNamesAsColumnHeaders = TRUE,
+qtbl(dataFrameOrMatrix, columnNamesAsColumnHeaders = TRUE,
   explicitColumnHeaders = NULL, rowNamesAsRowHeaders = FALSE,
   firstColumnAsRowHeaders = FALSE, explicitRowHeaders = NULL,
   columnFormats = NULL, ...)
 }
 \arguments{
-\item{dataFrame}{The data frame containing the data to be displayed in the
-table.}
+\item{dataFrameOrMatrix}{The data frame or matrix containing the data to be
+displayed in the table.}
 
 \item{columnNamesAsColumnHeaders}{TRUE to use the data frame column names
 as the column headers in the table.}

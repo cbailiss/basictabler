@@ -1,0 +1,300 @@
+---
+title: "01. Introduction"
+author: "Chris Bailiss"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{01. Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## In This Vignette
+
+* Introducing basictabler
+* Sample Data
+* Quick Table Functions
+* Cell-by-Cell Construction
+* Further Manipulation
+* Examples Gallery
+* Further Reading
+
+## Introducing basictabler
+
+The `basictabler` package enables basic tables to be created and rendered/exported with just a few lines of R.
+
+The `basictabler` package:
+
+- provides an easy way of creating basic tables.
+- Provide an especially easy way of generating tables from data frames and matrices.
+- Provide styling options so the basic tables can be themed/branded as needed.
+
+The tables are rendered as htmlwidgets or plain text. The HTML/text can be exported for use outside of R.
+
+The tables can also be exported to Excel, including the styling/formatting.
+
+`basictabler` is a companion package to the `pivottabler` package.  `pivottabler` is focussed on generating pivot tables and can aggregate data.  `basictabler` does not aggregate data but offers more control of table structure.
+
+The latest version of the `basictabler` package can be obtained directly from the [package repository](https://github.com/cbailiss/basictabler/).  Please log any questions not answered by the vignettes or any bug reports [here](https://github.com/cbailiss/basictabler/issues).
+
+## Sample Data: Trains in Birmingham
+
+To build some example tables, we will use the `bhmsummary` data frame.  This summarises the 83,710 trains that arrived into and/or departed from [Birmingham New Street railway station](https://en.wikipedia.org/wiki/Birmingham_New_Street_station) between 1st December 2016 and 28th February 2017. As an example, the following are the first four rows from this sample data - note the data has been transposed (otherwise the table would be very wide).
+
+```{r, message=FALSE}
+# the qhtbl() function is explained later in this vignette
+library(basictabler)
+qhtbl(t(bhmsummary[1:4,]), rowNamesAsRowHeaders=TRUE)
+```
+
+Each row in this sample data summarises different types of trains running through Birmingham.
+
+The first row from the sample data (column 1 above) represents:
+
+- Active trains (A=active as opposed to C=cancelled)...
+- operated by the Arriva Trains Wales train operating company
+- of type express passenger train (=fewer stops)
+- scheduled to be operated by a "Diesel Multiple Unit"
+- with a scheduled maximum speed of 75mph
+- in the week beginning 27th Nov 2016
+- originating from Crewe station
+- terminating at Birmingham International station
+- of which there two trains of the above type
+- of which zero arrived or departed on time
+- with a total of 8 arrival delay minutes and 3 departure delay minutes. 
+
+## Quick-Table Functions
+
+To construct basic tables quickly, two functions are provided that can construct tables with one line of R:
+
+- `qtbl()` returns a basic table.  Setting a variable equal to the return value, e.g. `tbl <- qtbl(...)`, allows further operations to be carried out on the table.  Otherwise, using `qtbl(...)` alone will simply print the table to the console and then discard it.
+- `qhtbl()` returns a HTML widget that when used alone will render a HTML representation of the table (e.g. in the R-Studio "Viewer" pane).
+
+The arguments to both functions are the same:
+
+- `dataFrameOrMatrix` specifies the data frame or matrix to construct the basic table from.
+- `columnNamesAsColumnHeaders` specifies whether the names of the columns in the data frame or matrix should be rendered as column headings in the table (TRUE by default).
+- `explicitColumnHeaders` is a character vector that allows the column headings to be explicitly specified.
+- `rowNamesAsRowHeaders` specifies whether the names of the rows in the data frame or matrix should be rendered as row headings in the table.
+- `firstColumnAsRowHeaders` specifies whether the first column of a data frame should be rendered as row headings in the table (is ignored for matrices).
+- `explicitRowHeaders` is a character vector that allows the row headings to be explicitly specified.
+- `columnFormats` is a list containing format specifiers, each of which is either an sprintf() character value, a list of arguments for the format() function or an R function that provides custom formatting logic.
+
+A basic example of quickly printing a pivot table to the console using the `qtbl()` function: 
+
+```{r, message=FALSE, warning=FALSE, comment=""}
+library(basictabler)
+qtbl(data.frame(a=1:2, b=3:4))
+```
+
+The `qtbl()` function is nothing more than a concise version of a more verbose syntax, i.e.
+
+```{r, message=FALSE, eval=FALSE, warning=FALSE, comment=""}
+library(basictabler)
+tbl <- qtbl(data.frame(a=1:2, b=3:4))
+```
+
+... is equivalent to ...
+
+```{r, message=FALSE, eval=FALSE, warning=FALSE, comment=""}
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(a=1:2, b=3:4))
+```
+
+Other operations can be carried out on the table object, e.g. rendering it as a HTML widget:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(a=1:2, b=3:4))
+tbl$renderTable()
+```
+
+The `qhtbl()` function renders the table immediately as html widget:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+library(basictabler)
+qhtbl(data.frame(a=1:2, b=3:4))
+```
+
+When creating tables from data frames or matrices, it is possible to specify how values should be formatted for display in the table.  The following example makes use of the sample data and illustrates how to specify formatting:
+
+```{r, message=FALSE, warning=FALSE, comment=""}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# To specify formatting, a list is created which contains one element for each column in 
+# the data frame, i.e. tocsummary contains six columns so the columnFormats list has six elements.
+# The values in the first column in the data frame won't be formatted since NULL has been specified.
+# The values in the 2nd, 3rd and 4th columns will be formatted using format(value, big.mark=",")
+# The values in the 5th and 6th columns will be formatted using sprintf(value, "%.1f")
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# render the table directly as a html widget
+qhtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+```
+
+## Cell-by-Cell Construction
+
+The examples in this vignette illustrate constructing tables from data frames.  This populates a table quickly with just one line of R.
+
+Tables can also be constructed row-by-row, column-by-column and/or cell-by-cell.  For more details, please see the [Working with Cells](v02-workingwithcells.html) vignette.
+
+## Further Manipulation
+
+Further operations on the basic table object `tbl` can be carried out to modify the table.  For example, to add a total row:
+
+```{r, message=FALSE, warning=FALSE, comment=""}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# calculate the data for the total row
+totalsummary <- bhmsummary %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100)
+
+# specify formatting
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# generate the table
+tbl <- qtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the values for the totals row
+values <- list("All TOC", totalsummary[1, ]$OnTimeArrivals, totalsummary[1, ]$OnTimeDepartures,
+               totalsummary[1, ]$TotalTrains, totalsummary[1, ]$OnTimeArrivalPercent,
+               totalsummary[1, ]$OnTimeDeparturePercent)
+
+# add the totals row
+tbl$cells$setRow(6, cellTypes=c("rowHeader", "total", "total", "total", "total", "total"),
+                 rawValues=values, formats=columnFormats)
+
+# render the table
+tbl$renderTable()
+```
+
+For more information and examples regarding manipulating the structure and content of tables see the [Working with Cells](v02-workingwithcells.html) vignette.
+
+## Examples Gallery
+
+This section shows some examples from the other vignettes as a quick overview of some of the other capabilities of the basictabler package.  The R scripts to create each example below can be found in the other vignettes.
+
+### Styling
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# define the colours
+blue1Colors <- list(
+  headerBackgroundColor = "rgb(68, 114, 196)",
+  headerColor = "rgb(255, 255, 255)",
+  cellBackgroundColor = "rgb(255, 255, 255)",
+  cellColor = "rgb(0, 0, 0)",
+  totalBackgroundColor = "rgb(186, 202, 233)",
+  totalColor = "rgb(0, 0, 0)",
+  borderColor = "rgb(48, 84, 150)"
+)
+
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+# theme the table and render
+theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=blue1Colors, fontName="Verdana, Arial")
+tbl$theme <- theme
+tbl$renderTable(styleNamePrefix="t3")
+```
+
+See the [Styling](v04-styling.html) vignette for more details.
+
+### Conditional Formatting
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# apply the red formatting
+redStyle <- tbl$createInlineStyle(declarations=list("background-color"="#FFC7CE", "color"="#9C0006"))
+cells <- tbl$findCells(columnNumbers=5:6, minValue=0, maxValue=40, includeNull=FALSE, includeNA=FALSE)
+lst <- lapply(cells, function(cell) {cell$style <- redStyle})
+# apply the yellow formatting
+yellowStyle <- tbl$createInlineStyle(declarations=list("background-color"="#FFEB9C", "color"="#9C5700"))
+cells <- tbl$findCells(columnNumbers=5:6, minValue=40, maxValue=60, includeNull=FALSE, includeNA=FALSE)
+lst <- lapply(cells, function(cell) {cell$style <- yellowStyle})
+# apply the green formatting
+greenStyle <- tbl$createInlineStyle(declarations=list("background-color"="#C6EFCE", "color"="#006100"))
+cells <- tbl$findCells(columnNumbers=5:6, minValue=60, maxValue=100, includeNull=FALSE, includeNA=FALSE)
+lst <- lapply(cells, function(cell) {cell$style <- greenStyle})
+tbl$renderTable()
+```
+
+See the [Finding and Formatting](v05-findingandformatting.html) vignette for more details.
+
+## Further Reading
+
+The full set of vignettes is:
+
+1. [Introduction](v01-introduction.html)
+2. [Working with Cells](v02-workingwithcells.html)
+3. [Outputs](v03-outputs.html)
+4. [Styling](v04-styling.html)
+5. [Finding and Formatting](v05-findingandformatting.html)
+6. [Shiny](v06-shiny.html)
+7. [Excel Export](v07-excelexport.html)

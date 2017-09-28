@@ -4,8 +4,8 @@
 #' The \code{qtbl} function builds a basic table with one line of R.
 #'
 #' @export
-#' @param dataFrame The data frame containing the data to be displayed in the
-#'   table.
+#' @param dataFrameOrMatrix The data frame or matrix containing the data to be
+#'   displayed in the table.
 #' @param columnNamesAsColumnHeaders TRUE to use the data frame column names
 #'   as the column headers in the table.
 #' @param explicitColumnHeaders A character vector of column headers.
@@ -27,11 +27,11 @@
 #'   "OnTimeArrivals")], columnNamesAsColumnHeaders=FALSE,
 #'   explicitColumnHeaders=c("Week", "From", "To", "Trains", "On-Time"))
 #'
-qtbl <- function(dataFrame, columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
-                       rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
-                       columnFormats=NULL, ...) {
+qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
+                 rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
+                 columnFormats=NULL, ...) {
   arguments <- list(...)
-  checkArgument(3, TRUE, "", "qtbl", dataFrame, missing(dataFrame), allowMissing=FALSE, allowNull=FALSE, allowedClasses="data.frame")
+  checkArgument(3, TRUE, "", "qtbl", dataFrameOrMatrix, missing(dataFrameOrMatrix), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("data.frame", "matrix"))
   checkArgument(3, TRUE, "", "qtbl", columnNamesAsColumnHeaders, missing(columnNamesAsColumnHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
   checkArgument(3, TRUE, "", "qtbl", explicitColumnHeaders, missing(explicitColumnHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
   checkArgument(3, TRUE, "", "qtbl", rowNamesAsRowHeaders, missing(rowNamesAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
@@ -41,9 +41,15 @@ qtbl <- function(dataFrame, columnNamesAsColumnHeaders=TRUE, explicitColumnHeade
   argumentCheckMode <- arguments$argumentCheckMode
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
   tbl <- BasicTable$new()
-  tbl$addData(dataFrame, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
-              rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
-              explicitRowHeaders=explicitRowHeaders, columnFormats=columnFormats)
+  if("data.frame" %in% class(dataFrameOrMatrix)) {
+    tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
+                rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
+                explicitRowHeaders=explicitRowHeaders, columnFormats=columnFormats)
+  }
+  else if("matrix" %in% class(dataFrameOrMatrix)) {
+    tbl$addMatrix(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
+                rowNamesAsRowHeaders=rowNamesAsRowHeaders, explicitRowHeaders=explicitRowHeaders, columnFormats=columnFormats)
+  }
   return(tbl)
 }
 
@@ -53,8 +59,8 @@ qtbl <- function(dataFrame, columnNamesAsColumnHeaders=TRUE, explicitColumnHeade
 #' one line of R.
 #'
 #' @export
-#' @param dataFrame The data frame containing the data to be displayed in the
-#'   table.
+#' @param dataFrameOrMatrix The data frame or matrix containing the data to be
+#'   displayed in the table.
 #' @param columnNamesAsColumnHeaders TRUE to use the data frame column names
 #'   as the column headers in the table.
 #' @param explicitColumnHeaders A character vector of column headers.
@@ -76,11 +82,11 @@ qtbl <- function(dataFrame, columnNamesAsColumnHeaders=TRUE, explicitColumnHeade
 #'   "OnTimeArrivals")], columnNamesAsColumnHeaders=FALSE,
 #'   explicitColumnHeaders=c("Week", "From", "To", "Trains", "On-Time"))
 #'
-qhtbl <- function(dataFrame, columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
-                       rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
-                       columnFormats=NULL, ...) {
+qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
+                  rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
+                  columnFormats=NULL, ...) {
   arguments <- list(...)
-  checkArgument(3, TRUE, "", "qhtbl", dataFrame, missing(dataFrame), allowMissing=FALSE, allowNull=FALSE, allowedClasses="data.frame")
+  checkArgument(3, TRUE, "", "qhtbl", dataFrameOrMatrix, missing(dataFrameOrMatrix), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("data.frame", "matrix"))
   checkArgument(3, TRUE, "", "qhtbl", columnNamesAsColumnHeaders, missing(columnNamesAsColumnHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
   checkArgument(3, TRUE, "", "qhtbl", explicitColumnHeaders, missing(explicitColumnHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
   checkArgument(3, TRUE, "", "qhtbl", rowNamesAsRowHeaders, missing(rowNamesAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
@@ -90,9 +96,15 @@ qhtbl <- function(dataFrame, columnNamesAsColumnHeaders=TRUE, explicitColumnHead
   argumentCheckMode <- arguments$argumentCheckMode
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
   tbl <- BasicTable$new()
-  tbl$addData(dataFrame, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
-              rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
-              explicitRowHeaders=explicitRowHeaders, columnFormats=columnFormats)
+  if("data.frame" %in% class(dataFrameOrMatrix)) {
+    tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
+                rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
+                explicitRowHeaders=explicitRowHeaders, columnFormats=columnFormats)
+  }
+  else if("matrix" %in% class(dataFrameOrMatrix)) {
+    tbl$addMatrix(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
+                rowNamesAsRowHeaders=rowNamesAsRowHeaders, explicitRowHeaders=explicitRowHeaders, columnFormats=columnFormats)
+  }
   w <- tbl$renderTable()
   return(w)
 }

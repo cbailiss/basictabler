@@ -1,0 +1,548 @@
+---
+title: "05. Finding and Formatting"
+author: "Chris Bailiss"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{07. Finding and Formatting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## In This Vignette
+
+* Finding and Formatting
+* Example Table
+* Getting Cells by Row and/or Column Numbers 
+* Finding Cells
+* Conditional Formatting
+* Further Reading
+
+## Finding and Formatting
+
+This vignette explains how to find parts of a table, i.e. one or more cells in the body of the table.
+
+This is often useful to retrieve either a specific value/values, or to change the appearance of specific headings/cells - similar to the conditional formatting capabilities of many off-the-shelf tools.
+
+Throughout this vignette, the `createInlineStyle` function is used.  This creates a new style in the table and takes two arguments:  `baseStyleName` specifies the name of the style that the new style will be based on (i.e. will have it's style properties copied from) and `declarations` which specifies new/overriding style properties for the new style.
+
+## Example Table
+
+The following table is used as the basis of the examples in the rest of this vignette:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table and render
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+tbl$renderTable()
+```
+
+## Getting Cells By Row and/or Column Numbers
+
+The `getCells()` function can be used to retrieve one or more cells by row/column number in the body of the table.  The arguments can be specified in two different ways depending on the value of the `specifyCellsAsList` argument.
+
+The `getCells()` function returns a list of cell objects.
+
+### Getting cells when `specifyCellsAsList=TRUE`
+
+To get cells when `specifyCellsAsList=TRUE`:
+
+- Get one or more rows by specifying the row numbers as a vector as the `rowNumbers` argument and leaving the `columnNumbers` argument set to the default value of NULL, or
+- Get one or more columns by specifying the column numbers as a vector as the `columnNumbers` argument and leaving the `rowNumbers` argument set to the default value of NULL, or
+- Get one or more individual cells by specifying the `cellCoordinates` argument as a list of vectors of length 2, where each element in the list is the row and column number of one cell, e.g. `list(c(1, 2), c(3, 4))` specifies two cells, the first located at row 1, column 2 and the second located at row 3, column 4.
+
+Examples of the above are given below.  The retrieved cells are highlighted in orange by specifying a different style.
+
+#### Retrieving whole rows of cells when `specifyCellsAsList=TRUE`
+
+Retrieving the first and third rows:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#FFCC66"))
+cells <- tbl$getCells(specifyCellsAsList=TRUE, rowNumbers=c(1, 3))
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+tbl$renderTable()
+```
+
+#### Retrieving whole columns of cells when `specifyCellsAsList=TRUE`
+
+Retrieving the second column:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#FFCC66"))
+cells <- tbl$getCells(specifyCellsAsList=TRUE, columnNumbers=2)
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+tbl$renderTable()
+```
+
+#### Retrieving specific cells when `specifyCellsAsList=TRUE`
+
+Retrieving the raw/formatted values of the cell in the third column on the second row:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#FFCC66"))
+cells <- tbl$getCells(specifyCellsAsList=TRUE, cellCoordinates=list(c(2, 3)))
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+cat("The raw value of the cell is", cells[[1]]$rawValue, "and the formatted value is", cells[[1]]$formattedValue, ".")
+tbl$renderTable()
+```
+
+Retrieving multiple cells (2nd row-3rd column, 3rd row-4th column and 5th row-6th column):
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#FFCC66"))
+cells <- tbl$getCells(specifyCellsAsList=TRUE, cellCoordinates=list(c(2, 3), c(3, 4), c(5, 6)))
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+tbl$renderTable()
+```
+
+#### Retrieving a mixture of rows, columns and cells when `specifyCellsAsList=TRUE`
+
+Retrieving the 2nd row, 4th column and 5th row-6th column cell:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#FFCC66"))
+cells <- tbl$getCells(specifyCellsAsList=TRUE, rowNumbers=2, columnNumbers=4, cellCoordinates=list(c(5, 6)))
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+tbl$renderTable()
+```
+
+### Getting cells when `specifyCellsAsList=FALSE`
+
+To get cells when `specifyCellsAsList=FALSE`:
+
+- Get one or more rows by specifying the row numbers as a vector as the `rowNumbers` argument and leaving the `columnNumbers` argument set to the default value of NULL, or
+- Get one or more columns by specifying the column numbers as a vector as the `columnNumbers` argument and leaving the `rowNumbers` argument set to the default value of NULL, or
+- Get one or more cells by specifying the row and column numbers as vectors for the `rowNumbers` and `columnNumbers` arguments, or
+- a mixture of the above, where for entire rows/columns the element in the other vector is set to `NA`, e.g. to retrieve whole rows, specify the row numbers as the `rowNumbers` but set the corresponding elements in the `columnNumbers` vector to `NA`.
+
+Examples of the above are given below.  The retrieved cells are highlighted in green by specifying a different style.
+
+#### Retrieving whole rows of cells when `specifyCellsAsList=FALSE`
+
+When retrieving just rows, the rowNumbers argument is specified the same irrespective of whether `specifyCellsAsList` is `TRUE` or `FALSE`.
+
+Retrieving the first and third rows:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#00FF00"))
+cells <- tbl$getCells(specifyCellsAsList=FALSE, rowNumbers=c(1, 3))
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+tbl$renderTable()
+```
+
+#### Retrieving whole columns of cells when `specifyCellsAsList=FALSE`
+
+When retrieving just columns, the columnNumbers argument is specified the same irrespective of whether `specifyCellsAsList` is `TRUE` or `FALSE`.
+
+Retrieving the second column:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#00FF00"))
+cells <- tbl$getCells(specifyCellsAsList=FALSE, columnNumbers=2)
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+tbl$renderTable()
+```
+
+#### Retrieving specific cells when `specifyCellsAsList=FALSE`
+
+When retrieving cells, the rowNumbers and columnNumbers arguments are specified differently depending on whether `specifyCellsAsList` is `TRUE` or `FALSE`.
+
+Retrieving the raw/formatted values of the cell in the third column on the second row:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#00FF00"))
+cells <- tbl$getCells(specifyCellsAsList=FALSE, rowNumbers=2, columnNumbers=3)
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+cat("The raw value of the cell is", cells[[1]]$rawValue, "and the formatted value is", cells[[1]]$formattedValue, ".")
+tbl$renderTable()
+```
+
+#### Retrieving multiple cells (2nd row-3rd column, 3rd row-4th column and 5th row-6th column):
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#00FF00"))
+cells <- tbl$getCells(specifyCellsAsList=FALSE, rowNumbers=c(2, 3, 5), columnNumbers=c(3, 4, 6))
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+tbl$renderTable()
+```
+
+#### Retrieving a mixture of rows, columns and cells when `specifyCellsAsList=FALSE`
+
+When retrieving cells, the rowNumbers and columnNumbers arguments are specified differently depending on whether `specifyCellsAsList` is `TRUE` or `FALSE`.
+
+Retrieving the 2nd row, 4th column and 5th row-6th column cell:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# get the cells and apply styling
+highlight <- tbl$createInlineStyle(declarations=list("background-color"="#00FF00"))
+cells <- tbl$getCells(specifyCellsAsList=FALSE, rowNumbers=c(2, NA, 5), columnNumbers=c(NA, 4, 6))
+lst <- lapply(cells, function(cell) {cell$style <- highlight})
+tbl$renderTable()
+```
+
+## Finding Cells
+
+The `findCells()` function is used to search for cells within the body of the table matching one or more criteria.  The function returns a list of cell objects.  This function has the following parameters:
+
+- `rowNumbers` - a numerical value specifying one or multiple row numbers to search in the table.
+- `columnNumbers` - a numerical value specifying one or multiple column numbers to search in the table.
+- `minValue` - a numerical value specifying a minimum value threshold when matching cells.
+- `maxValue` - a numerical value specifying a maximum value threshold when matching cells.
+- `exactValues` - vector specifying a set of allowed values when matching cells.
+- `includeNA` - specify TRUE to include NA in the matched cells, FALSE to exclude NA values.
+
+This is typically used for conditional formatting, as illustrated in the next section.
+
+## Conditional Formatting
+
+The `findCells()` and `getCells()` functions can be used to help conditionally format a table.
+
+For example, to highlight in red those cells in the basic example table that have a percentage value between 0% and 40%:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# apply the formatting
+redStyle <- tbl$createInlineStyle(declarations=list("background-color"="#FFC7CE", "color"="#9C0006"))
+cells <- tbl$findCells(columnNumbers=5:6, minValue=0, maxValue=40, includeNull=FALSE, includeNA=FALSE)
+lst <- lapply(cells, function(cell) {cell$style <- redStyle})
+tbl$renderTable()
+```
+
+Extending the above example so that on-time arrival/departure percentages are coloured as follows:
+
+- 0% to 40% - red
+- 40% to 60% - yellow
+- 60% to 100% - green
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# formatting values (explained in the introduction vignette)
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- BasicTable$new()
+tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# apply the red formatting
+redStyle <- tbl$createInlineStyle(declarations=list("background-color"="#FFC7CE", "color"="#9C0006"))
+cells <- tbl$findCells(columnNumbers=5:6, minValue=0, maxValue=40, includeNull=FALSE, includeNA=FALSE)
+lst <- lapply(cells, function(cell) {cell$style <- redStyle})
+# apply the yellow formatting
+yellowStyle <- tbl$createInlineStyle(declarations=list("background-color"="#FFEB9C", "color"="#9C5700"))
+cells <- tbl$findCells(columnNumbers=5:6, minValue=40, maxValue=60, includeNull=FALSE, includeNA=FALSE)
+lst <- lapply(cells, function(cell) {cell$style <- yellowStyle})
+# apply the green formatting
+greenStyle <- tbl$createInlineStyle(declarations=list("background-color"="#C6EFCE", "color"="#006100"))
+cells <- tbl$findCells(columnNumbers=5:6, minValue=60, maxValue=100, includeNull=FALSE, includeNA=FALSE)
+lst <- lapply(cells, function(cell) {cell$style <- greenStyle})
+tbl$renderTable()
+```
+
+
+## Further Reading
+
+The full set of vignettes is:
+
+1. [Introduction](v01-introduction.html)
+2. [Working with Cells](v02-workingwithcells.html)
+3. [Outputs](v03-outputs.html)
+4. [Styling](v04-styling.html)
+5. [Finding and Formatting](v05-findingandformatting.html)
+6. [Shiny](v06-shiny.html)
+7. [Excel Export](v07-excelexport.html)

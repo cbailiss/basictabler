@@ -58,11 +58,11 @@ table.
   \item{\code{insertRow(rowNumber=NULL)}}{Insert a new row (moving the rows
   underneath down).}
   \item{\code{setRow(rowNumber=NULL, startAtColumnNumber=1, cellTypes=NULL,
-  rawValues=NULL, formattedValues=NULL, visiblity=TRUE)}}{Set multiple cells
-  across a row at once.}
-  \item{\code{setColumn(columnNumber=NULL, startAtRowNumber=1, cellTypes=NULL,
-  rawValues=NULL, formattedValues=NULL, visiblity=TRUE)}}{Set multiple cells
-  down a column at once.}
+  rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE)}}{Set
+  multiple cells across a row at once.}
+  \item{\code{setColumn(columnNumber=NULL, startAtRowNumber=1,
+  cellTypes=NULL, rawValues=NULL, formattedValues=NULL, formats=NULL,
+  visiblity=TRUE)}}{Set multiple cells down a column at once.}
   \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
   underneath up.}
   \item{\code{insertColumn(columnNumber=NULL)}}{Insert a new column (moving

@@ -10,17 +10,19 @@ knitr::opts_chunk$set(echo = TRUE)
 [![Build Status](https://travis-ci.org/cbailiss/basictabler.svg?branch=master)](https://travis-ci.org/cbailiss/basictabler)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/basictabler)](https://cran.r-project.org/package=basictabler)
 
-The `basictabler` package enables basic tables to be created with just a few lines of R.
+The `basictabler` package enables basic tables to be created and rendered/exported with just a few lines of R.
 
-The `basictabler` package aims to:
+The `basictabler` package:
 
-* Provide an easy way of creating basic tables, without requiring the user to specify low-level layout logic.
-* Provide an especially easy way of generating tables from data frames.
-* Provide styling options so the basic tables can be themed/branded as needed.
+- provides an easy way of creating basic tables.
+- Provide an especially easy way of generating tables from data frames and matrices.
+- Provide styling options so the basic tables can be themed/branded as needed.
 
-The tables are rendered as htmlwidgets, Latex or plain text.  The HTML/Latex/text can be exported for use outside of R.
+The tables are rendered as htmlwidgets or plain text. The HTML/text can be exported for use outside of R.
 
-The tables can also be exported to Excel.
+The tables can also be exported to Excel, including the styling/formatting.
+
+`basictabler` is a companion package to the `pivottabler` package.  `pivottabler` is focussed on generating pivot tables and can aggregate data.  `basictabler` does not aggregate data but offers more control of table structure.
 
 ### Installation
 
@@ -40,105 +42,64 @@ devtools::install_github("cbailiss/basictabler", build_vignettes = TRUE)
 
 ### Example
 
-`basictabler` has many styling and formatting capabilities when rendering pivot tables in HTML / as htmlwidgets using `pt$renderTable()`, however the most basic output is simply as plain text.
+#### Trivial Example
 
-#### Plain Text Output
-
-A simple example of creating a basic table - summarising the types of trains run by different train companies:
+Creating a tiny HTML table from a data frame and immediately rendering it as a htmlwidget:
 
 ```{r, message=FALSE, warning=FALSE, comment=""}
-library(pivottabler)
-# arguments:  qpvt(dataFrame, rows, columns, calculations, ...)
-qpvt(bhmtrains, "TOC", "TrainCategory", "n()") # TOC = Train Operating Company
+library(basictabler)
+qhtbl(data.frame(a=1:2, b=3:4))
 ```
 
-`pivottabler` also offers a more verbose syntax that is more self-describing and offers additional options that aren't available with the quick-pivot functions.  The equivalent verbose commands to output the same pivot table as above are:
+#### Another Example
+
+Creating a table from a data frame, specifying column names and value formats:
 
 ```{r eval=FALSE}
-library(pivottabler)
-pt <- PivotTable$new()
-pt$addData(bhmtrains) # bhmtrains is a data frame with columns TrainCategory, TOC, etc.
-pt$addColumnDataGroups("TrainCategory") # e.g. Express Passenger
-pt$addRowDataGroups("TOC") # TOC = Train Operating Company e.g. Arriva Trains Wales
-pt$defineCalculation(calculationName="TotalTrains", summariseExpression="n()")
-pt$evaluatePivot()
-pt
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# To specify formatting, a list is created which contains one element for each column in 
+# the data frame, i.e. tocsummary contains six columns so the columnFormats list has six elements.
+# The values in the first column in the data frame won't be formatted since NULL has been specified.
+# The values in the 2nd, 3rd and 4th columns will be formatted using format(value, big.mark=",")
+# The values in the 5th and 6th columns will be formatted using sprintf(value, "%.1f")
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# render the table directly as a html widget
+qhtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
 ```
 
-Multiple levels can be added to the pivot table row or column headings, e.g. looking at combinations of TOC and PowerType:
+![http://cbailiss.me.uk/basictablerreadmeimgs/example1.png](http://cbailiss.me.uk/basictablerreadmeimgs/example1.png)
 
-```{r, eval=FALSE}
-library(pivottabler)
-qpvt(bhmtrains, c("TOC", "PowerType"), "TrainCategory", "n()")
-```
+Tables can be further manipulated once created, including adding/removing cells/rows/columns and specifying styling and formatting.
 
-```{r message=FALSE, warning=FALSE, comment=""}
-library(pivottabler)
-pt <- PivotTable$new()
-pt$addData(bhmtrains)
-pt$addColumnDataGroups("TrainCategory")
-pt$addRowDataGroups("TOC")
-pt$addRowDataGroups("PowerType") # D/EMU = Diesel/Electric Multiple Unit, HST=High Speed Train
-pt$defineCalculation(calculationName="TotalTrains", summariseExpression="n()")
-pt$evaluatePivot()
-pt
-```
-
-#### HTML Output
-
-The HTML rendering of the same two pivot tables shown above (each constructed using both a quick-pivot function and verbose syntax) is:
-
-```{r, eval=FALSE}
-library(pivottabler)
-qhpvt(bhmtrains, "TOC", "TrainCategory", "n()")
-```
-
-```{r eval=FALSE}
-library(pivottabler)
-pt <- PivotTable$new()
-pt$addData(bhmtrains)
-pt$addColumnDataGroups("TrainCategory")
-pt$addRowDataGroups("TOC")
-pt$defineCalculation(calculationName="TotalTrains", summariseExpression="n()")
-pt$renderPivot()
-```
-
-![http://cbailiss.me.uk/pivottablerreadmeimgs/example1.png](http://cbailiss.me.uk/pivottablerreadmeimgs/example1.png)
-
-```{r, eval=FALSE}
-library(pivottabler)
-qhpvt(bhmtrains, c("TOC", "PowerType"), "TrainCategory", "n()")
-```
-
-```{r eval=FALSE}
-library(pivottabler)
-pt <- PivotTable$new()
-pt$addData(bhmtrains) # bhmtrains is a data frame with columns TrainCategory, TOC, etc.
-pt$addColumnDataGroups("TrainCategory") # e.g. Express Passenger
-pt$addRowDataGroups("TOC") # TOC = Train Operating Company e.g. Arriva Trains Wales
-pt$addRowDataGroups("PowerType") # D/EMU = Diesel/Electric Multiple Unit, HST=High Speed Train
-pt$defineCalculation(calculationName="TotalTrains", summariseExpression="n()")
-pt$renderPivot()
-```
-
-![http://cbailiss.me.uk/pivottablerreadmeimgs/example2.png](http://cbailiss.me.uk/pivottablerreadmeimgs/example2.png)
+It is also possible to create tables row-by-row, column-by-column and/or cell-by-cell.
 
 ### More Information
 
-More complex pivot tables can also be created, e.g. with irregular layouts, using multiple data frames, using multiple calculations and/or custom R calculation functions.  See the package vignettes for more details:
+See the package vignettes for more information:
 
 ```{r eval=FALSE}
 # to see a list of available package vignettes:
-vignette(package="pivottabler")
+vignette(package="basictabler")
 # to open a specific vignette
-vignette(topic="v01-introduction", package="pivottabler")
+vignette(topic="v01-introduction", package="basictabler")
 ```
 
 The vignettes can also be read on CRAN at:
-https://cran.r-project.org/package=pivottabler
+https://cran.r-project.org/package=basictabler
 
-### More Examples
-
-The following are a few of the example pivot tables constructed in the package vignettes (click to open full sized picture):
-
-![http://cbailiss.me.uk/pivottablerreadmeimgs/example3.png](http://cbailiss.me.uk/pivottablerreadmeimgs/example3.png)
