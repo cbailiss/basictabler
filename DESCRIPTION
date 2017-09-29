@@ -1,10 +1,14 @@
 Package: basictabler
 Type: Package
-Title: Create Basic Tables in R
+Title: Construct Rich Tables for Output to HTML/Excel
 Version: 0.1.0
 Authors@R: person("Christopher", "Bailiss", email = "cbailiss@gmail.com",
   role = c("aut", "cre"))
-Description: Create basic tables with just a few lines of R.
+Description: Easily create tables from R data 
+    frames/matrices.  Create/manipulate tables 
+    row-by-row, column-by-column or cell-by-cell.  
+    Use common formatting/styling to output 
+    rich tables as HTML, HTML widgets or to Excel. 
 Depends: R (>= 3.3.0)
 Imports:
     R6 (>= 2.2.0),

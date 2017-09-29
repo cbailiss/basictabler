@@ -9,8 +9,17 @@
 #'   render to Excel via the openxlsx package
 #' @format \code{\link{R6Class}} object.
 #' @examples
-#' # This class should only be created by the table.
-#' # It is not intended to be created outside of the table.
+#' # This class should not be used by end users.  It is an internal class
+#' # created only by the BasicTable class.  It is used when rendering to Excel.
+#' library(basictabler)
+#' tbl <- qtbl(data.frame(a=1:2, b=3:4))
+#' library(openxlsx)
+#' wb <- createWorkbook(creator = Sys.getenv("USERNAME"))
+#' addWorksheet(wb, "Data")
+#' tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
+#'                          topRowNumber=1, leftMostColumnNumber=1,
+#'                          applyStyles=TRUE, mapStylesFromCSS=TRUE)
+#' # Use saveWorkbook() to save the Excel file.
 #' @field parentTable Owning table.
 
 #' @section Methods:

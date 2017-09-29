@@ -3,18 +3,18 @@ basictabler
 
 [![Build Status](https://travis-ci.org/cbailiss/basictabler.svg?branch=master)](https://travis-ci.org/cbailiss/basictabler) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/basictabler)](https://cran.r-project.org/package=basictabler)
 
-The `basictabler` package enables basic tables to be created and rendered/exported with just a few lines of R.
+The `basictabler` package enables rich tables to be created and rendered/exported with just a few lines of R.
 
 The `basictabler` package:
 
 -   Provides an easy way of creating basic tables, especially from data frames and matrices.
 -   Provides flexibility so that the structure/content of the table can be easily built/modified.
 -   Provides formatting options to simplify rendering/exporting data.
--   Provides styling options so the basic tables can be themed/branded as needed.
+-   Provides styling options so the tables can be themed/branded as needed.
 
 The tables are rendered as htmlwidgets or plain text. The HTML/text can be exported for use outside of R.
 
-The tables can also be exported to Excel, including the styling/formatting.
+The tables can also be exported to Excel, including the styling/formatting. The formatting/styling is specified once and can then be used when rendering to both HTML and Excel - i.e. it is not necessary to specify the formatting/styling separately for each output format.
 
 `basictabler` is a companion package to the `pivottabler` package. `pivottabler` is focussed on generating pivot tables and can aggregate data. `basictabler` does not aggregate data but offers more control of table structure.
 

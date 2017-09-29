@@ -17,3 +17,9 @@ A TableStyles object.
 \description{
 \code{getTblTheme} returns the specified theme.
 }
+\examples{
+library(basictabler)
+tbl <- qtbl(data.frame(a=1:2, b=3:4))
+tbl$theme <- getTblTheme(tbl, "largeplain")
+tbl$renderTable()
+}

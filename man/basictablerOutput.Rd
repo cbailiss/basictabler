@@ -16,3 +16,6 @@ basictablerOutput(outputId, width = "100\%", height = "100\%")
 \description{
 Standard function for Shiny scaffolding.
 }
+\examples{
+# See the Shiny vignette in this package for an example.
+}

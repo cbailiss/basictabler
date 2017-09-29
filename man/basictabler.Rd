@@ -24,5 +24,5 @@ The \code{basictabler} function is primarily intended for use with Shiny web
 applications.
 }
 \examples{
-# See the Shiny vignette in this package for examples.
+# See the Shiny vignette in this package for an example.
 }

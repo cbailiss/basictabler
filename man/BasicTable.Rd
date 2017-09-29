@@ -108,6 +108,10 @@ constructing the table, where the elapsed time > 0.1 seconds.}
 \examples{
 # The package vignettes have many more examples of working with the
 # BasicTable class.
+# Quickly rendering a table as an htmlwidget:
+library(basictabler)
+qhtbl(data.frame(a=1:2, b=3:4))
+# Rendering a larger table as an htmlwidget:
 library(basictabler)
 library(dplyr)
 tocsummary <- bhmsummary \%>\%

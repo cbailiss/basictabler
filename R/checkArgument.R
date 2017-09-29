@@ -2,7 +2,8 @@
 #'
 #' \code{checkArgument} is a utility function that provides basic assurances
 #' about function argument values and generates standardised error messages when
-#' invalid values are encountered.
+#' invalid values are encountered.  This function should not be used outside the
+#' basictabler package.
 #'
 #' @param argumentCheckMode A number between 0 and 4 specifying the checks to
 #'   perform.

@@ -1,3 +1,11 @@
+## Resubmission
+
+This is a resubmission (based on feedback received on 29th Sept). In this version I have:
+
+- Removed "R" from the package title in the DESCRIPTION file.
+- Provided a more descriptive package title and description in the DESCRIPTION file.
+- Added more examples in the Rd files for those functions/R6 classes that are exported and used directly by users of the package.  Many fuller examples can also be found in the package vignettes.
+
 ## Background
 
 This is the 1st version of a new package.

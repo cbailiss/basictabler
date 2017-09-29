@@ -12,9 +12,14 @@
 #'   define styles/a theme for a table.
 #' @format \code{\link{R6Class}} object.
 #' @examples
-#' pt <- BasicTable$new()
+#' # Creating styles is part of defining a theme for a table.
+#' # Multiple styles must be created for each theme.
+#' # The example below shows how to create one style.
+#' # For an example of creating a full theme please
+#' # see the Styling vignette.
+#' tbl <- BasicTable$new()
 #' # ...
-#' TableStyles <- TableStyles$new(pt, themeName="compact")
+#' TableStyles <- TableStyles$new(tbl, themeName="compact")
 #' TableStyles$addStyle(styleName="MyNewStyle", list(
 #'     font="0.75em arial",
 #'     padding="2px",

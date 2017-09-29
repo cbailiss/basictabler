@@ -16,3 +16,6 @@ renderBasictabler(expr, env = parent.frame(), quoted = FALSE)
 \description{
 Standard function for Shiny scaffolding.
 }
+\examples{
+# See the Shiny vignette in this package for an example.
+}

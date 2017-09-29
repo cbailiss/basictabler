@@ -6,6 +6,11 @@
 #' @param parentTable Owning table.
 #' @param themeName The name of the theme to retrieve.
 #' @return A TableStyles object.
+#' @examples
+#' library(basictabler)
+#' tbl <- qtbl(data.frame(a=1:2, b=3:4))
+#' tbl$theme <- getTblTheme(tbl, "largeplain")
+#' tbl$renderTable()
 getTblTheme <- function(parentTable, themeName=NULL) {
   if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
   else argumentCheckMode <- 4
@@ -204,6 +209,21 @@ getCompactTblTheme <- function(parentTable, themeName="compact") {
 #' @param colors The set of colours to use when generating the theme (see the Styling vignette for details).
 #' @param fontName The name of the font to use, or a comma separated list (for font-fall-back).
 #' @return A TableStyles object.
+#' @examples
+#' orangeColors <- list(
+#'   headerBackgroundColor = "rgb(237, 125, 49)",
+#'   headerColor = "rgb(255, 255, 255)",
+#'   cellBackgroundColor = "rgb(255, 255, 255)",
+#'   cellColor = "rgb(0, 0, 0)",
+#'   totalBackgroundColor = "rgb(248, 198, 165)",
+#'   totalColor = "rgb(0, 0, 0)",
+#'   borderColor = "rgb(198, 89, 17)"
+#' )
+#' library(basictabler)
+#' tbl <- qtbl(data.frame(a=1:2, b=3:4))
+#' tbl$theme <- getSimpleColoredTblTheme(parentTable=tbl,
+#'     colors=orangeColors, fontName="Garamond, arial")
+#' tbl$renderTable()
 getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colors, fontName) {
   if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
   else argumentCheckMode <- 4

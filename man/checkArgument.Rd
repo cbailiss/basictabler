@@ -59,5 +59,6 @@ No return value.  If invalid values are encountered, the
 \description{
 \code{checkArgument} is a utility function that provides basic assurances
 about function argument values and generates standardised error messages when
-invalid values are encountered.
+invalid values are encountered.  This function should not be used outside the
+basictabler package.
 }

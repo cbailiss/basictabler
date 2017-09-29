@@ -13,7 +13,7 @@
 #'   (to ensure uniqueness).
 #' @return A HTML widget.
 #' @examples
-#' # See the Shiny vignette in this package for examples.
+#' # See the Shiny vignette in this package for an example.
 basictabler <- function(bt, width=NULL, height=NULL, styleNamePrefix=NULL) {
   settings <- list() # may need this in the future
   widgetData <- list(
@@ -29,6 +29,8 @@ basictabler <- function(bt, width=NULL, height=NULL, styleNamePrefix=NULL) {
 #' @param outputId The id of the html element that will contain the htmlwidget.
 #' @param width The target width of the htmlwidget.
 #' @param height The target height of the htmlwidget.
+#' @examples
+#' # See the Shiny vignette in this package for an example.
 basictablerOutput <- function(outputId, width = "100%", height = "100%") {
   shinyWidgetOutput(outputId, "basictabler", width, height, package = "basictabler")
 }
@@ -38,6 +40,8 @@ basictablerOutput <- function(outputId, width = "100%", height = "100%") {
 #' @param expr The R expression to execute and render in the Shiny web application.
 #' @param env Standard shiny argument for a render function.
 #' @param quoted Standard shiny argument for a render function.
+#' @examples
+#' # See the Shiny vignette in this package for an example.
 renderBasictabler <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
   shinyRenderWidget(expr, basictablerOutput, env, quoted = TRUE)
