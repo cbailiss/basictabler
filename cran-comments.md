@@ -7,8 +7,8 @@ http://r-pkgs.had.co.nz/
 
 ## Test environments
 
-* local OS (windows) install, R 3.4.0
-* ubuntu 12.04 (on travis-ci), R 3.4.0.
+* local OS (windows) install, R 3.4.2
+* Ubuntu 14.04.5 LTS (on travis-ci), R 3.4.1.
 * win-builder, R-devel = R 3.5.0.
 
 ## R CMD check results
@@ -19,15 +19,7 @@ http://r-pkgs.had.co.nz/
 
 ### Travis-CI R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-NOTE:
-  installed size is  6.4Mb
-  sub-directories of 1Mb or more:
-    data   3.8Mb
-    doc    2.1Mb
-
-Unsure of reason for discrepancy between Local R CMD and Travis-CI CMD check results. The sample data has been compressed into three rda files, total size 1 MB. Different compression options were explored and the option chosen that resulted in the smallest files.
+0 errors | 0 warnings | 0 notes
 
 ### win-builder check results
 
