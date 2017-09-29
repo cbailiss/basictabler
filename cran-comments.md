@@ -1,4 +1,11 @@
-## Resubmission
+## Resubmission 2
+
+This is a second resubmission (based on further feedback received on 29th Sept).  In this version I have:
+
+- Wrapped package and software names in single quotes in the title and description fields in the DESCRIPTION file.
+- Removed the "R" from the description field - so it now reads "...data frames..." instead of "... R data frames..."
+
+## Resubmission 1
 
 This is a resubmission (based on feedback received on 29th Sept). In this version I have:
 
