@@ -12,7 +12,7 @@ vignette: >
 ## In This Vignette
 
 * Table Cells
-* Properies of a Table Cell
+* Properties of a Table Cell
 * Creating a Table Cell-by-Cell
 * Creating a Table Column-by-Column
 * Creating a Table Row-by-Row
@@ -30,7 +30,7 @@ The cells collection offers a set of functions that make working with individual
 
 The cells collection is accessed via `tbl$cells`.
 
-## Properies of a Table Cell
+## Properties of a Table Cell
 
 Each TableCell object has the following basic properies:
 
@@ -157,6 +157,9 @@ cat(tbl$cells$getValue(2, 4, formattedValue=TRUE))
 
 # get the values in row 2 (as a list due to different data types)
 rowValues <- tbl$cells$getRowValues(2, asList=TRUE)
+
+# convert to character values for outputting
+rowValues <- lapply(rowValues, as.character)
 cat(class(rowValues), ": ", paste(rowValues, collapse=", "))
 
 # get the values in column 3
@@ -190,7 +193,8 @@ cell <- tbl$cells$getCell(2, 4)
 # output the cell properties
 summary <- list(rowNumber=cell$rowNumber, columnNumber=cell$columnNumber, cellType=cell$cellType,
                 visible=cell$visible, rawValue=cell$rawValue, formattedValue=cell$formattedValue,
-                baseStyleName=cell$baseStyleName, style=ifelse(is.null(cell$style), "", cell$style$asCSSRule()))
+                baseStyleName=ifelse(is.null(cell$baseStyleName), "", cell$baseStyleName), 
+                style=ifelse(is.null(cell$style), "", cell$style$asCSSRule()))
 description <- paste(paste(names(summary), unlist(summary), sep="="), collapse="\n")
 cat(description)
 ```
@@ -274,7 +278,7 @@ The following functions exist on the TableCells collection:
 - insertColumn(columnNumber) 
 - deleteColumn(columnNumber)
 
-The following functions also exist on the TableCells collection, but are discussed in the [Finding and Formatting](v05-findingandformatting.html) vignette:
+The following functions also exist on the TableCells collection, but are discussed in the [Finding and Formatting](v05-findingandformatting.html)  vignette:
 
 - getCells(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL)
 - findCells(rowNumbers=NULL, columnNumbers=NULL, minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE)
