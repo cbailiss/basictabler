@@ -4,7 +4,7 @@ author: "Chris Bailiss"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{06. Styling}
+  %\VignetteIndexEntry{04. Styling}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
