@@ -86,11 +86,64 @@ qhtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
 
 ![http://cbailiss.me.uk/basictablerreadmeimgs/example1.png](http://cbailiss.me.uk/basictablerreadmeimgs/example1.png)
 
+#### Excel Output
+
+The same styling/formatting used for the HTML output is also used when outputting to Excel - greatly reducing the amount of script that needs to be written to create Excel output.  The only additional formatting that typically needs applying is the Excel cell format strings.
+
+```{r eval=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- qtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats)
+
+# style setting function
+setStyle <- function(cell, baseStyleName, declarations) {
+  if(is.null(cell$style)) 
+    cell$style <- tbl$createInlineStyle(baseStyleName=baseStyleName, declarations=declarations)
+  else cell$style$setPropertyValues(declarations=declarations)
+}
+# set the number formatting on the count cells
+cells <- tbl$findCells(rowNumbers=2:5, columnNumbers=2:4)
+invisible(lapply(cells, setStyle, baseStyleName="Cell", declarations=list("xl-value-format"="#,##0")))
+# set the number formatting on the percentage cells
+cells <- tbl$findCells(rowNumbers=2:5, columnNumbers=5:6)
+invisible(lapply(cells, setStyle, baseStyleName="Cell", declarations=list("xl-value-format"="##0.0")))
+
+# render the table to an Excel workbook
+library(openxlsx)
+wb <- createWorkbook(creator = Sys.getenv("USERNAME"))
+addWorksheet(wb, "Data")
+tbl$writeToExcelWorksheet(wb=wb, wsName="Data", 
+                          topRowNumber=2, leftMostColumnNumber=2, applyStyles=TRUE)
+saveWorkbook(wb, file="C:\\test.xlsx", overwrite = TRUE)
+
+```
+
+![http://cbailiss.me.uk/basictablerreadmeimgs/example2.png](http://cbailiss.me.uk/basictablerreadmeimgs/example2.png)
+
+In the screenshot above, Gridlines have been made invisible to make the styling easier to see (by clearing the checkbox on the 'View' ribbon).  Columns were also auto-sized - though the widths of columns could also be manually specified from R.  See the Excel Export vignette for more details.
+
+### More Information
+
 Tables can be further manipulated once created, including adding/removing cells/rows/columns and specifying styling and formatting.
 
 It is also possible to create tables row-by-row, column-by-column and/or cell-by-cell.
-
-### More Information
 
 See the package vignettes for more information:
 

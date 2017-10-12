@@ -5,4 +5,5 @@
 ^README\.Rmd$
 ^devnotes\.txt$
 ^example1\.png$
+^example2\.png$
 ^dev\.R$
