@@ -31,4 +31,4 @@ LazyData: true
 URL: https://github.com/cbailiss/basictabler
 BugReports: https://github.com/cbailiss/basictabler/issues
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
