@@ -47,7 +47,7 @@ Most the above properties are rarely accessed directly.  Instead, helper functio
 
 ## Creating a Table Cell-by-Cell
 
-Instead of constructing a table in one-line from a data frame or matrix, a table can be constructed call-by-cell, though this requires many lines of code:
+Instead of constructing a table in one-line from a data frame or matrix, a table can be constructed cell-by-cell, though this requires many lines of code:
 
 ```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
 library(basictabler)
