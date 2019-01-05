@@ -12,7 +12,7 @@ http://r-pkgs.had.co.nz/
 
 * local OS (windows) install, R 3.5.2
 * Ubuntu 14.04.5 LTS (on travis-ci), R 3.5.1.
-* win-builder, R-devel = R 3.5.1.
+* win-builder, R-release = R 3.5.2 and R-devel.
 
 ## R CMD check results
 
