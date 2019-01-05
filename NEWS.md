@@ -1,25 +1,11 @@
-basictabler 0.1.0.9000
+basictabler 0.1.1
 ================
-
-Breaking Changes
-----------------
-
-TBC 
-
-Improvements
-----------------
-
-TBC
 
 Bug Fixes
 ----------------
 
-TBC
+Tiny change to correct the index entry of the second vignette.
 
-Upcoming Changes
-----------------
-
-TBC
 
 basictabler 0.1.0
 ================
