@@ -1,30 +1,18 @@
-## Resubmission 2
-
-This is a second resubmission (based on further feedback received on 29th Sept).  In this version I have:
-
-- Wrapped package and software names in single quotes in the title and description fields in the DESCRIPTION file.
-- Removed the "R" from the description field - so it now reads "...data frames..." instead of "... R data frames..."
-
-## Resubmission 1
-
-This is a resubmission (based on feedback received on 29th Sept). In this version I have:
-
-- Removed "R" from the package title in the DESCRIPTION file.
-- Provided a more descriptive package title and description in the DESCRIPTION file.
-- Added more examples in the Rd files for those functions/R6 classes that are exported and used directly by users of the package.  Many fuller examples can also be found in the package vignettes.
 
 ## Background
 
-This is the 1st version of a new package.
+This is a minor release.  The only change is a correction to the index entry for one of the package vignettes that wrongly duplicated the index entry for a different vignette.
+This change is in response to the recent change to R CMD checks on CRAN that now reports duplicated index entries.
+
 This package is written entirely in R with no external dependencies/components other than the packages listed in the DESCRIPTION file.
 Development approach is aligned with practices described in:
 http://r-pkgs.had.co.nz/
 
 ## Test environments
 
-* local OS (windows) install, R 3.4.2
-* Ubuntu 14.04.5 LTS (on travis-ci), R 3.4.1.
-* win-builder, R-devel = R 3.5.0.
+* local OS (windows) install, R 3.5.2
+* Ubuntu 14.04.5 LTS (on travis-ci), R 3.5.1.
+* win-builder, R-devel = R 3.5.1.
 
 ## R CMD check results
 
