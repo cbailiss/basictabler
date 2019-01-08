@@ -72,13 +72,14 @@
 #'
 #'   \item{\code{addData(dataFrame=NULL, columnNamesAsColumnHeaders=TRUE,
 #'   explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
-#'   firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
-#'   columnFormats=NULL)}}{Generate the table from a data frame, specifying
+#'   firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL,
+#'   baseStyleNames=NULL)}}{Generate the table from a data frame, specifying
 #'   headers and value formatting.}
 #'   \item{\code{addMatrix(matrix=NULL, columnNamesAsColumnHeaders=TRUE,
 #'   explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
-#'   explicitRowHeaders=NULL, columnFormats=NULL)}}{Generate the table from a
-#'   matrix, specifying headers and value formatting.}
+#'   explicitRowHeaders=NULL, columnFormats=NULL,
+#'   baseStyleNames=NULL)}}{Generate the table from a matrix, specifying headers
+#'   and value formatting.l}
 #'   \item{\code{formatValue(value=NULL, format=NULL)}}{Format a value for
 #'   display, using either sprintf(), format() or a custom formatting function.}
 #'   \item{\code{addStyle(styleName, declarations)}}{Define a new TableStyle and
@@ -154,7 +155,7 @@ BasicTable <- R6::R6Class("BasicTable",
     addData = function(dataFrame=NULL,
                        columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
                        rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
-                       columnFormats=NULL) {
+                       columnFormats=NULL, baseStyleNames=NULL) {
       timeStart <- proc.time()
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", dataFrame, missing(dataFrame), allowMissing=FALSE, allowNull=FALSE, allowedClasses="data.frame")
@@ -164,6 +165,7 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", firstColumnAsRowHeaders, missing(firstColumnAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", baseStyleNames, missing(baseStyleNames), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addData", "Adding data to Table...")
       dfRowCount <- nrow(dataFrame)
@@ -176,6 +178,12 @@ BasicTable <- R6::R6Class("BasicTable",
       if(!is.null(columnFormats)) {
         if(length(columnFormats) != dfColumnCount) {
           stop("BasicTable$addData():  Length of columnFormats must match the number of columns in the data frame!", call. = FALSE)
+        }
+      }
+      # check the base style names
+      if(!is.null(baseStyleNames)) {
+        if(length(baseStyleNames) != dfColumnCount) {
+          stop("BasicTable$addData():  Length of baseStyleNames must match the number of columns in the data frame!", call. = FALSE)
         }
       }
       # get the column headers
@@ -243,10 +251,14 @@ BasicTable <- R6::R6Class("BasicTable",
             else formattedValue <- self$formatValue(value, columnFormats[[c]])
             if(firstColumnAsRowHeaders && (c==1)) cellType <- "rowHeader"
             else cellType <- "cell"
+            baseStyleName <- NULL
+            if(!is.null(baseStyleNames)) {
+              if(!is.null(baseStyleNames[[c]])) baseStyleName <- baseStyleNames[[c]]
+            }
             cell <- TableCell$new(parentTable=self, cellType=cellType,
                                   rowNumber=rowNumber, columnNumber=columnNumber,
-                                  rawValue=value,
-                                  formattedValue=formattedValue)
+                                  rawValue=value, formattedValue=formattedValue,
+                                  baseStyleName=baseStyleName)
             cells$moveCell(rowNumber, columnNumber, cell)
           }
         }
@@ -257,7 +269,7 @@ BasicTable <- R6::R6Class("BasicTable",
     },
     addMatrix = function(matrix=NULL,
                        columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
-                       rowNamesAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL) {
+                       rowNamesAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL, baseStyleNames=NULL) {
       timeStart <- proc.time()
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", matrix, missing(matrix), allowMissing=FALSE, allowNull=FALSE, allowedClasses="matrix")
@@ -266,6 +278,7 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", rowNamesAsRowHeaders, missing(rowNamesAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", baseStyleNames, missing(baseStyleNames), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addMatrix", "Adding matrix to Table...")
       mRowCount <- nrow(matrix)
@@ -278,6 +291,12 @@ BasicTable <- R6::R6Class("BasicTable",
       if(!is.null(columnFormats)) {
         if(length(columnFormats) != mColumnCount) {
           stop("BasicTable$addMatrix():  Length of columnFormats must match the number of columns in the matrix!", call. = FALSE)
+        }
+      }
+      # check the base style names
+      if(!is.null(baseStyleNames)) {
+        if(length(baseStyleNames) != mColumnCount) {
+          stop("BasicTable$addData():  Length of baseStyleNames must match the number of columns in the matrix!", call. = FALSE)
         }
       }
       # get the column headers
@@ -343,10 +362,14 @@ BasicTable <- R6::R6Class("BasicTable",
             else if(is.null(columnFormats[[c]])) formattedValue <- value
             else if(is.na(columnFormats[[c]])) formattedValue <- value
             else formattedValue <- self$formatValue(value, columnFormats[[c]])
+            baseStyleName <- NULL
+            if(!is.null(baseStyleNames)) {
+              if(!is.null(baseStyleNames[[c]])) baseStyleName <- baseStyleNames[[c]]
+            }
             cell <- TableCell$new(parentTable=self, cellType="cell",
                                   rowNumber=rowNumber, columnNumber=columnNumber,
-                                  rawValue=value,
-                                  formattedValue=formattedValue)
+                                  rawValue=value, formattedValue=formattedValue,
+                                  baseStyleName=baseStyleName)
             cells$moveCell(rowNumber, columnNumber, cell)
           }
         }
@@ -391,7 +414,7 @@ BasicTable <- R6::R6Class("BasicTable",
     addStyle = function(styleName=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addStyle", styleName, missing(styleName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addStyle", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addStyle", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addStyle", "Adding style...", list(styleName=styleName))
       style <- private$p_styles$addStyle(styleName=styleName, declarations=declarations)
@@ -400,7 +423,7 @@ BasicTable <- R6::R6Class("BasicTable",
     },
     createInlineStyle = function(baseStyleName=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "createInlineStyle", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "createInlineStyle", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$createInlineStyle", "Creating inline style...")
       if(is.null(baseStyleName)) {

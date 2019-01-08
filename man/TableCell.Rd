@@ -27,6 +27,12 @@ row.}
 \item{\code{columnNumber}}{The column number of the cell.  1 = the first (i.e.
 leftmost) data column.}
 
+\item{\code{cellType}}{One of the following values that specifies the type of cell:
+root, rowHeader, columnHeader, cell, total.  The cellType controls the
+default styling that is applied to the cell.}
+
+\item{\code{visible}}{TRUE or FALSE to specify whether the cell is rendered.}
+
 \item{\code{rawValue}}{The original unformatted value.}
 
 \item{\code{formattedValue}}{The formatted value (i.e. normally of character data

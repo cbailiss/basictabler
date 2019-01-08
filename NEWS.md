@@ -9,7 +9,7 @@ TBC
 Improvements
 ----------------
 
-TBC
+* It is now possible to specify styling when creating tables (instead of applying it to cells after table creation).  See the styling vignette for more details. 
 
 Bug Fixes
 ----------------

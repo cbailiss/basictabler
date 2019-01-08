@@ -44,10 +44,11 @@ table.
   formattedValue=FALSE, asList=FALSE, rebase=TRUE)}}{Get a vector or list of
   the values in a column.}
   \item{\code{setCell(r, c, cellType="cell", rawValue=NULL,
-  formattedValue=NULL, visible=TRUE)}}{Set the details of a cell in the
+  formattedValue=NULL, visible=TRUE, baseStyleName=NULL,
+  styleDeclarations=NULL)}}{Set the details of a cell in the table.}
+  \item{\code{setBlankCell(r, c, cellType="cell", visible=TRUE,
+  baseStyleName=NULL, styleDeclarations=NULL)}}{Set a cell to be empty in the
   table.}
-  \item{\code{setBlankCell(r, c, cellType="cell", visible=TRUE)}}{Set a
-  cell to be empty in the table.}
   \item{\code{deleteCell(r, c)}}{Remove a cell from the table (replacing it
   with a blank one).}
   \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
@@ -58,11 +59,12 @@ table.
   \item{\code{insertRow(rowNumber=NULL)}}{Insert a new row (moving the rows
   underneath down).}
   \item{\code{setRow(rowNumber=NULL, startAtColumnNumber=1, cellTypes=NULL,
-  rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE)}}{Set
-  multiple cells across a row at once.}
+  rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE,
+  baseStyleNames=NULL)}}{Set multiple cells across a row at once.}
   \item{\code{setColumn(columnNumber=NULL, startAtRowNumber=1,
   cellTypes=NULL, rawValues=NULL, formattedValues=NULL, formats=NULL,
-  visiblity=TRUE)}}{Set multiple cells down a column at once.}
+  visiblity=TRUE, baseStyleNames=NULL)}}{Set multiple cells down a column at
+  once.}
   \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
   underneath up.}
   \item{\code{insertColumn(columnNumber=NULL)}}{Insert a new column (moving
