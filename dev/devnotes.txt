@@ -1,7 +1,7 @@
 
 Next changes:
 
-1) Fix issue of unused dplyr import (see CRAN checks page)
+1) DONE:  Fix issue of unused dplyr import (see CRAN checks page)
 
 2) Declare baseStyleName and style upfront as part of cell definition.
    - Make the code change and modify docn at the top of the script

@@ -4,7 +4,7 @@
 \alias{basictablerSample}
 \title{Generate a sample basic table.}
 \usage{
-basictablerSample(value)
+basictablerSample()
 }
 \value{
 Example basic table describing the performance of trains run by

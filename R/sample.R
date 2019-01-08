@@ -11,14 +11,16 @@
 #' # Generate sample table.
 #' basictablerSample()
 
-basictablerSample <- function(value) {
-  tocdata <- dplyr::group_by(bhmsummary, TOC)
-  tocdata <- dplyr::summarise(tocdata, OnTimeArrivals=sum(OnTimeArrivals),
-                              OnTimeDepartures=sum(OnTimeDepartures), TotalTrains=sum(TrainCount))
+basictablerSample <- function() {
+  tocdata <- dplyr::group_by(basictabler::bhmsummary, TOC=basictabler::bhmsummary$TOC)
+  tocdata <- dplyr::summarise(tocdata, OnTimeArrivals=sum(tocdata$OnTimeArrivals),
+                              OnTimeDepartures=sum(tocdata$OnTimeDepartures),
+                              TotalTrains=sum(tocdata$TrainCount))
   tocdata <- dplyr::ungroup(tocdata)
-  tocdata <- dplyr::mutate(tocdata, OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
-                           OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100)
-  tocsummary <- dplyr::arrange(tocdata, TOC)
+  tocdata <- dplyr::mutate(tocdata,
+                           OnTimeArrivalPercent=tocdata$OnTimeArrivals/tocdata$TotalTrains*100,
+                           OnTimeDeparturePercent=tocdata$OnTimeDepartures/tocdata$TotalTrains*100)
+  tocsummary <- dplyr::arrange(tocdata, tocdata$TOC)
 
   # To specify formatting, a list is created which contains one element for each column in
   # the data frame, i.e. tocsummary contains six columns so the columnFormats list has six elements.
