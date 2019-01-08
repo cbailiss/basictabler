@@ -1,3 +1,27 @@
+
+Next changes:
+
+1) Fix issue of unused dplyr import (see CRAN checks page)
+
+2) Declare baseStyleName and style upfront as part of cell definition.
+   - Make the code change and modify docn at the top of the script
+   - Add some automated tests
+   - Add it to the vignettes
+   - Add to NEWS file
+   - Commit
+
+3) Add support for merged cells, via
+   - New mergeCells(fromRow, fromColumn, toRow, toColumn) - this adds to a list of merged cells, but only after checking for overlaps (errors on overlap)
+   - New unmergeCells(row, column) - unmerges any cell merge covering the specified cell
+   - New isMergedCell(row, column) - that returns MERGE_ROOT (if top left cell of merge), MERGED_CELL, NOT_MERGED (or return an instance of a merged range)
+   - Modify export functions (HTML and Excel) to correctly export merged cells
+
+4) Add support (in a new feature branch) to convert a pivottabler to a basictable
+
+5) Add support (in a new feature branch) to convert a basictable to a huxtable
+
+
+
 To generate the bhmsummary sample data:
 
 library(dplyr)
@@ -15,4 +39,6 @@ bhmsummary <- bhmtrains %>%
             TotalArrivalDelayMinutes=sum(if_else(GbttArrival<ActualArrival, difftime(ActualArrival, GbttArrival, units="mins"), 0), na.rm=TRUE),
             TotalDepartureDelayMinutes=sum(if_else(GbttDeparture<ActualDeparture, difftime(ActualDeparture, GbttDeparture, units="mins"), 0), na.rm=TRUE)) %>%
   ungroup()
+
 devtools::use_data(bhmsummary, compress="xz")
+now replaced with usethis::usedata(...)
