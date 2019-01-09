@@ -10,7 +10,7 @@ Next changes:
    - Add to NEWS file
    - Commit
 
-3) Add support for merged cells, via
+3) DONE:  Add support for merged cells, via
    - New mergeCells(fromRow, fromColumn, toRow, toColumn) - this adds to a list of merged cells, but only after checking for overlaps (errors on overlap)
    - New unmergeCells(row, column) - unmerges any cell merge covering the specified cell
    - New isMergedCell(row, column) - that returns MERGE_ROOT (if top left cell of merge), MERGED_CELL, NOT_MERGED (or return an instance of a merged range)

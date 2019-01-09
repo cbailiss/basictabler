@@ -153,6 +153,9 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
         return(invisible(NULL))
       }
 
+      # update the merged cell info
+      private$p_parentTable$applyCellMerges()
+
       # render the rows
       for(r in 1:rowCount) {
         # row number
@@ -160,15 +163,32 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
         xlColumnNumber <- leftMostColumnNumber
         # render the cell values
         for(c in 1:columnCount) {
+          # update position and get cell
           xlRowNumber <- topRowNumber + r - 1
           xlColumnNumber <- leftMostColumnNumber + c - 1
           cell <- private$p_parentTable$cells$getCell(r, c)
+
+          # if a merged cell and not the root of the merge, then skip to next cell
+          if(cell$isMerged && (!cell$isMergeRoot)) { next }
+
+          # merge cell if needed
+          mergeRows <- NULL
+          mergeColumns <- NULL
+          if(cell$isMerged) {
+            mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
+            mergeRows <- xlRowNumber:(xlRowNumber + mergeRange$rCount - 1)
+            mergeColumns <- xlColumnNumber:(xlColumnNumber + mergeRange$cCount - 1)
+          }
+
+          # get style info
           if(cell$cellType=="root") cs <- rootStyle
           else if(cell$cellType=="rowHeader") cs <- rowHeaderStyle
           else if(cell$cellType=="columnHeader") cs <- colHeaderStyle
           else if(cell$cellType=="total") cs <- totalStyle
           else cs <- cellStyle
           if(!is.null(cell$baseStyleName)) cs <- cell$baseStyleName
+
+          # get value
           if(outputValuesAs=="rawValue") value <- cell$rawValue
           else if(outputValuesAs=="formattedValueAsText") value <- cell$formattedValue
           else if(outputValuesAs=="formattedValueAsNumber") {
@@ -177,8 +197,11 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
           }
           else value <- cell$rawValue
           if(is.factor(value)) value <- as.character(value)
+
+          # write value
           self$writeToCell(wb, wsName, rowNumber=xlRowNumber, columnNumber=xlColumnNumber, value=value,
-                           applyStyles=applyStyles, baseStyleName=cs, style=cell$style, mapFromCss=mapStylesFromCSS)
+                           applyStyles=applyStyles, baseStyleName=cs, style=cell$style, mapFromCss=mapStylesFromCSS,
+                           mergeRows=mergeRows, mergeColumns=mergeColumns)
         }
       }
 

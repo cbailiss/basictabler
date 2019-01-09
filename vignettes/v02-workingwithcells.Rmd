@@ -18,6 +18,7 @@ vignette: >
 * Creating a Table Row-by-Row
 * Retrieving Cell values
 * Retrieving Cells
+* Merging Cells
 * Manipulating Tables
 * Summary of Table Cells Functions
 * Further Reading
@@ -197,6 +198,36 @@ summary <- list(rowNumber=cell$rowNumber, columnNumber=cell$columnNumber, cellTy
                 style=ifelse(is.null(cell$style), "", cell$style$asCSSRule()))
 description <- paste(paste(names(summary), unlist(summary), sep="="), collapse="\n")
 cat(description)
+```
+
+## Merging Cells
+
+Cells can be merged.  The range of cells is specified using the row and column of the top-left cell (`rTop` and `cLeft`), then specifying either the number of rows and columns that the merge spans (`rCount` and `cCount`) or the row and column of the bottom-right cell (`rBottom` and `cRight`). 
+
+E.g. merging the headings of the 2nd and 3rd columns into a single cell:
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, comment=""}
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+# merge the cells and specify new heading
+tbl$mergeCells(rTop=1, cLeft=2, rCount=1, cCount=2)
+cell <- tbl$cells$getCell(1, 2)
+cell$rawValue <- "Item & Qty"
+cell$formattedValue <- "Item & Qty"
+
+tbl$renderTable()
 ```
 
 ## Manipulating Tables

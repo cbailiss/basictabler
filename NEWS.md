@@ -9,7 +9,8 @@ TBC
 Improvements
 ----------------
 
-* It is now possible to specify styling when creating tables (instead of applying it to cells after table creation).  See the styling vignette for more details. 
+* Ability to merge table cells.  See the "Working with Cells" vignette for an example.
+* Specify styling when creating tables (or apply it to cells after table creation as in v0.1).  See the "Styling"" vignette for more details. 
 
 Bug Fixes
 ----------------
