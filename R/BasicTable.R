@@ -80,6 +80,14 @@
 #'   explicitRowHeaders=NULL, columnFormats=NULL,
 #'   baseStyleNames=NULL)}}{Generate the table from a matrix, specifying headers
 #'   and value formatting.l}
+#'   \item{\code{mergeCells(rTop=NULL, cLeft=NULL, rCount=NULL, cCount=NULL,
+#'   rBottom=NULL, cRight=NULL)}}{Merge cells in the table.  This does not delete
+#'   the other cells covered by the merged cell.  When the table is output, the
+#'   top-left most cell in the merged cell range is rendered over the other
+#'   cells (which are effectively hidden).}
+#'   \item{\code{unmergeCells = function(r, c,
+#'   errorIfNotFound=TRUE)}}{Delete a merged cell range by specifying any of the
+#'   cells covered by the merged cell.}
 #'   \item{\code{formatValue(value=NULL, format=NULL)}}{Format a value for
 #'   display, using either sprintf(), format() or a custom formatting function.}
 #'   \item{\code{addStyle(styleName, declarations)}}{Define a new TableStyle and
@@ -146,6 +154,7 @@ BasicTable <- R6::R6Class("BasicTable",
       # Create the basic parts of the table
       private$p_styles <- getTblTheme(parentTable=self, themeName="default")
       private$p_cells <- TableCells$new(self)
+      private$p_mergedCells <- TableCellRanges$new(self)
       private$p_htmlRenderer <- TableHtmlRenderer$new(parentTable=self)
       private$p_openxlsxRenderer <-TableOpenXlsxRenderer$new(parentTable=self)
       private$p_timings <- list()
@@ -376,6 +385,37 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addMatrix", "Added data to Table.")
       private$addTiming(paste0("addMatrix()"), timeStart)
+      return(invisible())
+    },
+    mergeCells = function(rTop=NULL, cLeft=NULL, rCount=NULL, cCount=NULL, rBottom=NULL, cRight=NULL) {
+      if(private$p_parentTable$argumentCheckMode > 0) {
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rTop, missing(rTop), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cLeft, missing(cLeft), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rCount, missing(rCount), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cCount, missing(cCount), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rBottom, missing(rBottom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cRight, missing(cRight), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merging cells...", list(rTop=rTop, cLeft=cLeft, rCount=rCount, cCount=cCount, rBottom=rBottom, cRight=cRight))
+      existingRange <- private$p_mergedCells$findIntersectingRange(rTop=rTop, cLeft=cLeft, rCount=rCount, cCount=cCount, rBottom=rBottom, cRight=cRight)
+      if(!is.null(existingRange)) {
+        stop(paste0("BasicTable$mergeCells(): An existing merged cell range intersects with the specified cell range."), call. = FALSE)
+      }
+      private$p_mergedCells$addRange(rTop=rTop, cLeft=cLeft, rCount=rCount, cCount=cCount, rBottom=rBottom, cRight=cRight)
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merged cells.")
+      return(invisible())
+    },
+    unmergeCells = function(r=NULL, c=NULL, errorIfNotFound=TRUE) {
+      if(private$p_parentTable$argumentCheckMode > 0) {
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "unmergeCells", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "unmergeCells", c, missing(c), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Unmerging cells...", list(r, c))
+      rangeDeleted <- private$p_mergedCells$deleteRange(r=r, c=c)
+      if(errorIfNotFound && (!rangeDeleted)) {
+        stop(paste0("BasicTable$unmergeCells(): No cell range could be found that intersects the specified cell."), call. = FALSE)
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Unmerged cells.")
       return(invisible())
     },
     formatValue = function(value=NULL, format=NULL) {
@@ -900,6 +940,7 @@ BasicTable <- R6::R6Class("BasicTable",
     p_data = NULL,
     p_styles = NULL,
     p_cells = NULL,
+    p_mergedCells = NULL,
     p_htmlRenderer = NULL,
     p_openxlsxRenderer = NULL,
     p_traceFile = NULL,

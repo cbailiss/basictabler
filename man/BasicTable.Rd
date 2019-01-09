@@ -66,6 +66,14 @@ constructing the table, where the elapsed time > 0.1 seconds.}
   explicitRowHeaders=NULL, columnFormats=NULL,
   baseStyleNames=NULL)}}{Generate the table from a matrix, specifying headers
   and value formatting.l}
+  \item{\code{mergeCells(rTop=NULL, cLeft=NULL, rCount=NULL, cCount=NULL,
+  rBottom=NULL, cRight=NULL)}}{Merge cells in the table.  This does not delete
+  the other cells covered by the merged cell.  When the table is output, the
+  top-left most cell in the merged cell range is rendered over the other
+  cells (which are effectively hidden).}
+  \item{\code{unmergeCells = function(r, c,
+  errorIfNotFound=TRUE)}}{Delete a merged cell range by specifying any of the
+  cells covered by the merged cell.}
   \item{\code{formatValue(value=NULL, format=NULL)}}{Format a value for
   display, using either sprintf(), format() or a custom formatting function.}
   \item{\code{addStyle(styleName, declarations)}}{Define a new TableStyle and
