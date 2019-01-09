@@ -85,9 +85,10 @@
 #'   the other cells covered by the merged cell.  When the table is output, the
 #'   top-left most cell in the merged cell range is rendered over the other
 #'   cells (which are effectively hidden).}
-#'   \item{\code{unmergeCells = function(r, c,
-#'   errorIfNotFound=TRUE)}}{Delete a merged cell range by specifying any of the
-#'   cells covered by the merged cell.}
+#'   \item{\code{unmergeCells(r, c, errorIfNotFound=TRUE)}}{Delete a merged cell
+#'   range by specifying any of the cells covered by the merged cell.}
+#'   \item{\code{applyCellMerges()}}{Updates the isMerged, isMergeRoot and
+#'   mergeIndex properties of the cells.}
 #'   \item{\code{formatValue(value=NULL, format=NULL)}}{Format a value for
 #'   display, using either sprintf(), format() or a custom formatting function.}
 #'   \item{\code{addStyle(styleName, declarations)}}{Define a new TableStyle and
@@ -388,7 +389,7 @@ BasicTable <- R6::R6Class("BasicTable",
       return(invisible())
     },
     mergeCells = function(rTop=NULL, cLeft=NULL, rCount=NULL, cCount=NULL, rBottom=NULL, cRight=NULL) {
-      if(private$p_parentTable$argumentCheckMode > 0) {
+      if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rTop, missing(rTop), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cLeft, missing(cLeft), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rCount, missing(rCount), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
@@ -406,7 +407,7 @@ BasicTable <- R6::R6Class("BasicTable",
       return(invisible())
     },
     unmergeCells = function(r=NULL, c=NULL, errorIfNotFound=TRUE) {
-      if(private$p_parentTable$argumentCheckMode > 0) {
+      if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "unmergeCells", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "unmergeCells", c, missing(c), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
       }
@@ -416,6 +417,42 @@ BasicTable <- R6::R6Class("BasicTable",
         stop(paste0("BasicTable$unmergeCells(): No cell range could be found that intersects the specified cell."), call. = FALSE)
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Unmerged cells.")
+      return(invisible())
+    },
+    applyCellMerges = function() {
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$applyCellMerges", "Applying cell merges...")
+      # clear existing cell merge info
+      if(length(private$p_cells$rows) > 0) {
+        for(r in 1:length(private$p_cells$rows)) {
+          if(length(private$p_cells$rows[[r]]) > 0) {
+            for(c in 1:length(private$p_cells$rows[[r]])) {
+              cell <- private$p_cells$rows[[r]][[c]]
+              if(!is.null(cell)) {
+                cell$isMerged <- FALSE
+                cell$isMergeRoot <- FALSE
+                cell$mergeIndex <- NULL
+              }
+            }
+          }
+        }
+      }
+      # set the merged cell info onto each cell
+      mergeRanges <- private$p_mergedCells$ranges
+      if(length(mergeRanges) > 0) {
+        for(i in 1:length(mergeRanges)) {
+          mr <- mergeRanges[[i]]
+          cell <- private$p_cells$rows[[mr$rTop]][[mr$cLeft]]
+          cell$isMergeRoot <- TRUE
+          for(r in mr$rTop:mr$rBottom) {
+            for(c in mr$cLeft:mr$cRight) {
+              cell <- private$p_cells$rows[[r]][[c]]
+              cell$isMerged <- TRUE
+              cell$mergeIndex <- i
+            }
+          }
+        }
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$applyCellMerges", "Applied cell merges.")
       return(invisible())
     },
     formatValue = function(value=NULL, format=NULL) {
@@ -880,6 +917,7 @@ BasicTable <- R6::R6Class("BasicTable",
       }
     },
     cells = function(value) { return(invisible(private$p_cells)) },
+    mergedCells = function(value) { return(invisible(private$p_mergedCells)) },
     rowCount = function(value) { return(invisible(private$p_cells$rowCount)) },
     columnCount = function(value) { return(invisible(private$p_cells$columnCount)) },
     asCharacter = function() { return(self$print(asCharacter=TRUE)) },

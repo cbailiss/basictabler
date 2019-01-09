@@ -122,7 +122,7 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       rt <- rTop
       cl <- cLeft
       bRCountSpecified <- !(is.null(rCount)||is.na(rCount))
-      bCCountpecified <- !(is.null(cCount)||is.na(cCount))
+      bCCountSpecified <- !(is.null(cCount)||is.na(cCount))
       bBottomSpecified <- !(is.null(rBottom)||is.na(rBottom))
       bRightSpecified <- !(is.null(cRight)||is.na(cRight))
       if(bRCountSpecified) {
@@ -160,13 +160,13 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if (rb < rt) {
         stop(paste0("TableCellRanges$validateRange(): Invalid row range: the start row (rTop) must be less than or equal to the end row (rBottom)."), call. = FALSE)
       }
-      if ((rb - rt) != rc) {
+      if ((rb - rt + 1) != rc) {
         stop(paste0("TableCellRanges$validateRange(): Invalid row range: the row count specified is not consistent with the start and end rows (i.e. rCount must equal rBottom - rTop + 1)."), call. = FALSE)
       }
       if (cr < cl) {
         stop(paste0("TableCellRanges$validateRange(): Invalid column range: the start column (cLeft) must be less than or equal to the end column (cRight)."), call. = FALSE)
       }
-      if ((cr - cl) != cc) {
+      if ((cr - cl + 1) != cc) {
         stop(paste0("TableCellRanges$validateRange(): Invalid column range: the column count specified is not consistent with the left and right columns (i.e. cCount must equal cRight - cLeft + 1)."), call. = FALSE)
       }
       range <- list(rTop=rt, cLeft=cl, rCount=rc, cCount=cc, rBottom=rb, cRight=cr)

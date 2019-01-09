@@ -133,6 +133,27 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+   isMerged = function(value) { # for internal use by the renderers only
+     if(missing(value)) { return(invisible(private$p_isMerged)) }
+     else {
+       private$p_isMerged <- value
+       return(invisible())
+     }
+   },
+   isMergeRoot = function(value) { # for internal use by the renderers only
+     if(missing(value)) { return(invisible(private$p_isMergeRoot)) }
+     else {
+       private$p_isMergeRoot <- value
+       return(invisible())
+     }
+   },
+   mergeIndex = function(value) { # for internal use by the renderers only
+     if(missing(value)) { return(invisible(private$p_mergeIndex)) }
+     else {
+       private$p_mergeIndex <- value
+       return(invisible())
+     }
+   },
    baseStyleName = function(value) {
      if(missing(value)) { return(invisible(private$p_baseStyleName)) }
      else {
@@ -159,6 +180,9 @@ TableCell <- R6::R6Class("TableCell",
     p_rowNumber = NULL,               # an integer
     p_columnNumber = NULL,            # an integer
     p_cellType = NULL,                # root, rowHeader, columnHeader, cell, total
+    p_isMerged = NULL,                # TRUE if the cell is part of a merged cell (but only set by BasicTable$applyCellMerges())
+    p_isMergeRoot = NULL,             # TRUE if the cell is the top-most, left-most cell in the merged cell (also only set by...)
+    p_mergeIndex = NULL,              # the index of the merged cell (also only set by...)
     p_visible = NULL,
     p_rawValue = NULL ,               # a value (unique to this cell)
     p_formattedValue = NULL,          # a value (unique to this cell)
