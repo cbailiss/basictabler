@@ -96,6 +96,7 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$resetCells", "Resetting cells...")
      private$p_rows <- NULL
      private$p_columnCount <- 0
+     private$p_parentTable$mergedCells$clear()
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$resetCells", "Reset cells.")
    },
    getCell = function(r=NULL, c=NULL) {
@@ -376,6 +377,7 @@ TableCells <- R6::R6Class("TableCells",
      for(c in 1:self$columnCount) {
        self$setBlankCell(rowNumber, c)
      }
+     private$p_parentTable$mergedCells$updateAfterRowInsert(rowNumber)
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertRow", "Inserted row.")
      return(invisible())
    },
@@ -393,6 +395,7 @@ TableCells <- R6::R6Class("TableCells",
        }
      }
      private$p_rows[[self$rowCount]] <- NULL # can set last cell in the list to NULL to shorten the array
+     private$p_parentTable$mergedCells$updateAfterRowDelete(rowNumber)
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteRow", "Deleted row.")
      return(invisible())
    },
@@ -412,6 +415,7 @@ TableCells <- R6::R6Class("TableCells",
      for(r in 1:self$rowCount) {
        self$setBlankCell(r, columnNumber)
      }
+     private$p_parentTable$mergedCells$updateAfterColumnInsert(columnNumber)
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertColumn", "Inserted column")
      return(invisible())
    },
@@ -432,6 +436,7 @@ TableCells <- R6::R6Class("TableCells",
        private$p_rows[[r]][[self$columnCount]] <- NULL # can set last cell in the list to NULL to shorten the array
      }
      private$p_columnCount <- private$p_columnCount - 1
+     private$p_parentTable$mergedCells$updateAfterColumnDelete(columnNumber)
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteColumn", "Deleted column.")
      return(invisible())
    },

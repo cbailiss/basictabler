@@ -98,6 +98,93 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$deleteRange", "Deleted range.", list(rangeIndex=rangeIndex))
       return(invisible(!is.null(rangeIndex))) # returns TRUE if range found and deleted
     },
+    clear = function() {
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$clear", "Clearing ranges...")
+      private$p_ranges <- list()
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$clear", "Cleared ranges.")
+    },
+    updateAfterRowInsert = function(r=NULL) {
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowInsert", "Updating...", list(r=r))
+      if(length(private$p_ranges) > 0) {
+        for(i in 1:length(private$p_ranges)) {
+          if(r<=private$p_ranges[[i]]$rTop) {
+            private$p_ranges[[i]]$rTop <- private$p_ranges[[i]]$rTop + 1
+          }
+          if(r<=private$p_ranges[[i]]$rBottom) {
+            private$p_ranges[[i]]$rBottom <- private$p_ranges[[i]]$rBottom + 1
+          }
+        }
+      }
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowInsert", "Updated.")
+      return(invisible())
+    },
+    updateAfterRowDelete = function(r=NULL) {
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowDelete", "Updating...", list(r=r))
+      if(length(private$p_ranges) > 0) {
+        for(i in length(private$p_ranges):1) {
+          if(r<private$p_ranges[[i]]$rTop) {
+            private$p_ranges[[i]]$rTop <- private$p_ranges[[i]]$rTop - 1
+            private$p_ranges[[i]]$rBottom <- private$p_ranges[[i]]$rBottom - 1
+          }
+          else if(r==private$p_ranges[[i]]$rTop) {
+            if(private$p_ranges[[i]]$rCount==1) {
+              private$p_ranges[[i]] <- NULL
+            }
+            else {
+              private$p_ranges[[i]]$rBottom <- private$p_ranges[[i]]$rBottom - 1
+              private$p_ranges[[i]]$rCount <- private$p_ranges[[i]]$rCount - 1
+            }
+          }
+          else if((r>private$p_ranges[[i]]$rTop)&&(r<=private$p_ranges[[i]]$rBottom)) {
+            private$p_ranges[[i]]$rBottom <- private$p_ranges[[i]]$rBottom - 1
+            private$p_ranges[[i]]$rCount <- private$p_ranges[[i]]$rCount - 1
+          }
+        }
+      }
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowDelete", "Updated.")
+      return(invisible())
+    },
+    updateAfterColumnInsert = function(c=NULL) {
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnInsert", "Updating...", list(c=c))
+      if(length(private$p_ranges) > 0) {
+        for(i in 1:length(private$p_ranges)) {
+          if(c<=private$p_ranges[[i]]$cLeft) {
+            private$p_ranges[[i]]$cLeft <- private$p_ranges[[i]]$cLeft + 1
+          }
+          if(c<=private$p_ranges[[i]]$cRight) {
+            private$p_ranges[[i]]$cRight <- private$p_ranges[[i]]$cRight + 1
+          }
+        }
+      }
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnInsert", "Updated.")
+      return(invisible())
+    },
+    updateAfterColumnDelete = function(c=NULL) {
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnDelete", "Updating...", list(c=c))
+      if(length(private$p_ranges) > 0) {
+        for(i in length(private$p_ranges):1) {
+          if(c<private$p_ranges[[i]]$cLeft) {
+            private$p_ranges[[i]]$cLeft <- private$p_ranges[[i]]$cLeft - 1
+            private$p_ranges[[i]]$cRight <- private$p_ranges[[i]]$cRight - 1
+          }
+          else if(c==private$p_ranges[[i]]$cLeft) {
+            if(private$p_ranges[[i]]$cCount==1) {
+              private$p_ranges[[i]] <- NULL
+            }
+            else {
+              private$p_ranges[[i]]$cRight <- private$p_ranges[[i]]$cRight - 1
+              private$p_ranges[[i]]$cCount <- private$p_ranges[[i]]$cCount - 1
+            }
+          }
+          else if((c>private$p_ranges[[i]]$cLeft)&&(c<=private$p_ranges[[i]]$cRight)) {
+            private$p_ranges[[i]]$cRight <- private$p_ranges[[i]]$cRight - 1
+            private$p_ranges[[i]]$cCount <- private$p_ranges[[i]]$cCount - 1
+          }
+        }
+      }
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnDelete", "Updated.")
+      return(invisible())
+    },
     asList = function() {
       lst <- list(
         ranges = private$p_ranges
