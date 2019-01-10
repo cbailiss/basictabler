@@ -41,10 +41,11 @@
 #'   the values in a column.}
 #'   \item{\code{setCell(r, c, cellType="cell", rawValue=NULL,
 #'   formattedValue=NULL, visible=TRUE, baseStyleName=NULL,
-#'   styleDeclarations=NULL)}}{Set the details of a cell in the table.}
+#'   styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL)}}{Set the details of a
+#'   cell in the table.}
 #'   \item{\code{setBlankCell(r, c, cellType="cell", visible=TRUE,
-#'   baseStyleName=NULL, styleDeclarations=NULL)}}{Set a cell to be empty in the
-#'   table.}
+#'   baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL,
+#'   colSpan=NULL)}}{Set a cell to be empty in the table.}
 #'   \item{\code{deleteCell(r, c)}}{Remove a cell from the table (replacing it
 #'   with a blank one).}
 #'   \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
@@ -190,7 +191,7 @@ TableCells <- R6::R6Class("TableCells",
      }
      return(invisible(cv))
    },
-   setCell = function(r=NULL, c=NULL, cellType="cell", rawValue=NULL, formattedValue=NULL, visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL) {
+   setCell = function(r=NULL, c=NULL, cellType="cell", rawValue=NULL, formattedValue=NULL, visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", c, missing(c), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -200,15 +201,41 @@ TableCells <- R6::R6Class("TableCells",
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", visible, missing(visible), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", styleDeclarations, missing(styleDeclarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", rowSpan, missing(rowSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", colSpan, missing(colSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"), minValue=1)
      }
      if(missing(formattedValue)) formattedValue <- rawValue
      cell <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType=cellType, rawValue=rawValue, formattedValue=formattedValue, baseStyleName=baseStyleName, styleDeclarations=styleDeclarations)
      self$moveCell(r, c, cell)
+     if((!is.null(rowSpan))||(!is.null(colSpan))) {
+       rs <- rowSpan
+       cs <- colSpan
+       if(is.null(rs)) { rs <- 1 }
+       if(is.null(cs)) { cs <- 1 }
+       if((rs>1)||(cs>1)) { private$p_parentTable$mergeCells(rTop=r, cLeft=c, rCount=rs, cCount=cs) }
+     }
      return(invisible(cell))
    },
-   setBlankCell = function(r=NULL, c=NULL, cellType="cell", visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL) {
+   setBlankCell = function(r=NULL, c=NULL, cellType="cell", visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL) {
+     if(private$p_parentTable$argumentCheckMode > 0) {
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", c, missing(c), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", cellType, missing(cellType), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("root", "rowHeader", "columnHeader", "cell", "total"))
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", visible, missing(visible), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", styleDeclarations, missing(styleDeclarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", rowSpan, missing(rowSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", colSpan, missing(colSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"), minValue=1)
+     }
      cell <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType=cellType, visible=visible, rawValue=NULL, formattedValue=NULL, baseStyleName=baseStyleName, styleDeclarations=styleDeclarations)
      self$moveCell(r, c, cell)
+     if((!is.null(rowSpan))||(!is.null(colSpan))) {
+       rs <- rowSpan
+       cs <- colSpan
+       if(is.null(rs)) { rs <- 1 }
+       if(is.null(cs)) { cs <- 1 }
+       if((rs>1)||(cs>1)) { private$p_parentTable$mergeCells(rTop=r, cLeft=c, rCount=rs, cCount=cs) }
+     }
      return(invisible(cell))
    },
    deleteCell = function(r=NULL, c=NULL) {

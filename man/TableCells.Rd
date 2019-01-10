@@ -45,10 +45,11 @@ table.
   the values in a column.}
   \item{\code{setCell(r, c, cellType="cell", rawValue=NULL,
   formattedValue=NULL, visible=TRUE, baseStyleName=NULL,
-  styleDeclarations=NULL)}}{Set the details of a cell in the table.}
+  styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL)}}{Set the details of a
+  cell in the table.}
   \item{\code{setBlankCell(r, c, cellType="cell", visible=TRUE,
-  baseStyleName=NULL, styleDeclarations=NULL)}}{Set a cell to be empty in the
-  table.}
+  baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL,
+  colSpan=NULL)}}{Set a cell to be empty in the table.}
   \item{\code{deleteCell(r, c)}}{Remove a cell from the table (replacing it
   with a blank one).}
   \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
