@@ -289,37 +289,35 @@ tbl$renderTable()
 
 ## Summary of Table Cells Functions
 
-The following functions exist on the TableCells collection:
+The following functions exist on the table cells (`tbl$cells`) collection:
 
-- reset()
-- getCell(r, c)
-- getValue(r, c, formattedValue=FALSE)
-- getRowValues(rowNumber, columnNumbers, formattedValue=FALSE, asList=FALSE, rebase=TRUE)
-- getColumnValues(columnNumber, rowNumbers, formattedValue=FALSE, asList=FALSE, rebase=TRUE)
-- setCell(r, c, cellType="cell", rawValue, formattedValue=NULL, visible=TRUE)
-- setRow(rowNumber, startAtColumnNumber=1, cellTypes="cell", rawValues, formattedValues=NULL, formats=NULL, visiblity=TRUE)
-- setColumn(columnNumber, startAtRowNumber=2, cellTypes="cell", rawValues, formattedValues=NULL, formats=NULL, visiblity=TRUE)
-- setValue(r, c, rawValue, formattedValue=NULL)
-- setBlankCell(r, c, cellType="cell", visible=TRUE) 
-- deleteCell(r, c)
-- extendCells(rowCount, columnCount)
-- moveCell(r, c, cell)
-- insertRow(rowNumber) 
-- deleteRow(rowNumber)
-- insertColumn(columnNumber) 
-- deleteColumn(columnNumber)
+- `reset()`
+- `getCell(r, c)`
+- `getValue(r, c, formattedValue=FALSE)`
+- `getRowValues(rowNumber, columnNumbers, formattedValue=FALSE, asList=FALSE, rebase=TRUE)`
+- `getColumnValues(columnNumber, rowNumbers, formattedValue=FALSE, asList=FALSE, rebase=TRUE)`
+- `setCell(r, c, cellType="cell", rawValue, formattedValue=NULL, visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL)`
+- `setRow(rowNumber, startAtColumnNumber=1, cellTypes="cell", rawValues, formattedValues=NULL, formats=NULL, visiblity=TRUE, baseStyleNames=NULL)`
+- `setColumn(columnNumber, startAtRowNumber=2, cellTypes="cell", rawValues, formattedValues=NULL, formats=NULL, visiblity=TRUE, baseStyleNames=NULL)`
+- `setValue(r, c, rawValue, formattedValue=NULL)`
+- `setBlankCell(r, c, cellType="cell", visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL)` 
+- `deleteCell(r, c)`
+- `extendCells(rowCount, columnCount)`
+- `moveCell(r, c, cell)`
+- `insertRow(rowNumber, insertBlankCells=TRUE, headerCells=1, totalCells=0)`
+- `deleteRow(rowNumber)`
+- `insertColumn(columnNumber, insertBlankCells=TRUE, headerCells=1, totalCells=0)`
+- `deleteColumn(columnNumber)`
 
-The following functions also exist on the TableCells collection, but are discussed in the [Finding and Formatting](v05-findingandformatting.html)  vignette:
+The following functions also exist on the TableCells collection and are described in the [Finding and Formatting](v05-findingandformatting.html) vignette:
 
-- getCells(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL)
-- findCells(rowNumbers=NULL, columnNumbers=NULL, minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE)
+- `getCells(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL)`
+- `findCells(rowNumbers=NULL, columnNumbers=NULL, minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE)`
 
 Shortcuts to the above two functions also exist directly on the table object, i.e. any of the following ways of calling the functions work:
 
-- `tbl$getCells(...)`
-- `tbl$cells$getCells(...)`
-- `tbl$findCells(...)`
-- `tbl$cells$findCells(...)`
+- `tbl$getCells(...)` or `tbl$cells$getCells(...)`
+- `tbl$findCells(...)` or `tbl$cells$findCells(...)`
 
 ## Further Reading
 

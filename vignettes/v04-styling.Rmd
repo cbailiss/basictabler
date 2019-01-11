@@ -300,7 +300,8 @@ Since a theme is a collection of styles, creating themes is relatively straightf
 
 *  tableStyle - the name of the style applied to the table (i.e. the HTML `<table>` element).
 *  rootStyle - the name of the style applied to the empty cell at the top left of the table.
-*  rowHeaderStyle/colHeaderStyle - the name of the style applied to the row/column header cells.
+*  rowHeaderStyle - the name of the style applied to the row header cells.
+*  colHeaderStyle - the name of the style applied to the column header cells.
 *  cellStyle - the name of the style applied to the cells in the body of the table.
 *  totalStyle - the name of the style applied to the total cells in the table.
 
@@ -647,7 +648,16 @@ tbl$renderTable(styleNamePrefix="t9")
 
 In the example above, the default cell style from the theme is still applied.  The highlight is applied in addition to the default styling.  To stop the base styling being applied, create a new named style and set the baseStyleName property on the cell to the name of the new style. 
 
-The `createInlineStyle` function is also used in the example above.  This function creates a new unnamed style (that is not part of the table theme) and takes two arguments:  `baseStyleName` specifies the name of the style that the new style will be based on (i.e. will have it's style properties copied from) and `declarations` which specifies new/overriding style properties for the new style.  
+The `tbl$setStyling()` function is used in the example above.  This function has the following arguments:
+
+* `rFrom` and `cFrom` are the coordinates of the cell where the styling is to be applied.  If the styling is being applied to multiple cells, this is the top-left cell in the rectangular cell range where the styling is to be applied.
+* `rTo` and `cTo`  are the coordinates of the bottom right cell when styling is being applied to a rectangular range of cells.  If styling is only being applied to a single cell, these arguments are not needed. 
+* `cells` is a list of cells to apply styling to.  Either `rFrom`/`cFrom` or `cells` is typically specified - not both.
+* `baseStyleName` is the name of a style in the table theme to apply to the specified cells.  Set this explicitly to NULL to revert to the default style specified in the table theme.
+* `style` is a `TableStyle` override object to apply to the specified cells.  This is created by calling `tbl$createInlineStyle()` as shown in the example above.
+* `declarations` is a list of style override declarations to apply to the specified cells. 
+
+The `tbl$createInlineStyle()` function is also used in the example above.  This function creates a new unnamed style (that is not part of the table theme) and takes two arguments:  `baseStyleName` specifies the name of the style that the new style will be based on (i.e. will have it's style properties copied from) and `declarations` which specifies new/overriding style properties for the new style.  
 
 The `lapply()` function can be used to set the style for multiple cells to a new inline style:
 
