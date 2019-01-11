@@ -16,7 +16,7 @@ Next changes:
    - New isMergedCell(row, column) - that returns MERGE_ROOT (if top left cell of merge), MERGED_CELL, NOT_MERGED (or return an instance of a merged range)
    - Modify export functions (HTML and Excel) to correctly export merged cells
 
-4) Add support (in a new feature branch) to convert a pivottabler to a basictable
+4) DONE:  Add support (in a new feature branch) to convert a pivottabler to a basictable
 
 5) Add support (in a new feature branch) to convert a basictable to a huxtable
 
