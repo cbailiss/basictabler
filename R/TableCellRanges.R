@@ -262,6 +262,12 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if ((cRight - cLeft + 1) != cCount) {
         stop(paste0("TableCellRanges$validateRange(): Invalid column range: the column count specified is not consistent with the left and right columns (i.e. cSpan must equal cTo - cFrom + 1)."), call. = FALSE)
       }
+      if (rBottom > private$p_parentTable$rowCount){
+        stop(paste0("TableCellRanges$validateRange(): Invalid row range: The specified range is outside the size of the table."), call. = FALSE)
+      }
+      if (cRight > private$p_parentTable$columnCount){
+        stop(paste0("TableCellRanges$validateRange(): Invalid column range: The specified range is outside the size of the table."), call. = FALSE)
+      }
       range <- list(rFrom=rTop, cFrom=cLeft, rSpan=rCount, cSpan=cCount, rTo=rBottom, cTo=cRight)
       return(range)
     }
