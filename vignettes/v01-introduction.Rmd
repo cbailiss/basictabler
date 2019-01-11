@@ -205,10 +205,6 @@ tbl$renderTable()
 
 For more information and examples regarding manipulating the structure and content of tables see the [Working with Cells](v02-workingwithcells.html) vignette.
 
-## Outputs
-
-The 
-
 ## Examples Gallery
 
 This section shows some examples from the other vignettes as a quick overview of some of the other capabilities of the basictabler package.  The R scripts to create each example below can be found in the other vignettes.

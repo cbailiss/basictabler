@@ -100,7 +100,16 @@ TableCell <- R6::R6Class("TableCell",
    asJSON = function() { return(jsonlite::toJSON(asList())) }
   ),
   active = list(
-   cellType = function(value) { return(invisible(private$p_cellType)) },
+   cellType = function(value) {
+     if(missing(value)) return(invisible(private$p_cellType))
+     else {
+       if(private$p_parentTable$argumentCheckMode > 0) {
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCell", "cellType", value, missing(value), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", allowedValues=c("root", "rowHeader", "columnHeader", "cell", "total"))
+       }
+       private$p_cellType <- value
+       return(invisible())
+     }
+   },
    rowNumber = function(value) { return(invisible(private$p_rowNumber)) },
    columnNumber = function(value) { return(invisible(private$p_columnNumber)) },
    visible = function(value) {

@@ -81,11 +81,11 @@ constructing the table, where the elapsed time > 0.1 seconds.}
   add it to the TableStyles collection.}
   \item{\code{createInlineStyle(baseStyleName, declarations)}}{Create a
   TableStyle object that can be used to style individual cells in the table.}
-  \item{\code{setStyling(rFrom, cFrom, rTo=NULL, cTo=NULL,
-  baseStyleName=NULL, style=NULL, declarations=NULL)}}{Set the style settings
-  across a range of cells.}
+  \item{\code{setStyling(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL,
+  cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL)}}{Set the
+  style settings across a range of cells.}
   \item{\code{resetCells()}}{Clear the cells of the table.}
-  \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
+  \item{\code{getCells(specifyCellsAsList=TRUE, rowNumbers=NULL,
   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
   of row and/or column numbers.}
   \item{\code{findCells(rowNumbers=NULL, columnNumbers=NULL,

@@ -95,11 +95,11 @@
 #'   add it to the TableStyles collection.}
 #'   \item{\code{createInlineStyle(baseStyleName, declarations)}}{Create a
 #'   TableStyle object that can be used to style individual cells in the table.}
-#'   \item{\code{setStyling(rFrom, cFrom, rTo=NULL, cTo=NULL,
-#'   baseStyleName=NULL, style=NULL, declarations=NULL)}}{Set the style settings
-#'   across a range of cells.}
+#'   \item{\code{setStyling(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL,
+#'   cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL)}}{Set the
+#'   style settings across a range of cells.}
 #'   \item{\code{resetCells()}}{Clear the cells of the table.}
-#'   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
+#'   \item{\code{getCells(specifyCellsAsList=TRUE, rowNumbers=NULL,
 #'   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
 #'   of row and/or column numbers.}
 #'   \item{\code{findCells(rowNumbers=NULL, columnNumbers=NULL,
@@ -518,30 +518,43 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$createInlineStyle", "Created inline style.")
       return(invisible(style))
     },
-    setStyling = function(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL, baseStyleName=NULL, style=NULL, declarations=NULL) {
+    setStyling = function(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL, cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rFrom, missing(rFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cFrom, missing(cFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rFrom, missing(rFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cFrom, missing(cFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rTo, missing(rTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cTo, missing(cTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cells, missing(cells), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses="TableCell")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Setting styling...")
-      if(is.null(rTo)) rTo <- rFrom
-      if(is.null(cTo)) cTo <- cFrom
-      if(rTo<rFrom) { stop("BasicTable$setStyling():  rTo must be greater than or equal to rFrom.", call. = FALSE) }
-      if(cTo<cFrom) { stop("BasicTable$setStyling():  cTo must be greater than or equal to cFrom.", call. = FALSE) }
-      if(missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of baseStyleName, style or declarations.", call. = FALSE) }
-      if((!is.null(style))&&(!is.null(declarations))) { stop("BasicTable$setStyling():  Please specify either style or declarations, not both.", call. = FALSE) }
-      for(r in rFrom:rTo) {
-        for(c in cFrom:cTo) {
-          cell <- self$cells$getCell(r, c)
+      if(!is.null(cells)) {
+        for(i in 1:length(cells)) {
+          cell <- cells[[i]]
           if(!is.null(cell)) {
             if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
             if(!missing(style)) { cell$style <- style$getCopy() }
             if(!missing(declarations)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
+          }
+        }
+      }
+      if((!is.null(rFrom))&&(!is.null(cFrom))) {
+        if(is.null(rTo)) rTo <- rFrom
+        if(is.null(cTo)) cTo <- cFrom
+        if(rTo<rFrom) { stop("BasicTable$setStyling():  rTo must be greater than or equal to rFrom.", call. = FALSE) }
+        if(cTo<cFrom) { stop("BasicTable$setStyling():  cTo must be greater than or equal to cFrom.", call. = FALSE) }
+        if(missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of baseStyleName, style or declarations.", call. = FALSE) }
+        if((!is.null(style))&&(!is.null(declarations))) { stop("BasicTable$setStyling():  Please specify either style or declarations, not both.", call. = FALSE) }
+        for(r in rFrom:rTo) {
+          for(c in cFrom:cTo) {
+            cell <- self$cells$getCell(r, c)
+            if(!is.null(cell)) {
+              if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
+              if(!missing(style)) { cell$style <- style$getCopy() }
+              if(!missing(declarations)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
+            }
           }
         }
       }
@@ -557,7 +570,7 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$resetCells", "Reset cells.")
       return(invisible())
     },
-    getCells = function(specifyCellsAsList=FALSE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL) {
+    getCells = function(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", specifyCellsAsList, missing(specifyCellsAsList), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
