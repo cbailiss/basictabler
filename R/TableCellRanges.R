@@ -112,6 +112,9 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
           }
           if(r<=private$p_ranges[[i]]$rBottom) {
             private$p_ranges[[i]]$rBottom <- private$p_ranges[[i]]$rBottom + 1
+            if((r>private$p_ranges[[i]]$rTop)) {
+              private$p_ranges[[i]]$rCount <- private$p_ranges[[i]]$rCount + 1
+            }
           }
         }
       }
@@ -153,6 +156,9 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
           }
           if(c<=private$p_ranges[[i]]$cRight) {
             private$p_ranges[[i]]$cRight <- private$p_ranges[[i]]$cRight + 1
+            if((c>private$p_ranges[[i]]$cLeft)) {
+              private$p_ranges[[i]]$cCount <- private$p_ranges[[i]]$cCount + 1
+            }
           }
         }
       }
