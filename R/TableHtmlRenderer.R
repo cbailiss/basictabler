@@ -92,9 +92,9 @@ TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
          # output the cell
          if(cell$isMerged) {
            mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
-           if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rCount, colspan=mergeRange$cCount,
+           if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
                                                                          class=cssCell, style=cllstyl, cell$formattedValue)
-           else trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rCount, colspan=mergeRange$cCount,
+           else trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
                                                              class=cssCell, style=cllstyl) # todo: check escaping
          }
          else {

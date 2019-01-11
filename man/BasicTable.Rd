@@ -66,8 +66,8 @@ constructing the table, where the elapsed time > 0.1 seconds.}
   explicitRowHeaders=NULL, columnFormats=NULL,
   baseStyleNames=NULL)}}{Generate the table from a matrix, specifying headers
   and value formatting.l}
-  \item{\code{mergeCells(rTop=NULL, cLeft=NULL, rCount=NULL, cCount=NULL,
-  rBottom=NULL, cRight=NULL)}}{Merge cells in the table.  This does not delete
+  \item{\code{mergeCells(rFrom, cFrom, rSpan=NULL, cSpan=NULL,
+  rTo=NULL, cTo=NULL)}}{Merge cells in the table.  This does not delete
   the other cells covered by the merged cell.  When the table is output, the
   top-left most cell in the merged cell range is rendered over the other
   cells (which are effectively hidden).}
@@ -81,6 +81,9 @@ constructing the table, where the elapsed time > 0.1 seconds.}
   add it to the TableStyles collection.}
   \item{\code{createInlineStyle(baseStyleName, declarations)}}{Create a
   TableStyle object that can be used to style individual cells in the table.}
+  \item{\code{setStyling(rFrom, cFrom, rTo=NULL, cTo=NULL,
+  baseStyleName=NULL, style=NULL, declarations=NULL)}}{Set the style settings
+  across a range of cells.}
   \item{\code{resetCells()}}{Clear the cells of the table.}
   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination

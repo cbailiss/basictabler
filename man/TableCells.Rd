@@ -31,7 +31,6 @@ table.
   the extensive vignettes supplied with this package.}
   \item{\code{new(...)}}{Create a new set of table cells, specifying
   the field values documented above.}
-
   \item{\code{reset())}}{Clears and removes all of the cells.}
   \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
   column coordinates in the table.}
@@ -54,11 +53,6 @@ table.
   with a blank one).}
   \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
   value of a cell.}
-  \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
-  \item{\code{moveCell(r, c, cell))}}{Move the cell to the specified row
-  and column coordinates in the table.}
-  \item{\code{insertRow(rowNumber=NULL)}}{Insert a new row (moving the rows
-  underneath down).}
   \item{\code{setRow(rowNumber=NULL, startAtColumnNumber=1, cellTypes=NULL,
   rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE,
   baseStyleNames=NULL)}}{Set multiple cells across a row at once.}
@@ -66,10 +60,17 @@ table.
   cellTypes=NULL, rawValues=NULL, formattedValues=NULL, formats=NULL,
   visiblity=TRUE, baseStyleNames=NULL)}}{Set multiple cells down a column at
   once.}
+  \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
+  \item{\code{moveCell(r, c, cell))}}{Move the cell to the specified row
+  and column coordinates in the table.}
+  \item{\code{insertRow(rowNumber, insertBlankCells=TRUE, headerCells=1,
+  totalCells=0)}}{Insert a new row (moving the rows underneath down), where
+  headerCells and totalCells control default styling.}
   \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
   underneath up.}
-  \item{\code{insertColumn(columnNumber=NULL)}}{Insert a new column (moving
-  other columns rightwards.}
+  \item{\code{insertColumn(columnNumber, insertBlankCells=TRUE,
+  headerCells=1, totalCells=0)}}{Insert a new column (moving other columns
+  rightwards, where headerCells and totalCells control default styling.}
   \item{\code{deleteColumn(columnNumber=NULL)}}{Delete a column (moving other
   columns leftwards.}
   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,

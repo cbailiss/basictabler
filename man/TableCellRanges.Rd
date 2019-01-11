@@ -32,10 +32,10 @@ the functioning of the BasicTable class.
   the extensive vignettes supplied with this package.}
   \item{\code{new(...)}}{Create a new object to manage cell ranges.}
 
-  \item{\code{addRange(rTop, cLeft, rCount=NULL, cCount=NULL, rBottom=NULL,
-  cRight=NULL)}}{Add a cell range to the list of cell ranges.}
-  \item{\code{findIntersectingRange(rTop, cLeft, rCount=NULL, cCount=NULL,
-  rBottom=NULL, cRight=NULL)}}{Find a cell range that intersects with the
+  \item{\code{addRange(rFrom, cFrom, rSpan=NULL, cSpan=NULL, rTo=NULL,
+  cTo=NULL)}}{Add a cell range to the list of cell ranges.}
+  \item{\code{findIntersectingRange(rFrom, cFrom, rSpan=NULL, cSpan=NULL,
+  rTo=NULL, cTo=NULL)}}{Find a cell range that intersects with the
   specified cell range.}
   \item{\code{deleteRange(r, c)}}{Delete the cell range covering the
   specified cell.}

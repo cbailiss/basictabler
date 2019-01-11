@@ -202,7 +202,7 @@ cat(description)
 
 ## Merging Cells
 
-Cells can be merged.  The range of cells is specified using the row and column of the top-left cell (`rTop` and `cLeft`), then specifying either the number of rows and columns that the merge spans (`rCount` and `cCount`) or the row and column of the bottom-right cell (`rBottom` and `cRight`). 
+Cells can be merged.  The range of cells is specified using the row and column of the top-left cell (`rFrom` and `cFrom`), then specifying either the number of rows and columns that the merge spans (`rSpan` and `cSpan`) or the row and column of the bottom-right cell (`rTo` and `cTo`). 
 
 E.g. merging the headings of the 2nd and 3rd columns into a single cell:
 
@@ -222,7 +222,7 @@ tbl$addData(data.frame(saleIds, items, quantities, prices),
             columnFormats=list(NULL, NULL, NULL, "%.2f"))
 
 # merge the cells and specify new heading
-tbl$mergeCells(rTop=1, cLeft=2, rCount=1, cCount=2)
+tbl$mergeCells(rFrom=1, cFrom=2, rSpan=1, cSpan=2)
 cell <- tbl$cells$getCell(1, 2)
 cell$rawValue <- "Item & Qty"
 cell$formattedValue <- "Item & Qty"

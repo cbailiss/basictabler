@@ -176,8 +176,8 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
           mergeColumns <- NULL
           if(cell$isMerged) {
             mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
-            mergeRows <- xlRowNumber:(xlRowNumber + mergeRange$rCount - 1)
-            mergeColumns <- xlColumnNumber:(xlColumnNumber + mergeRange$cCount - 1)
+            mergeRows <- xlRowNumber:(xlRowNumber + mergeRange$rSpan - 1)
+            mergeColumns <- xlColumnNumber:(xlColumnNumber + mergeRange$cSpan - 1)
           }
 
           # get style info

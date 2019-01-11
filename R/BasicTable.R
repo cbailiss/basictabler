@@ -80,8 +80,8 @@
 #'   explicitRowHeaders=NULL, columnFormats=NULL,
 #'   baseStyleNames=NULL)}}{Generate the table from a matrix, specifying headers
 #'   and value formatting.l}
-#'   \item{\code{mergeCells(rTop=NULL, cLeft=NULL, rCount=NULL, cCount=NULL,
-#'   rBottom=NULL, cRight=NULL)}}{Merge cells in the table.  This does not delete
+#'   \item{\code{mergeCells(rFrom, cFrom, rSpan=NULL, cSpan=NULL,
+#'   rTo=NULL, cTo=NULL)}}{Merge cells in the table.  This does not delete
 #'   the other cells covered by the merged cell.  When the table is output, the
 #'   top-left most cell in the merged cell range is rendered over the other
 #'   cells (which are effectively hidden).}
@@ -95,6 +95,9 @@
 #'   add it to the TableStyles collection.}
 #'   \item{\code{createInlineStyle(baseStyleName, declarations)}}{Create a
 #'   TableStyle object that can be used to style individual cells in the table.}
+#'   \item{\code{setStyling(rFrom, cFrom, rTo=NULL, cTo=NULL,
+#'   baseStyleName=NULL, style=NULL, declarations=NULL)}}{Set the style settings
+#'   across a range of cells.}
 #'   \item{\code{resetCells()}}{Clear the cells of the table.}
 #'   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
 #'   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
@@ -388,21 +391,21 @@ BasicTable <- R6::R6Class("BasicTable",
       private$addTiming(paste0("addMatrix()"), timeStart)
       return(invisible())
     },
-    mergeCells = function(rTop=NULL, cLeft=NULL, rCount=NULL, cCount=NULL, rBottom=NULL, cRight=NULL) {
+    mergeCells = function(rFrom=NULL, cFrom=NULL, rSpan=NULL, cSpan=NULL, rTo=NULL, cTo=NULL) {
       if(private$p_argumentCheckMode > 0) {
-        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rTop, missing(rTop), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cLeft, missing(cLeft), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rCount, missing(rCount), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cCount, missing(cCount), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rBottom, missing(rBottom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cRight, missing(cRight), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rFrom, missing(rFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cFrom, missing(cFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rSpan, missing(rSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cSpan, missing(cSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rTo, missing(rTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cTo, missing(cTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
       }
-      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merging cells...", list(rTop=rTop, cLeft=cLeft, rCount=rCount, cCount=cCount, rBottom=rBottom, cRight=cRight))
-      existingRange <- private$p_mergedCells$findIntersectingRange(rTop=rTop, cLeft=cLeft, rCount=rCount, cCount=cCount, rBottom=rBottom, cRight=cRight)
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merging cells...", list(rFrom=rFrom, cFrom=cFrom, rSpan=rSpan, cSpan=cSpan, rTo=rTo, cTo=cTo))
+      existingRange <- private$p_mergedCells$findIntersectingRange(rFrom=rFrom, cFrom=cFrom, rSpan=rSpan, cSpan=cSpan, rTo=rTo, cTo=cTo)
       if(!is.null(existingRange)) {
         stop(paste0("BasicTable$mergeCells(): An existing merged cell range intersects with the specified cell range."), call. = FALSE)
       }
-      private$p_mergedCells$addRange(rTop=rTop, cLeft=cLeft, rCount=rCount, cCount=cCount, rBottom=rBottom, cRight=cRight)
+      private$p_mergedCells$addRange(rFrom=rFrom, cFrom=cFrom, rSpan=rSpan, cSpan=cSpan, rTo=rTo, cTo=cTo)
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merged cells.")
       return(invisible())
     },
@@ -441,10 +444,10 @@ BasicTable <- R6::R6Class("BasicTable",
       if(length(mergeRanges) > 0) {
         for(i in 1:length(mergeRanges)) {
           mr <- mergeRanges[[i]]
-          cell <- private$p_cells$rows[[mr$rTop]][[mr$cLeft]]
+          cell <- private$p_cells$rows[[mr$rFrom]][[mr$cFrom]]
           cell$isMergeRoot <- TRUE
-          for(r in mr$rTop:mr$rBottom) {
-            for(c in mr$cLeft:mr$cRight) {
+          for(r in mr$rFrom:mr$rTo) {
+            for(c in mr$cFrom:mr$cTo) {
               cell <- private$p_cells$rows[[r]][[c]]
               cell$isMerged <- TRUE
               cell$mergeIndex <- i
@@ -500,6 +503,7 @@ BasicTable <- R6::R6Class("BasicTable",
     },
     createInlineStyle = function(baseStyleName=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "createInlineStyle", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "createInlineStyle", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$createInlineStyle", "Creating inline style...")
@@ -513,6 +517,35 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$createInlineStyle", "Created inline style.")
       return(invisible(style))
+    },
+    setStyling = function(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL, baseStyleName=NULL, style=NULL, declarations=NULL) {
+      if(private$p_argumentCheckMode > 0) {
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rFrom, missing(rFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cFrom, missing(cFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rTo, missing(rTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cTo, missing(cTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Setting styling...")
+      if(is.null(rTo)) rTo <- rFrom
+      if(is.null(cTo)) cTo <- cFrom
+      if(rTo<rFrom) { stop("BasicTable$setStyling():  rTo must be greater than or equal to rFrom.", call. = FALSE) }
+      if(cTo<cFrom) { stop("BasicTable$setStyling():  cTo must be greater than or equal to cFrom.", call. = FALSE) }
+      if(missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of baseStyleName, style or declarations.", call. = FALSE) }
+      if((!is.null(style))&&(!is.null(declarations))) { stop("BasicTable$setStyling():  Please specify either style or declarations, not both.", call. = FALSE) }
+      for(r in rFrom:rTo) {
+        for(c in cFrom:cTo) {
+          cell <- self$cells$getCell(r, c)
+          if(!is.null(cell)) {
+            if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
+            if(!missing(style)) { cell$style <- style$getCopy() }
+            if(!missing(declarations)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
+          }
+        }
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Set styling.")
     },
     resetCells = function() {
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$resetCells", "Resetting cells...")

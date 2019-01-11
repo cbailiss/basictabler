@@ -27,7 +27,6 @@
 #'   the extensive vignettes supplied with this package.}
 #'   \item{\code{new(...)}}{Create a new set of table cells, specifying
 #'   the field values documented above.}
-#'
 #'   \item{\code{reset())}}{Clears and removes all of the cells.}
 #'   \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
 #'   column coordinates in the table.}
@@ -50,11 +49,6 @@
 #'   with a blank one).}
 #'   \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
 #'   value of a cell.}
-#'   \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
-#'   \item{\code{moveCell(r, c, cell))}}{Move the cell to the specified row
-#'   and column coordinates in the table.}
-#'   \item{\code{insertRow(rowNumber=NULL)}}{Insert a new row (moving the rows
-#'   underneath down).}
 #'   \item{\code{setRow(rowNumber=NULL, startAtColumnNumber=1, cellTypes=NULL,
 #'   rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE,
 #'   baseStyleNames=NULL)}}{Set multiple cells across a row at once.}
@@ -62,10 +56,17 @@
 #'   cellTypes=NULL, rawValues=NULL, formattedValues=NULL, formats=NULL,
 #'   visiblity=TRUE, baseStyleNames=NULL)}}{Set multiple cells down a column at
 #'   once.}
+#'   \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
+#'   \item{\code{moveCell(r, c, cell))}}{Move the cell to the specified row
+#'   and column coordinates in the table.}
+#'   \item{\code{insertRow(rowNumber, insertBlankCells=TRUE, headerCells=1,
+#'   totalCells=0)}}{Insert a new row (moving the rows underneath down), where
+#'   headerCells and totalCells control default styling.}
 #'   \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
 #'   underneath up.}
-#'   \item{\code{insertColumn(columnNumber=NULL)}}{Insert a new column (moving
-#'   other columns rightwards.}
+#'   \item{\code{insertColumn(columnNumber, insertBlankCells=TRUE,
+#'   headerCells=1, totalCells=0)}}{Insert a new column (moving other columns
+#'   rightwards, where headerCells and totalCells control default styling.}
 #'   \item{\code{deleteColumn(columnNumber=NULL)}}{Delete a column (moving other
 #'   columns leftwards.}
 #'   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
@@ -208,11 +209,9 @@ TableCells <- R6::R6Class("TableCells",
      cell <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType=cellType, rawValue=rawValue, formattedValue=formattedValue, baseStyleName=baseStyleName, styleDeclarations=styleDeclarations)
      self$moveCell(r, c, cell)
      if((!is.null(rowSpan))||(!is.null(colSpan))) {
-       rs <- rowSpan
-       cs <- colSpan
-       if(is.null(rs)) { rs <- 1 }
-       if(is.null(cs)) { cs <- 1 }
-       if((rs>1)||(cs>1)) { private$p_parentTable$mergeCells(rTop=r, cLeft=c, rCount=rs, cCount=cs) }
+       if(is.null(rowSpan)) { rowSpan <- 1 }
+       if(is.null(colSpan)) { colSpan <- 1 }
+       if((rowSpan>1)||(colSpan>1)) { private$p_parentTable$mergeCells(rFrom=r, cFrom=c, rSpan=rowSpan, cSpan=colSpan) }
      }
      return(invisible(cell))
    },
@@ -232,9 +231,9 @@ TableCells <- R6::R6Class("TableCells",
      if((!is.null(rowSpan))||(!is.null(colSpan))) {
        rs <- rowSpan
        cs <- colSpan
-       if(is.null(rs)) { rs <- 1 }
-       if(is.null(cs)) { cs <- 1 }
-       if((rs>1)||(cs>1)) { private$p_parentTable$mergeCells(rTop=r, cLeft=c, rCount=rs, cCount=cs) }
+       if(is.null(rowSpan)) { rowSpan <- 1 }
+       if(is.null(colSpan)) { colSpan <- 1 }
+       if((rowSpan>1)||(colSpan>1)) { private$p_parentTable$mergeCells(rFrom=r, cFrom=c, rSpan=rowSpan, cSpan=colSpan) }
      }
      return(invisible(cell))
    },
@@ -388,9 +387,12 @@ TableCells <- R6::R6Class("TableCells",
      cell$updatePosition(r, c)
      return(invisible())
    },
-   insertRow = function(rowNumber=NULL) {
+   insertRow = function(rowNumber=NULL, insertBlankCells=TRUE, headerCells=1, totalCells=0) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertRow", insertBlankCells, missing(insertBlankCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertRow", headerCells, missing(headerCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=0)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertRow", totalCells, missing(totalCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=0)
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertRow", "Inserting row...")
      if(rowNumber<=self$rowCount) {
@@ -401,8 +403,13 @@ TableCells <- R6::R6Class("TableCells",
          }
        }
      }
-     for(c in 1:self$columnCount) {
-       self$setBlankCell(rowNumber, c)
+     if(insertBlankCells) {
+       for(c in 1:self$columnCount) {
+         cellType <- "cell"
+         if(c<=headerCells) { cellType <- "rowHeader" }
+         else if(c>=(self$columnCount-totalCells+1))  { cellType <- "total" }
+         self$setBlankCell(rowNumber, c, cellType=cellType)
+       }
      }
      private$p_parentTable$mergedCells$updateAfterRowInsert(rowNumber)
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertRow", "Inserted row.")
@@ -426,9 +433,12 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteRow", "Deleted row.")
      return(invisible())
    },
-   insertColumn = function(columnNumber=NULL) {
+   insertColumn = function(columnNumber=NULL, insertBlankCells=TRUE, headerCells=1, totalCells=0) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertColumn", insertBlankCells, missing(insertBlankCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertColumn", headerCells, missing(headerCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=0)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertColumn", totalCells, missing(totalCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=0)
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertColumn", "Inserting column...")
      if(columnNumber<=self$columnCount) {
@@ -439,8 +449,13 @@ TableCells <- R6::R6Class("TableCells",
          }
        }
      }
-     for(r in 1:self$rowCount) {
-       self$setBlankCell(r, columnNumber)
+     if(insertBlankCells) {
+       for(r in 1:self$rowCount) {
+         cellType <- "cell"
+         if(r<=headerCells) { cellType <- "columnHeader" }
+         else if(r>=(self$rowCount-totalCells+1))  { cellType <- "total" }
+         self$setBlankCell(r, columnNumber)
+       }
      }
      private$p_parentTable$mergedCells$updateAfterColumnInsert(columnNumber)
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertColumn", "Inserted column")
