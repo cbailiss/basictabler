@@ -530,13 +530,17 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Setting styling...")
+      if(missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of baseStyleName, style or declarations.", call. = FALSE) }
       if(!is.null(cells)) {
         for(i in 1:length(cells)) {
           cell <- cells[[i]]
           if(!is.null(cell)) {
             if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
-            if(!missing(style)) { cell$style <- style$getCopy() }
-            if(!missing(declarations)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
+            if(!missing(style)) { cell$style <- ifelse(is.null(style, NULL, style$getCopy())) }
+            if((!missing(declarations))&&(!is.null(declarations))) {
+              if (is.null(cell$style)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
+              else { cell$setPropertyValues(declarations) }
+            }
           }
         }
       }
@@ -545,15 +549,16 @@ BasicTable <- R6::R6Class("BasicTable",
         if(is.null(cTo)) cTo <- cFrom
         if(rTo<rFrom) { stop("BasicTable$setStyling():  rTo must be greater than or equal to rFrom.", call. = FALSE) }
         if(cTo<cFrom) { stop("BasicTable$setStyling():  cTo must be greater than or equal to cFrom.", call. = FALSE) }
-        if(missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of baseStyleName, style or declarations.", call. = FALSE) }
-        if((!is.null(style))&&(!is.null(declarations))) { stop("BasicTable$setStyling():  Please specify either style or declarations, not both.", call. = FALSE) }
         for(r in rFrom:rTo) {
           for(c in cFrom:cTo) {
             cell <- self$cells$getCell(r, c)
             if(!is.null(cell)) {
               if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
-              if(!missing(style)) { cell$style <- style$getCopy() }
-              if(!missing(declarations)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
+              if(!missing(style)) { cell$style <- ifelse(is.null(style), NULL, style$getCopy()) }
+              if((!missing(declarations))&&(!is.null(declarations))) {
+                if (is.null(cell$style)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
+                else { cell$setPropertyValues(declarations) }
+              }
             }
           }
         }

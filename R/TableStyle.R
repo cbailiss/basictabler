@@ -71,7 +71,7 @@ TableStyle <- R6::R6Class("TableStyle",
    setPropertyValue = function(property=NULL, value=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "setPropertyValue", property, missing(property), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "setPropertyValue", value, missing(value), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "setPropertyValue", value, missing(value), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("character", "integer", "numeric"))
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$setPropertyValue", "Setting property value...", list(property=property, value=value))
      private$p_declarations[[tolower(trimws(property))]] <- value
@@ -80,7 +80,7 @@ TableStyle <- R6::R6Class("TableStyle",
    },
    setPropertyValues = function(declarations=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "initialize", declarations, missing(declarations), allowMissing=FALSE, allowNull=FALSE, allowedClasses="list", allowedListElementClasses="character")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "setPropertyValues", declarations, missing(declarations), allowMissing=FALSE, allowNull=FALSE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$setPropertyValues", "Setting property values...")
      nms <- names(declarations)
