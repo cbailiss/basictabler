@@ -17,6 +17,18 @@
 #' @param columnFormats A list containing format specifiers, each of which is
 #'   either an sprintf() character value, a list of format() arguments or an
 #'   R function that provides custom formatting logic.
+#' @param theme Either the name of a built-in theme (default, largeplain,
+#'   compact or blank/none) or a list which specifies the default formatting for
+#'   the table.
+#' @param replaceExistingStyles TRUE to completely replace the default styling
+#'   with the specified tableStyle, headingStyle, cellStyle and/or totalStyle
+#' @param tableStyle A list of CSS style declarations that apply to the table.
+#' @param headingStyle A list of CSS style declarations that apply to the
+#'   heading cells in the table.
+#' @param cellStyle A list of CSS style declarations that apply to the normal
+#'   cells in the table.
+#' @param totalStyle A list of CSS style declarations that apply to the total
+#'   cells in the table.
 #' @param ... Additional arguments, currently only argumentCheckMode.
 #' @return A basic table.
 #' @examples
@@ -29,7 +41,8 @@
 #'
 qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
                  rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
-                 columnFormats=NULL, ...) {
+                 columnFormats=NULL, theme=NULL, replaceExistingStyles=FALSE,
+                 tableStyle=NULL, headingStyle=NULL, cellStyle=NULL, totalStyle=NULL, ...) {
   arguments <- list(...)
   checkArgument(3, TRUE, "", "qtbl", dataFrameOrMatrix, missing(dataFrameOrMatrix), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("data.frame", "matrix"))
   checkArgument(3, TRUE, "", "qtbl", columnNamesAsColumnHeaders, missing(columnNamesAsColumnHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
@@ -38,9 +51,16 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
   checkArgument(3, TRUE, "", "qtbl", firstColumnAsRowHeaders, missing(firstColumnAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
   checkArgument(3, TRUE, "", "qtbl", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
   checkArgument(3, TRUE, "", "qtbl", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
+  checkArgument(3, TRUE, "", "qtbl", theme, missing(theme), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyles"), allowedListElementClasses="character")
+  checkArgument(3, TRUE, "", "qtbl", replaceExistingStyles, missing(replaceExistingStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+  checkArgument(3, TRUE, "", "qtbl", tableStyle, missing(tableStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+  checkArgument(3, TRUE, "", "qtbl", headingStyle, missing(headingStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+  checkArgument(3, TRUE, "", "qtbl", cellStyle, missing(cellStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+  checkArgument(3, TRUE, "", "qtbl", totalStyle, missing(totalStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
   argumentCheckMode <- arguments$argumentCheckMode
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
-  tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode)
+  tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode, theme=theme, replaceExistingStyles=replaceExistingStyles,
+                        tableStyle=tableStyle, headingStyle=headingStyle, cellStyle=cellStyle, totalStyle=totalStyle)
   if("data.frame" %in% class(dataFrameOrMatrix)) {
     tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
@@ -72,6 +92,18 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
 #' @param columnFormats A list containing format specifiers, each of which is
 #'   either an sprintf() character value, a list of format() arguments or an
 #'   R function that provides custom formatting logic.
+#' @param theme Either the name of a built-in theme (default, largeplain,
+#'   compact or blank/none) or a list which specifies the default formatting for
+#'   the table.
+#' @param replaceExistingStyles TRUE to completely replace the default styling
+#'   with the specified tableStyle, headingStyle, cellStyle and/or totalStyle
+#' @param tableStyle A list of CSS style declarations that apply to the table.
+#' @param headingStyle A list of CSS style declarations that apply to the
+#'   heading cells in the table.
+#' @param cellStyle A list of CSS style declarations that apply to the normal
+#'   cells in the table.
+#' @param totalStyle A list of CSS style declarations that apply to the total
+#'   cells in the table.
 #' @param ... Additional arguments, currently only argumentCheckMode.
 #' @return A basic table.
 #' @examples
@@ -84,7 +116,8 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
 #'
 qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
                   rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
-                  columnFormats=NULL, ...) {
+                  columnFormats=NULL, theme=NULL, replaceExistingStyles=FALSE,
+                  tableStyle=NULL, headingStyle=NULL, cellStyle=NULL, totalStyle=NULL, ...) {
   arguments <- list(...)
   checkArgument(3, TRUE, "", "qhtbl", dataFrameOrMatrix, missing(dataFrameOrMatrix), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("data.frame", "matrix"))
   checkArgument(3, TRUE, "", "qhtbl", columnNamesAsColumnHeaders, missing(columnNamesAsColumnHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
@@ -93,9 +126,16 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
   checkArgument(3, TRUE, "", "qhtbl", firstColumnAsRowHeaders, missing(firstColumnAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
   checkArgument(3, TRUE, "", "qhtbl", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
   checkArgument(3, TRUE, "", "qhtbl", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
+  checkArgument(3, TRUE, "", "qhtbl", theme, missing(theme), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyles"), allowedListElementClasses="character")
+  checkArgument(3, TRUE, "", "qhtbl", replaceExistingStyles, missing(replaceExistingStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+  checkArgument(3, TRUE, "", "qhtbl", tableStyle, missing(tableStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+  checkArgument(3, TRUE, "", "qhtbl", headingStyle, missing(headingStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+  checkArgument(3, TRUE, "", "qhtbl", cellStyle, missing(cellStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+  checkArgument(3, TRUE, "", "qhtbl", totalStyle, missing(totalStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
   argumentCheckMode <- arguments$argumentCheckMode
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
-  tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode)
+  tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode, theme=theme, replaceExistingStyles=replaceExistingStyles,
+                        tableStyle=tableStyle, headingStyle=headingStyle, cellStyle=cellStyle, totalStyle=totalStyle)
   if("data.frame" %in% class(dataFrameOrMatrix)) {
     tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,

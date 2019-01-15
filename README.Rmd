@@ -86,6 +86,47 @@ qhtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
 
 ![http://cbailiss.me.uk/basictablerreadmeimgs/example1.png](http://cbailiss.me.uk/basictablerreadmeimgs/example1.png)
 
+### Styling Example
+
+Styling can be specified when creating tables:
+
+```{r eval=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# column formats
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- qtbl(tocsummary, firstColumnAsRowHeaders=FALSE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats, 
+            tableStyle=list("border-color"="maroon"),
+            headingStyle=list("color"="cornsilk", "background-color"="maroon", 
+                              "font-style"="italic", "border-color"="maroon"), 
+            cellStyle=list("color"="maroon", "background-color"="cornsilk", 
+                           "border-color"="maroon"))
+
+# set column alignment of first column
+tbl$setStyling(2, 1, 5, 1, declarations=list("text-align"="left"))
+
+# render table
+tbl$renderTable()
+```
+
+![http://cbailiss.me.uk/basictablerreadmeimgs/example3.png](http://cbailiss.me.uk/basictablerreadmeimgs/example3.png)
+
 #### Excel Output
 
 The same styling/formatting used for the HTML output is also used when outputting to Excel - greatly reducing the amount of script that needs to be written to create Excel output.  The only additional formatting that typically needs applying is the Excel cell format strings.
@@ -134,9 +175,11 @@ In the screenshot above, Gridlines have been made invisible to make the styling 
 
 ### More Information
 
-Tables can be further manipulated once created, including adding/removing cells/rows/columns and specifying styling and formatting.
+It is possible to create tables from data frames, matrices, row-by-row, column-by-column and/or cell-by-cell.
 
-It is also possible to create tables row-by-row, column-by-column and/or cell-by-cell.
+Tables can be further manipulated once created, including adding/removing cells/rows/columns and merging cells.  
+
+Styling and formatting can be specified for individual cells and ranges of cells.
 
 See the package vignettes for more information:
 

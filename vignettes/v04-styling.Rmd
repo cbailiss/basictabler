@@ -200,38 +200,6 @@ tbl$renderTable(styleNamePrefix="t4")
 
 ```{r, message=FALSE, warning=FALSE}
 # define the colours
-orangeColors <- list(
-  headerBackgroundColor = "rgb(237, 125, 49)",
-  headerColor = "rgb(255, 255, 255)",
-  cellBackgroundColor = "rgb(255, 255, 255)",
-  cellColor = "rgb(0, 0, 0)",
-  totalBackgroundColor = "rgb(248, 198, 165)",
-  totalColor = "rgb(0, 0, 0)",
-  borderColor = "rgb(198, 89, 17)"
-)
-
-# data for the table
-saleIds <- c(5334, 5336, 5338)
-items <- c("Apple", "Orange", "Banana")
-quantities <- c(5, 8, 6)
-prices <- c(0.34452354, 0.4732543, 1.3443243)
-
-# construct the table
-library(basictabler)
-tbl <- BasicTable$new()
-tbl$addData(data.frame(saleIds, items, quantities, prices), 
-            firstColumnAsRowHeaders=FALSE,
-            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
-            columnFormats=list(NULL, NULL, NULL, "%.2f"))
-
-# theme the table and render
-theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=orangeColors, fontName="Garamond, arial")
-tbl$theme <- theme
-tbl$renderTable(styleNamePrefix="t5")
-```
-
-```{r, message=FALSE, warning=FALSE}
-# define the colours
 greenColors <- list(
   headerBackgroundColor = "rgb(112, 173, 71)",
   headerColor = "rgb(255, 255, 255)",
@@ -260,38 +228,6 @@ tbl$addData(data.frame(saleIds, items, quantities, prices),
 theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=greenColors, fontName="Helvetica, arial")
 tbl$theme <- theme
 tbl$renderTable(styleNamePrefix="t6")
-```
-
-```{r, message=FALSE, warning=FALSE}
-# define the colours
-yellowColors <- list(
-  headerBackgroundColor = "rgb(255, 192, 0)",
-  headerColor = "rgb(255, 255, 255)",
-  cellBackgroundColor="rgb(255, 255, 255)",
-  cellColor="rgb(0, 0, 0)",
-  totalBackgroundColor = "rgb(255, 242, 204)",
-  totalColor="rgb(0, 0, 0)",
-  borderColor = "rgb(255, 192, 0)"
-)
-
-# data for the table
-saleIds <- c(5334, 5336, 5338)
-items <- c("Apple", "Orange", "Banana")
-quantities <- c(5, 8, 6)
-prices <- c(0.34452354, 0.4732543, 1.3443243)
-
-# construct the table
-library(basictabler)
-tbl <- BasicTable$new()
-tbl$addData(data.frame(saleIds, items, quantities, prices), 
-            firstColumnAsRowHeaders=TRUE,
-            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
-            columnFormats=list(NULL, NULL, NULL, "%.2f"))
-
-# theme the table and render
-theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=yellowColors, fontName="Verdana")
-tbl$theme <- theme
-tbl$renderTable(styleNamePrefix="t7")
 ```
 
 ## Creating a New Theme
@@ -395,6 +331,86 @@ tbl$renderTable(styleNamePrefix="t8")
 
 ## Changing the appearance of individual cells
 
+### Specifying styling while creating a table using the quick table functions
+
+The following example defines a simple theme and supplies this to the quick table function to specify styling:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# column formats
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# simple theme
+simpleBlueTheme <- list(
+  fontName="Verdana, Arial",
+  headerBackgroundColor = "rgb(68, 114, 196)",
+  headerColor = "rgb(255, 255, 255)",
+  cellBackgroundColor = "rgb(255, 255, 255)",
+  cellColor = "rgb(0, 0, 0)",
+  totalBackgroundColor = "rgb(186, 202, 233)",
+  totalColor = "rgb(0, 0, 0)",
+  borderColor = "rgb(48, 84, 150)"
+)
+
+# headings in red text, cells in light gray
+tbl <- qtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats, theme=simpleBlueTheme)
+
+# render table
+tbl$renderTable(styleNamePrefix="t9")
+```
+
+The next example demonstrates specifying more granuar style settings when using a quick table function:
+
+```{r, message=FALSE, warning=FALSE}
+# aggregate the sample data to make a small data frame
+library(basictabler)
+library(dplyr)
+tocsummary <- bhmsummary %>%
+  group_by(TOC) %>%
+  summarise(OnTimeArrivals=sum(OnTimeArrivals),
+            OnTimeDepartures=sum(OnTimeDepartures),
+            TotalTrains=sum(TrainCount)) %>%
+  ungroup() %>%
+  mutate(OnTimeArrivalPercent=OnTimeArrivals/TotalTrains*100,
+         OnTimeDeparturePercent=OnTimeDepartures/TotalTrains*100) %>%
+  arrange(TOC)
+
+# column formats
+columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
+
+# create the table
+tbl <- qtbl(tocsummary, firstColumnAsRowHeaders=FALSE,
+            explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
+                                    "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
+            columnFormats=columnFormats, 
+            tableStyle=list("border-color"="maroon"),
+            headingStyle=list("color"="cornsilk", "background-color"="maroon", 
+                              "font-style"="italic", "border-color"="maroon"), 
+            cellStyle=list("color"="maroon", "background-color"="cornsilk", 
+                           "border-color"="maroon"))
+
+# set column alignment of first column
+tbl$setStyling(2, 1, 5, 1, declarations=list("text-align"="left"))
+
+# render table
+tbl$renderTable(styleNamePrefix="t10")
+```
+
 ### Specifying cell appearance while creating a table from a data frame
 
 The following example defines a new style and uses this for one of the columns in the table, with the other columns using the normal cell style.
@@ -428,7 +444,7 @@ colStyleNames <- c("Cell", "Cell", "AltCell", "Cell")
 
 # populate the table
 tbl$addData(df, explicitColumnHeaders=colNames, columnFormats=colFormats, baseStyleNames=colStyleNames)
-tbl$renderTable()
+tbl$renderTable(styleNamePrefix="t11")
 ```
 
 ### Specifying cell appearance while creating a table cell-by-cell
@@ -468,7 +484,7 @@ tbl$cells$setCell(2, 3, cellType="cell", rawValue=5, baseStyleName="AltCell")
 tbl$cells$setCell(3, 3, cellType="cell", rawValue=8, styleDeclarations=list("background-color"="#FFFF00"))
 
 # render the table
-tbl$renderTable()
+tbl$renderTable(styleNamePrefix="t12")
 ```
 
 
@@ -507,7 +523,7 @@ tbl$cells$setColumn(2, cellTypes="cell", rawValues=items)
 tbl$cells$setColumn(3, cellTypes="cell", rawValues=quantities, baseStyleName="AltColumn")
 tbl$cells$setColumn(4, cellTypes="cell", rawValues=prices,
                     formats=list("%.2f"))
-tbl$renderTable()
+tbl$renderTable(styleNamePrefix="t13")
 ```
 
 ### Specifying cell appearance while creating a table row-by-row
@@ -547,7 +563,7 @@ tbl$cells$setRow(3, cellTypes=cellTypes, formats=formats,
                  rawValues=list(5336, "Orange", 8, 0.4732543), baseStyleNames="AltRow")
 tbl$cells$setRow(4, cellTypes=cellTypes, formats=formats,
                  rawValues=list(5338, "Banana", 6, 1.3443243))
-tbl$renderTable()
+tbl$renderTable(styleNamePrefix="t14")
 ```
 
 When creating tables column-by-column and row-by-row, it is possible to specify a vector for baseStyleNames of the same length as rawValues, to be able to specify different styles for each cell in the column/row:
@@ -597,7 +613,7 @@ tbl$cells$setRow(3, cellTypes=cellTypes, formats=formats,
                  rawValues=list(5336, "Orange", 8, 0.4732543), baseStyleNames=styleNames)
 tbl$cells$setRow(4, cellTypes=cellTypes, formats=formats,
                  rawValues=list(5338, "Banana", 6, 1.3443243))
-tbl$renderTable()
+tbl$renderTable(styleNamePrefix="t15")
 ```
 
 ### Changing cell appearance after cells have been created
@@ -643,7 +659,7 @@ cell <- tbl$cells$getCell(3, 3)
 cell$style <- cellHighlight
 
 # render the table
-tbl$renderTable(styleNamePrefix="t9")
+tbl$renderTable(styleNamePrefix="t16")
 ```
 
 In the example above, the default cell style from the theme is still applied.  The highlight is applied in addition to the default styling.  To stop the base styling being applied, create a new named style and set the baseStyleName property on the cell to the name of the new style. 

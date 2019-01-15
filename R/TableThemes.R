@@ -21,7 +21,35 @@ getTblTheme <- function(parentTable, themeName=NULL) {
   if(themeName=="default") return(getDefaultTblTheme(parentTable=parentTable))
   else if(themeName=="largeplain") return(getLargePlainTblTheme(parentTable=parentTable))
   else if(themeName=="compact") return(getCompactTblTheme(parentTable=parentTable))
+  else if(themeName=="blank") return(getBlankTblTheme(parentTable=parentTable))
   else stop(paste0("getTblTheme(): Theme '", themeName, "' is not a recognised theme."), call.=FALSE)
+}
+
+#' Get an empty theme for applying no styling to a table.
+#'
+#' @param parentTable Owning table.
+#' @param themeName The name to use as the new theme name.
+#' @return A TableStyles object.
+getBlankTblTheme <- function(parentTable, themeName="blank") {
+  if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
+  else argumentCheckMode <- 4
+  if(argumentCheckMode > 0) {
+    checkArgument(argumentCheckMode, TRUE, "", "getBlankTblTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+    checkArgument(argumentCheckMode, TRUE, "", "getBlankTblTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
+  }
+  TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
+  TableStyles$addStyle(styleName="Table", list())
+  TableStyles$addStyle(styleName="ColumnHeader", list())
+  TableStyles$addStyle(styleName="RowHeader", list())
+  TableStyles$addStyle(styleName="Cell", list())
+  TableStyles$addStyle(styleName="Total", list())
+  TableStyles$tableStyle <- "Table"
+  TableStyles$rootStyle <- "RowHeader"
+  TableStyles$rowHeaderStyle <- "RowHeader"
+  TableStyles$colHeaderStyle <- "ColumnHeader"
+  TableStyles$cellStyle <- "Cell"
+  TableStyles$totalStyle <- "Total"
+  return(invisible(TableStyles))
 }
 
 #' Get the default theme for styling a table.

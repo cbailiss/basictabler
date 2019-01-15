@@ -66,10 +66,12 @@
 #' \describe{
 #'   \item{Documentation}{For more complete explanations and examples please see
 #'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(argumentCheckMode="auto", traceEnabled=FALSE,
-#'   traceFile=NULL)}}{Create a new table, including optionally enabling debug
-#'   logging.}
-#'
+#'   \item{\code{new(argumentCheckMode="auto", theme=NULL,
+#'   replaceExistingStyles=FALSE, tableStyle=NULL, headingStyle=NULL,
+#'   cellStyle=NULL, totalStyle=NULL, traceEnabled=FALSE,
+#'   traceFile=NULL)}}{Create a new table, optionally specifying the name of a
+#'   built in theme or CSS style declarations for the different cells within the
+#'   table.}
 #'   \item{\code{addData(dataFrame=NULL, columnNamesAsColumnHeaders=TRUE,
 #'   explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
 #'   firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL,
@@ -133,8 +135,16 @@
 
 BasicTable <- R6::R6Class("BasicTable",
   public = list(
-    initialize = function(argumentCheckMode="auto", traceEnabled=FALSE, traceFile=NULL) {
+    initialize = function(argumentCheckMode="auto", theme=NULL, replaceExistingStyles=FALSE,
+                          tableStyle=NULL, headingStyle=NULL, cellStyle=NULL, totalStyle=NULL,
+                          traceEnabled=FALSE, traceFile=NULL) {
       checkArgument(4, TRUE, "BasicTable", "initialize", argumentCheckMode, missing(argumentCheckMode), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("auto", "none", "minimal", "basic", "balanced", "full"))
+      checkArgument(4, TRUE, "BasicTable", "initialize", theme, missing(theme), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyles"), allowedListElementClasses="character")
+      checkArgument(4, TRUE, "BasicTable", "initialize", replaceExistingStyles, missing(replaceExistingStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+      checkArgument(4, TRUE, "BasicTable", "initialize", tableStyle, missing(tableStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+      checkArgument(4, TRUE, "BasicTable", "initialize", headingStyle, missing(headingStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+      checkArgument(4, TRUE, "BasicTable", "initialize", cellStyle, missing(cellStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
+      checkArgument(4, TRUE, "BasicTable", "initialize", totalStyle, missing(totalStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
       checkArgument(4, TRUE, "BasicTable", "initialize", traceEnabled, missing(traceEnabled), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       checkArgument(4, TRUE, "BasicTable", "initialize", traceFile, missing(traceFile), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
       if(argumentCheckMode=="auto") {
@@ -156,12 +166,109 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Creating new Basic Table...")
       # Create the basic parts of the table
-      private$p_styles <- getTblTheme(parentTable=self, themeName="default")
       private$p_cells <- TableCells$new(self)
       private$p_mergedCells <- TableCellRanges$new(self)
       private$p_htmlRenderer <- TableHtmlRenderer$new(parentTable=self)
       private$p_openxlsxRenderer <-TableOpenXlsxRenderer$new(parentTable=self)
       private$p_timings <- list()
+      # apply theming and styles
+      if(is.null(theme)) {
+        private$p_styles <- getTblTheme(parentTable=self, themeName="default")
+      }
+      else {
+        if("TableStyles" %in% class(theme)) { private$p_styles <- theme }
+        else if("list" %in% class(theme)) {
+          private$p_styles <- getSimpleColoredTblTheme(parentTable=self, themeName="coloredTheme", colors=theme, fontName=theme$fontName)
+        }
+        else if("character" %in% class(theme)) {
+          if(tolower(trimws(theme))=="none") { theme <- "blank" }
+          private$p_styles <- getTblTheme(parentTable=self, themeName=theme)
+        }
+      }
+      if(!is.null(tableStyle)) {
+        if("TableStyle" %in% class(tableStyle)) { tableStyle <- tableStyle$declarations }
+        if("list" %in% class(tableStyle)) {
+          if(private$p_styles$isExistingStyle(private$p_styles$tableStyle)&&(!replaceExistingStyles)) {
+            private$p_styles$getStyle(private$p_styles$tableStyle)$setPropertyValues(declarations=tableStyle)
+            tableStyle <- private$p_styles$tableStyle
+          }
+          else {
+            private$p_styles$addStyle(styleName="customTableStyle", declarations=tableStyle)
+            tableStyle <- "customTableStyle"
+          }
+        }
+        if("character" %in% class(tableStyle)) { private$p_styles$tableStyle <- tableStyle }
+      }
+      if(!is.null(headingStyle)) {
+        if("TableStyle" %in% class(headingStyle)) { headingStyle <- headingStyle$declarations }
+        # root style
+        rootStyle <- headingStyle
+        if("list" %in% class(rootStyle)) {
+          if(private$p_styles$isExistingStyle(private$p_styles$rootStyle)&&(!replaceExistingStyles)) {
+            private$p_styles$getStyle(private$p_styles$rootStyle)$setPropertyValues(declarations=rootStyle)
+            rootStyle <- private$p_styles$rootStyle
+          }
+          else {
+            private$p_styles$addStyle(styleName="customRootStyle", declarations=rootStyle)
+            rootStyle <- "customRootStyle"
+          }
+        }
+        if("character" %in% class(rootStyle)) { private$p_styles$rootStyle <- rootStyle }
+        # row heading style
+        rowHeaderStyle <- headingStyle
+        if("list" %in% class(rowHeaderStyle)) {
+          if(private$p_styles$isExistingStyle(private$p_styles$rowHeaderStyle)&&(!replaceExistingStyles)) {
+            private$p_styles$getStyle(private$p_styles$rowHeaderStyle)$setPropertyValues(declarations=rowHeaderStyle)
+            rowHeaderStyle <- private$p_styles$rowHeaderStyle
+          }
+          else {
+            private$p_styles$addStyle(styleName="customRowHeadingStyle", declarations=rowHeaderStyle)
+            rowHeaderStyle <- "customRowHeadingStyle"
+          }
+        }
+        if("character" %in% class(rowHeaderStyle)) { private$p_styles$rowHeaderStyle <- rowHeaderStyle }
+        # column heading style
+        colHeaderStyle <- headingStyle
+        if("list" %in% class(colHeaderStyle)) {
+          if(private$p_styles$isExistingStyle(private$p_styles$colHeaderStyle)&&(!replaceExistingStyles)) {
+            private$p_styles$getStyle(private$p_styles$colHeaderStyle)$setPropertyValues(declarations=colHeaderStyle)
+            colHeaderStyle <- private$p_styles$colHeaderStyle
+          }
+          else {
+            private$p_styles$addStyle(styleName="customColHeadingStyle", declarations=colHeaderStyle)
+            colHeaderStyle <- "customColHeadingStyle"
+          }
+        }
+        if("character" %in% class(colHeaderStyle)) { private$p_styles$colHeaderStyle <- colHeaderStyle }
+      }
+      if(!is.null(cellStyle)) {
+        if("TableStyle" %in% class(cellStyle)) { cellStyle <- cellStyle$declarations }
+        if("list" %in% class(cellStyle)) {
+          if(private$p_styles$isExistingStyle(private$p_styles$cellStyle)&&(!replaceExistingStyles)) {
+            private$p_styles$getStyle(private$p_styles$cellStyle)$setPropertyValues(declarations=cellStyle)
+            cellStyle <- private$p_styles$cellStyle
+          }
+          else {
+            private$p_styles$addStyle(styleName="customCellStyle", declarations=cellStyle)
+            cellStyle <- "customCellStyle"
+          }
+        }
+        if("character" %in% class(cellStyle)) { private$p_styles$cellStyle <- cellStyle }
+      }
+      if(!is.null(totalStyle)) {
+        if("TableStyle" %in% class(totalStyle)) { totalStyle <- totalStyle$declarations }
+        if("list" %in% class(totalStyle)) {
+          if(private$p_styles$isExistingStyle(private$p_styles$totalStyle)&&(!replaceExistingStyles)) {
+            private$p_styles$getStyle(private$p_styles$totalStyle)$setPropertyValues(declarations=totalStyle)
+            totalStyle <- private$p_styles$totalStyle
+          }
+          else {
+            private$p_styles$addStyle(styleName="customTotalStyle", declarations=totalStyle)
+            totalStyle <- "customTotalStyle"
+          }
+        }
+        if("character" %in% class(totalStyle)) { private$p_styles$totalStyle <- totalStyle }
+      }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Created new Basic Table.")
       return(invisible())
     },

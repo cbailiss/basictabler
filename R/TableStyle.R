@@ -110,11 +110,13 @@ TableStyle <- R6::R6Class("TableStyle",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$asCSSRule", "Getting CSS rule...")
      cssRule <- NULL
      if(!is.null(selector)) cssRule <- paste0(selector, " {")
-     nms <- names(private$p_declarations)
-     for(i in 1:length(private$p_declarations)) {
-       if(length(nms[i])==0) stop("TableStyle$asCSSRule(): Encountered a style declaration without a name.", call. = FALSE)
-       if(startsWith(tolower(nms[i]), "xl-")) next # exclude Excel declarations from CSS/HTML output
-       cssRule <- paste0(cssRule, nms[i], ": ", private$p_declarations[[i]], "; ")
+     if(length(private$p_declarations)>0) {
+       nms <- names(private$p_declarations)
+       for(i in 1:length(private$p_declarations)) {
+         if(length(nms[i])==0) stop("TableStyle$asCSSRule(): Encountered a style declaration without a name.", call. = FALSE)
+         if(startsWith(tolower(nms[i]), "xl-")) next # exclude Excel declarations from CSS/HTML output
+         cssRule <- paste0(cssRule, nms[i], ": ", private$p_declarations[[i]], "; ")
+       }
      }
      if(!is.null(selector)) cssRule <- paste0(cssRule, "}")
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$asCSSRule", "Got CSS rule.")

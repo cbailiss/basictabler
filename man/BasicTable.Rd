@@ -52,10 +52,12 @@ constructing the table, where the elapsed time > 0.1 seconds.}
 \describe{
   \item{Documentation}{For more complete explanations and examples please see
   the extensive vignettes supplied with this package.}
-  \item{\code{new(argumentCheckMode="auto", traceEnabled=FALSE,
-  traceFile=NULL)}}{Create a new table, including optionally enabling debug
-  logging.}
-
+  \item{\code{new(argumentCheckMode="auto", theme=NULL,
+  replaceExistingStyles=FALSE, tableStyle=NULL, headingStyle=NULL,
+  cellStyle=NULL, totalStyle=NULL, traceEnabled=FALSE,
+  traceFile=NULL)}}{Create a new table, optionally specifying the name of a
+  built in theme or CSS style declarations for the different cells within the
+  table.}
   \item{\code{addData(dataFrame=NULL, columnNamesAsColumnHeaders=TRUE,
   explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
   firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL,

@@ -80,15 +80,18 @@ The arguments to both functions are the same:
 - `firstColumnAsRowHeaders` specifies whether the first column of a data frame should be rendered as row headings in the table (is ignored for matrices).
 - `explicitRowHeaders` is a character vector that allows the row headings to be explicitly specified.
 - `columnFormats` is a list containing format specifiers, each of which is either an sprintf() character value, a list of arguments for the format() function or an R function that provides custom formatting logic.
+- `theme` specifies the name of a built in theme or a simple list of colours and fonts.
+- `replaceExistingStyles` specifies whether the default styles are partially overwritten or wholly replaced by the styles specified in the following arguments.
+- `tableStyle`, `headingStyle`, `cellStyle` and `totalStyle` are lists of CSS declarations that provide more granular control of styling and formatting settings.
 
-A basic example of quickly printing a pivot table to the console using the `qtbl()` function: 
+A basic example of quickly printing a table to the console using the `qtbl()` function: 
 
 ```{r, message=FALSE, warning=FALSE, comment=""}
 library(basictabler)
 qtbl(data.frame(a=1:2, b=3:4))
 ```
 
-The `qtbl()` function is nothing more than a concise version of a more verbose syntax, i.e.
+The `qtbl()` function is a concise version of a more verbose syntax, i.e.
 
 ```{r, message=FALSE, eval=FALSE, warning=FALSE, comment=""}
 library(basictabler)
