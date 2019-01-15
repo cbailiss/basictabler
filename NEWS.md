@@ -11,7 +11,8 @@ Improvements
 
 * Ability to merge table cells.  See the "Working with Cells" vignette for an example.
 * Specifying the styling/formatting of individual cells/groups of cells is now simpler using the `tbl$setStyling()` function.  See the "Styling" vignette and the "Finding and Formatting" vignette for more details and examples. 
-* Ability to specify styling when creating tables.  See the "Styling" vignette for more details. 
+* Specifying styling/formatting when creating tables using the `qtbl()` and `qhtbl()` is now possible.  See the "Introduction" vignette for a list of parameters for these functions.  See the "Styling" vignette and the "Finding and Formatting" vignette for more details and examples. 
+* Specifying styling/formatting when creating tables from a data frame or row-by-row, column-by-column and cell-by-cell is now possible.  Again see the "Styling" vignette and the "Finding and Formatting" vignette for more details and examples.
 * A more detailed explanation of styling rules has been added to the "Styling" vignette.
 
 Bug Fixes
