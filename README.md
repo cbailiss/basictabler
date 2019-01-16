@@ -34,7 +34,7 @@ install.packages("basictabler")
 devtools::install_github("cbailiss/basictabler", build_vignettes = TRUE)
 ```
 
-### Example
+### Examples
 
 #### Trivial Example
 
