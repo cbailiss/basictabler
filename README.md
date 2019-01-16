@@ -112,6 +112,7 @@ tbl <- qtbl(tocsummary, firstColumnAsRowHeaders=FALSE,
                            "border-color"="maroon"))
 
 # set column alignment of first column
+# the arguments are (rFrom, cFrom, rTo, cTo, declarations)
 tbl$setStyling(2, 1, 5, 1, declarations=list("text-align"="left"))
 
 # render table
