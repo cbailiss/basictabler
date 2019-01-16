@@ -104,7 +104,8 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
 #'   cells in the table.
 #' @param totalStyle A list of CSS style declarations that apply to the total
 #'   cells in the table.
-#' @param ... Additional arguments, currently only argumentCheckMode.
+#' @param ... Additional arguments, currently only argumentCheckMode and
+#'   styleNamePrefix.
 #' @return A basic table.
 #' @examples
 #' qhtbl(head(bhmsummary))
@@ -134,6 +135,7 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
   checkArgument(3, TRUE, "", "qhtbl", totalStyle, missing(totalStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
   argumentCheckMode <- arguments$argumentCheckMode
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
+  styleNamePrefix <- arguments$styleNamePrefix
   tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode, theme=theme, replaceExistingStyles=replaceExistingStyles,
                         tableStyle=tableStyle, headingStyle=headingStyle, cellStyle=cellStyle, totalStyle=totalStyle)
   if("data.frame" %in% class(dataFrameOrMatrix)) {
@@ -145,6 +147,6 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
     tbl$addMatrix(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, explicitRowHeaders=explicitRowHeaders, columnFormats=columnFormats)
   }
-  w <- tbl$renderTable()
+  w <- tbl$renderTable(styleNamePrefix=styleNamePrefix)
   return(w)
 }

@@ -16,8 +16,10 @@ vignette: >
 * XL Styles
 * Included Themes
 * Simple Themes
+* Styling with the quick table functions
+* Styling Rows/Columns/Cells
+* Changing styling/formating after table creation using `tbl$setStyling()`
 * Creating a New Theme
-* Changing the appearance of individual cells
 * Summary of Styling Rules
 * Styling Output
 * Further Reading
@@ -36,6 +38,8 @@ When rendered to HTML, the appearance of `basictabler` tables can be changed usi
 * A theme is a collection of styles that can easily be applied to a table.
 
 The `basictabler` package is supplied with some basic themes.  Additional themes can be defined.
+
+In addition, for each cell in the table, a set of style overrides can be set.  These are style declarations that apply to individual cells.
 
 ## Styles and CSS
 
@@ -132,11 +136,12 @@ tbl$renderTable(styleNamePrefix="t2")
 
 ## Simple Themes
 
-The `basictabler` package includes the `getSimpleColoredTblTheme()` function that helps define basic new themes quickly.  Several examples of using this function are shown below. 
+Simple themes can be defined using a list.  Several examples are shown below. 
 
 ```{r, message=FALSE, warning=FALSE}
-# define the colours
-blue1Colors <- list(
+# define the font and colours
+simpleBlueTheme <- list(
+  fontName="Verdana, Arial",
   headerBackgroundColor = "rgb(68, 114, 196)",
   headerColor = "rgb(255, 255, 255)",
   cellBackgroundColor = "rgb(255, 255, 255)",
@@ -161,14 +166,14 @@ tbl$addData(data.frame(saleIds, items, quantities, prices),
             columnFormats=list(NULL, NULL, NULL, "%.2f"))
 
 # theme the table and render
-theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=blue1Colors, fontName="Verdana, Arial")
-tbl$theme <- theme
+tbl$theme <- simpleBlueTheme
 tbl$renderTable(styleNamePrefix="t3")
 ```
 
 ```{r, message=FALSE, warning=FALSE}
 # define the colours
-grayColors <- list(
+simpleGrayTheme <- list(
+  fontName="Courier New, Courier",
   headerBackgroundColor = "rgb(128, 128, 128)",
   headerColor = "rgb(255, 255, 255)",
   cellBackgroundColor = "rgb(255, 255, 255)",
@@ -193,14 +198,14 @@ tbl$addData(data.frame(saleIds, items, quantities, prices),
             columnFormats=list(NULL, NULL, NULL, "%.2f"))
 
 # theme the table and render
-theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=grayColors, fontName="Courier New, Courier")
-tbl$theme <- theme
+tbl$theme <- simpleGrayTheme
 tbl$renderTable(styleNamePrefix="t4")
 ```
 
 ```{r, message=FALSE, warning=FALSE}
 # define the colours
-greenColors <- list(
+simpleGreenTheme <- list(
+  fontName="Helvetica, arial",
   headerBackgroundColor = "rgb(112, 173, 71)",
   headerColor = "rgb(255, 255, 255)",
   cellBackgroundColor="rgb(255, 255, 255)",
@@ -225,113 +230,11 @@ tbl$addData(data.frame(saleIds, items, quantities, prices),
             columnFormats=list(NULL, NULL, NULL, "%.2f"))
 
 # theme the table and render
-theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=greenColors, fontName="Helvetica, arial")
-tbl$theme <- theme
+tbl$theme <- simpleGreenTheme
 tbl$renderTable(styleNamePrefix="t6")
 ```
 
-## Creating a New Theme
-
-Since a theme is a collection of styles, creating themes is relatively straightforward.  The names of the styles are then assigned to the different types of cells within a table:
-
-*  tableStyle - the name of the style applied to the table (i.e. the HTML `<table>` element).
-*  rootStyle - the name of the style applied to the empty cell at the top left of the table.
-*  rowHeaderStyle - the name of the style applied to the row header cells.
-*  colHeaderStyle - the name of the style applied to the column header cells.
-*  cellStyle - the name of the style applied to the cells in the body of the table.
-*  totalStyle - the name of the style applied to the total cells in the table.
-
-E.g. creating a custom theme that displays a mixture of bright colours (a rather ugly bubble-gum theme):
-
-```{r, message=FALSE, warning=FALSE}
-# define the theme and styles
-createCustomTheme <- function(parentTable=NULL, themeName="myCustomTheme") {
-  tableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
-  # borders in purple
-  tableStyles$addStyle(styleName="Table", list(
-      "border-collapse"="collapse",
-      "border"="2px solid #B28DFF"
-    ))
-  # column headings in pink
-  tableStyles$addStyle(styleName="ColumnHeader", list(
-      "font-family"="\"Courier New\", Courier, monospace",
-      "font-size"="0.75em",
-      "font-weight"="bold",
-      padding="2px",
-      "border"="2px solid #B28DFF",
-      "vertical-align"="middle",
-      "text-align"="center",
-      "font-weight"="bold",
-      color="#DB49AC",
-      "background-color"="#FFCCF9",
-      "xl-wrap-text"="wrap"
-    ))
-  # row headings in blue
-  tableStyles$addStyle(styleName="RowHeader", list(
-      "font-family"="\"Courier New\", Courier, monospace",
-      "font-size"="0.75em",
-      "font-weight"="bold",
-      padding="2px 8px 2px 2px",
-      "border"="1px solid #B28DFF",
-      "vertical-align"="middle",
-      "text-align"="left",
-      "font-weight"="bold",
-      color="#438EC8",
-      "background-color"="#ACE7FF",
-      "xl-wrap-text"="wrap"
-    ))
-  # cells in yellow
-  tableStyles$addStyle(styleName="Cell", list(
-      "font-family"="\"Courier New\", Courier, monospace",
-      "font-size"="0.75em",
-      padding="2px 2px 2px 8px",
-      "border"="1px solid #B28DFF",
-      "text-align"="right",
-      color="#FF800D",
-      "background-color"="#FFFFD1"
-    ))
-  # totals in orange
-  tableStyles$addStyle(styleName="Total", list(
-      "font-family"="\"Courier New\", Courier, monospace",
-      "font-size"="0.75em",
-      "font-weight"="bold",
-      padding="2px 2px 2px 8px",
-      "border"="1px solid rgb(84, 130, 53)",
-      "text-align"="right",
-      color="#3BC6B6",
-      "background-color"="#BFFCC6"
-    ))
-  tableStyles$tableStyle <- "Table"
-  tableStyles$rootStyle <- "ColumnHeader"
-  tableStyles$rowHeaderStyle <- "RowHeader"
-  tableStyles$colHeaderStyle <- "ColumnHeader"
-  tableStyles$cellStyle <- "Cell"
-  tableStyles$totalStyle <- "Total"
-  return(invisible(tableStyles))
-}
-
-# data for the table
-saleIds <- c(5334, 5336, 5338)
-items <- c("Apple", "Orange", "Banana")
-quantities <- c(5, 8, 6)
-prices <- c(0.34452354, 0.4732543, 1.3443243)
-
-# construct the table
-library(basictabler)
-tbl <- BasicTable$new()
-tbl$addData(data.frame(saleIds, items, quantities, prices), 
-            firstColumnAsRowHeaders=TRUE,
-            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
-            columnFormats=list(NULL, NULL, NULL, "%.2f"))
-
-# theme the table and render
-tbl$theme <- createCustomTheme(tbl)
-tbl$renderTable(styleNamePrefix="t8")
-```
-
-## Changing the appearance of individual cells
-
-### Specifying styling while creating a table using the quick table functions
+## Styling with the quick table functions
 
 The following example defines a simple theme and supplies this to the quick table function to specify styling:
 
@@ -411,6 +314,10 @@ tbl$setStyling(2, 1, 5, 1, declarations=list("text-align"="left"))
 tbl$renderTable(styleNamePrefix="t10")
 ```
 
+The quick table functions specify the same styling/formatting for all headers and all cells.  To specify different styling/formatting for specific headings and/or specifc rows/columns, use the more verbose syntax for creating the table as shown in the examples below. 
+
+## Styling Rows/Columns/Cells
+
 ### Specifying cell appearance while creating a table from a data frame
 
 The following example defines a new style and uses this for one of the columns in the table, with the other columns using the normal cell style.
@@ -446,47 +353,6 @@ colStyleNames <- c("Cell", "Cell", "AltCell", "Cell")
 tbl$addData(df, explicitColumnHeaders=colNames, columnFormats=colFormats, baseStyleNames=colStyleNames)
 tbl$renderTable(styleNamePrefix="t11")
 ```
-
-### Specifying cell appearance while creating a table cell-by-cell
-
-The following example shows two different ways of specifying cell styling whilst creating a table cell-by-cell.  The first method defines an entirely new cell style (i.e. that is not part of the standard theming).  This cell style is then used when styling one of the cells.  The second method specifies one additional style declaration that is applied on top of the standard theming.
-
-```{r, message=FALSE, warning=FALSE}
-
-library(basictabler)
-tbl <- BasicTable$new()
-
-# specify a new cell style
-tbl$addStyle(styleName="AltCell", list(
-  "font-family"="Arial",
-  "font-size"="0.8em",
-  "font-weight"="bold",
-  padding="2px 2px 2px 8px",
-  "border"="2px solid #9C0006",
-  "text-align"="right",
-  color="#9C0006",
-  "background-color"="#FFC7CE"
-))
-
-# build the table
-tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
-tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
-tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
-tbl$cells$setCell(2, 1, cellType="rowHeader", rawValue=5334)
-tbl$cells$setCell(2, 2, cellType="cell", rawValue="Apple")
-tbl$cells$setCell(3, 1, cellType="rowHeader", rawValue=5336)
-tbl$cells$setCell(3, 2, cellType="cell", rawValue="Orange")
-
-# use the new style for the following cell (used instead of the theme styling)
-tbl$cells$setCell(2, 3, cellType="cell", rawValue=5, baseStyleName="AltCell")
-
-# specify an additional style declaration for the following cell (used on top of the theme styling)
-tbl$cells$setCell(3, 3, cellType="cell", rawValue=8, styleDeclarations=list("background-color"="#FFFF00"))
-
-# render the table
-tbl$renderTable(styleNamePrefix="t12")
-```
-
 
 ### Specifying cell appearance while creating a table column-by-column
 
@@ -616,7 +482,47 @@ tbl$cells$setRow(4, cellTypes=cellTypes, formats=formats,
 tbl$renderTable(styleNamePrefix="t15")
 ```
 
-### Changing cell appearance after cells have been created
+### Specifying cell appearance while creating a table cell-by-cell
+
+The following example shows two different ways of specifying cell styling whilst creating a table cell-by-cell.  The first method defines an entirely new cell style (i.e. that is not part of the standard theming).  This cell style is then used when styling one of the cells.  The second method specifies one additional style declaration that is applied on top of the standard theming.
+
+```{r, message=FALSE, warning=FALSE}
+
+library(basictabler)
+tbl <- BasicTable$new()
+
+# specify a new cell style
+tbl$addStyle(styleName="AltCell", list(
+  "font-family"="Arial",
+  "font-size"="0.8em",
+  "font-weight"="bold",
+  padding="2px 2px 2px 8px",
+  "border"="2px solid #9C0006",
+  "text-align"="right",
+  color="#9C0006",
+  "background-color"="#FFC7CE"
+))
+
+# build the table
+tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
+tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
+tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
+tbl$cells$setCell(2, 1, cellType="rowHeader", rawValue=5334)
+tbl$cells$setCell(2, 2, cellType="cell", rawValue="Apple")
+tbl$cells$setCell(3, 1, cellType="rowHeader", rawValue=5336)
+tbl$cells$setCell(3, 2, cellType="cell", rawValue="Orange")
+
+# use the new style for the following cell (used instead of the theme styling)
+tbl$cells$setCell(2, 3, cellType="cell", rawValue=5, baseStyleName="AltCell")
+
+# specify an additional style declaration for the following cell (used on top of the theme styling)
+tbl$cells$setCell(3, 3, cellType="cell", rawValue=8, styleDeclarations=list("background-color"="#FFFF00"))
+
+# render the table
+tbl$renderTable(styleNamePrefix="t12")
+```
+
+## Changing styling/formating after table creation using `tbl$setStyling()`
 
 The individual cells in the table can have their appearance changed by retrieving the cell then applying a style to the cell.  The example below shows two different ways of applying cells to an individual cell.  These styles apply in addition to the styles coming from the underlying theme, e.g. highlighting a cell:
 
@@ -685,6 +591,105 @@ lst <- lapply(cells, function(cell) {cell$style <- highlight})
 ```
 
 For many more examples of styling parts of a table, see the [Finding and Formatting](v05-findingandformatting.html) vignette.
+
+## Creating a New Theme
+
+Since a theme is a collection of styles, creating themes is relatively straightforward.  The names of the styles are then assigned to the different types of cells within a table:
+
+*  tableStyle - the name of the style applied to the table (i.e. the HTML `<table>` element).
+*  rootStyle - the name of the style applied to the empty cell at the top left of the table.
+*  rowHeaderStyle - the name of the style applied to the row header cells.
+*  colHeaderStyle - the name of the style applied to the column header cells.
+*  cellStyle - the name of the style applied to the cells in the body of the table.
+*  totalStyle - the name of the style applied to the total cells in the table.
+
+E.g. creating a custom theme that displays a mixture of bright colours (a rather ugly bubble-gum theme):
+
+```{r, message=FALSE, warning=FALSE}
+# define the theme and styles
+createCustomTheme <- function(parentTable=NULL, themeName="myCustomTheme") {
+  tableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
+  # borders in purple
+  tableStyles$addStyle(styleName="Table", list(
+      "border-collapse"="collapse",
+      "border"="2px solid #B28DFF"
+    ))
+  # column headings in pink
+  tableStyles$addStyle(styleName="ColumnHeader", list(
+      "font-family"="\"Courier New\", Courier, monospace",
+      "font-size"="0.75em",
+      "font-weight"="bold",
+      padding="2px",
+      "border"="2px solid #B28DFF",
+      "vertical-align"="middle",
+      "text-align"="center",
+      "font-weight"="bold",
+      color="#DB49AC",
+      "background-color"="#FFCCF9",
+      "xl-wrap-text"="wrap"
+    ))
+  # row headings in blue
+  tableStyles$addStyle(styleName="RowHeader", list(
+      "font-family"="\"Courier New\", Courier, monospace",
+      "font-size"="0.75em",
+      "font-weight"="bold",
+      padding="2px 8px 2px 2px",
+      "border"="1px solid #B28DFF",
+      "vertical-align"="middle",
+      "text-align"="left",
+      "font-weight"="bold",
+      color="#438EC8",
+      "background-color"="#ACE7FF",
+      "xl-wrap-text"="wrap"
+    ))
+  # cells in yellow
+  tableStyles$addStyle(styleName="Cell", list(
+      "font-family"="\"Courier New\", Courier, monospace",
+      "font-size"="0.75em",
+      padding="2px 2px 2px 8px",
+      "border"="1px solid #B28DFF",
+      "text-align"="right",
+      color="#FF800D",
+      "background-color"="#FFFFD1"
+    ))
+  # totals in orange
+  tableStyles$addStyle(styleName="Total", list(
+      "font-family"="\"Courier New\", Courier, monospace",
+      "font-size"="0.75em",
+      "font-weight"="bold",
+      padding="2px 2px 2px 8px",
+      "border"="1px solid rgb(84, 130, 53)",
+      "text-align"="right",
+      color="#3BC6B6",
+      "background-color"="#BFFCC6"
+    ))
+  tableStyles$tableStyle <- "Table"
+  tableStyles$rootStyle <- "ColumnHeader"
+  tableStyles$rowHeaderStyle <- "RowHeader"
+  tableStyles$colHeaderStyle <- "ColumnHeader"
+  tableStyles$cellStyle <- "Cell"
+  tableStyles$totalStyle <- "Total"
+  return(invisible(tableStyles))
+}
+
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+# theme the table and render
+tbl$theme <- createCustomTheme(tbl)
+tbl$renderTable(styleNamePrefix="t8")
+```
 
 ## Summary of Styling Rules
 

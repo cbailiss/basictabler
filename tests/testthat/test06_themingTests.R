@@ -465,7 +465,7 @@ test_that("styling when creating row-by-row", {
 
 
 
-test_that("styling after creating", {
+test_that("styling after creating (legacy)", {
 
   # define the colours
   orangeColors <- list(
@@ -495,6 +495,60 @@ test_that("styling after creating", {
   # theme the table and render
   theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=orangeColors, fontName="Garamond, arial")
   tbl$theme <- theme
+
+  # apply an additional highlight to one cell (3rd row, 2nd column)
+  tbl$setStyling(3, 2, declarations=list("background-color"="#FFFF00"))
+
+  # apply an additional highlight to one cell (3rd row, 3rd column)
+  cellHighlight <- tbl$createInlineStyle(declarations=list("background-color"="#00FFFF"))
+  cell <- tbl$cells$getCell(3, 3)
+  cell$style <- cellHighlight
+
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getCss()))
+  # prepStr(as.character(tbl$getHtml()))
+  str <- "Sale ID    Item  Quantity  Price  \n   5334   Apple         5   0.34  \n   5336  Orange         8   0.47  \n   5338  Banana         6   1.34  "
+  css <- ".Table {border-collapse: collapse; border: 2px solid rgb(198, 89, 17); }\r\n.ColumnHeader {font-family: Garamond, arial; font-size: 0.75em; padding: 2px; border: 1px solid rgb(198, 89, 17); vertical-align: middle; text-align: center; font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(237, 125, 49); }\r\n.RowHeader {font-family: Garamond, arial; font-size: 0.75em; padding: 2px 8px 2px 2px; border: 1px solid rgb(198, 89, 17); vertical-align: middle; text-align: left; font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(237, 125, 49); }\r\n.Cell {font-family: Garamond, arial; font-size: 0.75em; padding: 2px 2px 2px 8px; border: 1px solid rgb(198, 89, 17); vertical-align: middle; text-align: right; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); }\r\n.Total {font-family: Garamond, arial; font-size: 0.75em; padding: 2px 2px 2px 8px; border: 1px solid rgb(198, 89, 17); vertical-align: middle; text-align: right; color: rgb(0, 0, 0); background-color: rgb(248, 198, 165); }\r\n"
+  html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"ColumnHeader\">Sale ID</td>\n    <td class=\"ColumnHeader\">Item</td>\n    <td class=\"ColumnHeader\">Quantity</td>\n    <td class=\"ColumnHeader\">Price</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5334</td>\n    <td class=\"Cell\">Apple</td>\n    <td class=\"Cell\">5</td>\n    <td class=\"Cell\">0.34</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5336</td>\n    <td class=\"Cell\" style=\"background-color: #FFFF00; \">Orange</td>\n    <td class=\"Cell\" style=\"background-color: #00FFFF; \">8</td>\n    <td class=\"Cell\">0.47</td>\n  </tr>\n  <tr>\n    <td class=\"RowHeader\">5338</td>\n    <td class=\"Cell\">Banana</td>\n    <td class=\"Cell\">6</td>\n    <td class=\"Cell\">1.34</td>\n  </tr>\n</table>"
+
+  expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getCss()), css)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+
+test_that("styling after creating (current)", {
+
+  # define the colours
+  simpleOrangeTheme <- list(
+    fontName="Garamond, arial",
+    headerBackgroundColor = "rgb(237, 125, 49)",
+    headerColor = "rgb(255, 255, 255)",
+    cellBackgroundColor = "rgb(255, 255, 255)",
+    cellColor = "rgb(0, 0, 0)",
+    totalBackgroundColor = "rgb(248, 198, 165)",
+    totalColor = "rgb(0, 0, 0)",
+    borderColor = "rgb(198, 89, 17)"
+  )
+
+  # data for the table
+  saleIds <- c(5334, 5336, 5338)
+  items <- c("Apple", "Orange", "Banana")
+  quantities <- c(5, 8, 6)
+  prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+  # construct the table
+  library(basictabler)
+  tbl <- BasicTable$new()
+  tbl$addData(data.frame(saleIds, items, quantities, prices),
+              firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+              columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+  # theme the table and render
+  tbl$theme <- simpleOrangeTheme
 
   # apply an additional highlight to one cell (3rd row, 2nd column)
   tbl$setStyling(3, 2, declarations=list("background-color"="#FFFF00"))
