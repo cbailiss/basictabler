@@ -79,7 +79,7 @@ qhtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
 
 ![<http://cbailiss.me.uk/basictablerreadmeimgs/example1.png>](http://cbailiss.me.uk/basictablerreadmeimgs/example1.png)
 
-### Styling Example
+#### Styling Example
 
 Styling can be specified when creating tables:
 
