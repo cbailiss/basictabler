@@ -79,6 +79,49 @@ qhtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
 
 ![<http://cbailiss.me.uk/basictablerreadmeimgs/example1.png>](http://cbailiss.me.uk/basictablerreadmeimgs/example1.png)
 
+#### Changing a Table Example
+
+Tables can also be built row-by-row, column-by-column and cell-by-cell. Once built tables can be modified (adding/removing rows columns and cells, merging cells and changing styling). The following example shows more granular ways of building and changing a table:
+
+``` r
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct a table column by column
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
+tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
+tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
+tbl$cells$setCell(1, 4, cellType="columnHeader", rawValue="Price")
+tbl$cells$setColumn(1, cellTypes="rowHeader", rawValues=saleIds)
+tbl$cells$setColumn(2, cellTypes="cell", rawValues=items)
+tbl$cells$setColumn(3, cellTypes="cell", rawValues=quantities)
+tbl$cells$setColumn(4, cellTypes="cell", rawValues=prices,
+                    formats=list("%.2f"))
+
+# example of changing the table - inserting a row
+formats <- list(NULL, NULL, NULL, "%.2f")
+cellTypes=c("rowHeader", "cell", "cell", "cell")
+tbl$cells$setRow(5, cellTypes=cellTypes, formats=formats, 
+                 rawValues=list(5343, "Pear", 2, 1.0213424))
+tbl$cells$insertRow(1)
+tbl$cells$setRow(1, cellTypes="columnHeader",
+                 rawValues=list("Sale ID", "Sale Details", "", ""))
+
+# example of changing the table - merging some cells
+tbl$mergeCells(rFrom=1, cFrom=1, rSpan=2, cSpan=1)
+tbl$mergeCells(rFrom=1, cFrom=2, rSpan=1, cSpan=3)
+
+# render the final table
+tbl$renderTable()
+```
+
+![<http://cbailiss.me.uk/basictablerreadmeimgs/example4.png>](http://cbailiss.me.uk/basictablerreadmeimgs/example4.png)
+
 #### Styling Example
 
 Styling can be specified when creating tables:
