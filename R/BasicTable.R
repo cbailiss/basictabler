@@ -631,7 +631,7 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cFrom, missing(cFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rTo, missing(rTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cTo, missing(cTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cells, missing(cells), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses="TableCell")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cells, missing(cells), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("list", "TableCell"), allowedListElementClasses="TableCell")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
@@ -639,6 +639,9 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Setting styling...")
       if(missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of baseStyleName, style or declarations.", call. = FALSE) }
       if(!is.null(cells)) {
+        if("TableCell" %in% class(cells)) {
+          cells <- list(cells)
+        }
         for(i in 1:length(cells)) {
           cell <- cells[[i]]
           if(!is.null(cell)) {
