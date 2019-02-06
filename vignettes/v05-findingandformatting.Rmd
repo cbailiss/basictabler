@@ -442,9 +442,9 @@ This is typically used for conditional formatting, as illustrated in the next se
 
 ### Comparing to `getCells()`
 
-The `rowNumbers` and `columnNumbers` arguments work differently in `getCells()` and `findCells()`.  
+The `rowNumbers` and `columnNumbers` arguments work differently in `findCells()` and `getCells()`.  
 
-The `getCells()` function applies them independently, e.g. specifying `rowNumbers=2:3` and `columnNumbers=5:6` will match all cells in rows 2 and 3 and all cells in columns 5 and 6, i.e. cells must match either the `rowNumbers` criteria **OR** the `columnNumbers` criteria.
+The `findCells()` function applies them independently, e.g. specifying `rowNumbers=2:3` and `columnNumbers=5:6` will match all cells in rows 2 and 3 and all cells in columns 5 and 6, i.e. cells must match either the `rowNumbers` criteria **OR** the `columnNumbers` criteria.
 
 The `getCells()` function applies them in combination, e.g. specifying `rowNumbers=2:3` and `columnNumbers=5:6` will match only those cells satisfying both the `rowNumbers` criteria **AND** the `columnNumbers` criteria, which is cells (2, 5), (2, 6), (3, 5) and (3, 6) - and not for example (2, 4).
 
