@@ -1,9 +1,6 @@
 
 ## Background
 
-This is a minor release.  The only change is a correction to the index entry for one of the package vignettes that wrongly duplicated the index entry for a different vignette.
-This change is in response to the recent change to R CMD checks on CRAN that now reports duplicated index entries.
-
 This package is written entirely in R with no external dependencies/components other than the packages listed in the DESCRIPTION file.
 Development approach is aligned with practices described in:
 http://r-pkgs.had.co.nz/

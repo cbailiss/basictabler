@@ -1,4 +1,4 @@
-basictabler 0.1.1.9000
+basictabler 0.2.0
 ================
 
 Overview
@@ -24,15 +24,6 @@ Improvements
 * Specifying styling/formatting when creating tables from a data frame or row-by-row, column-by-column and cell-by-cell is now possible.  Again, see the "Styling" vignette and the "Finding and Formatting" vignette for more details and examples.
 * A more detailed explanation of styling rules has been added to the "Styling" vignette.
 
-Bug Fixes
-----------------
-
-TBC
-
-Upcoming Changes
-----------------
-
-TBC
 
 basictabler 0.1.1
 ================
@@ -47,6 +38,7 @@ basictabler 0.1.0
 ================
 
 Initial version.
+
 
 Earlier versions
 ================

@@ -1,7 +1,7 @@
 Package: basictabler
 Type: Package
 Title: Construct Rich Tables for Output to 'HTML'/'Excel'
-Version: 0.1.1.9000
+Version: 0.2.0
 Authors@R: person("Christopher", "Bailiss", email = "cbailiss@gmail.com",
   role = c("aut", "cre"))
 Description: Easily create tables from data 
