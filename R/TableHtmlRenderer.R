@@ -90,16 +90,36 @@ TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
          cllstyl <- NULL
          if(!is.null(cell$style)) cllstyl <- cell$style$asCSSRule()
          # output the cell
-         if(cell$isMerged) {
-           mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
-           if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
-                                                                         class=cssCell, style=cllstyl, cell$formattedValue)
-           else trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
-                                                             class=cssCell, style=cllstyl) # todo: check escaping
+         renderAsTH <- (cell$cellType=="root") || (cell$cellType=="rowHeader") || (cell$cellType=="columnHeader")
+         renderAsTH <- renderAsTH && (!isTRUE(private$p_parentTable$compatibility$headerCellsAsTD))
+         if(renderAsTH)
+         {
+           # th cells
+           if(cell$isMerged) {
+             mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
+             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$th(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
+                                                                           class=cssCell, style=cllstyl, cell$formattedValue)
+             else trow[[length(trow)+1]] <- htmltools::tags$th(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
+                                                               class=cssCell, style=cllstyl) # todo: check escaping
+           }
+           else {
+             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$th(class=cssCell, style=cllstyl, cell$formattedValue)
+             else trow[[length(trow)+1]] <- htmltools::tags$th(class=cssCell, style=cllstyl) # todo: check escaping
+           }
          }
          else {
-           if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(class=cssCell, style=cllstyl, cell$formattedValue)
-           else trow[[length(trow)+1]] <- htmltools::tags$td(class=cssCell, style=cllstyl) # todo: check escaping
+           # td cells
+           if(cell$isMerged) {
+             mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
+             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
+                                                                           class=cssCell, style=cllstyl, cell$formattedValue)
+             else trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
+                                                               class=cssCell, style=cllstyl) # todo: check escaping
+           }
+           else {
+             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(class=cssCell, style=cllstyl, cell$formattedValue)
+             else trow[[length(trow)+1]] <- htmltools::tags$td(class=cssCell, style=cllstyl) # todo: check escaping
+           }
          }
        }
        # finished this row

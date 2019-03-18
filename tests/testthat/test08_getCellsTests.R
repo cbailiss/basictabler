@@ -50,7 +50,7 @@ test_that("getting a mixture of rows, columns and cells when `specifyCellsAsList
   columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
 
   # create the table
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
                                       "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
@@ -90,7 +90,7 @@ test_that("getting a mixture of rows, columns and cells when `specifyCellsAsList
   columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark=","), "%.1f", "%.1f")
 
   # create the table
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(tocsummary, firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
                                       "Total Trains", "On-Time Arrival %", "On-Time Departure %"),

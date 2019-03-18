@@ -50,7 +50,8 @@ cells in the table.}
 \item{totalStyle}{A list of CSS style declarations that apply to the total
 cells in the table.}
 
-\item{...}{Additional arguments, currently only argumentCheckMode.}
+\item{...}{Additional arguments, currently compatibility and/or
+argumentCheckMode.}
 }
 \value{
 A basic table.

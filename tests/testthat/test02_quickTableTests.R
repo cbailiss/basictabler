@@ -33,7 +33,7 @@ context("QUICK TABLE TESTS")
 
 test_that("quick table", {
 
-  tbl <- qtbl(head(bhmsummary))
+  tbl <- qtbl(head(bhmsummary), compatibility=list(headerCellsAsTD=TRUE))
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
   # prepStr(as.character(tbl$getHtml()))
@@ -85,7 +85,8 @@ test_that("quick table with simple theming", {
   tbl <- qtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("TOC", "On-Time Arrivals", "On-Time Departures",
                                       "Total Trains", "On-Time Arrival %", "On-Time Departure %"),
-              columnFormats=columnFormats, theme=simpleBlueTheme)
+              columnFormats=columnFormats, theme=simpleBlueTheme,
+              compatibility=list(headerCellsAsTD=TRUE))
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
   # prepStr(as.character(tbl$getHtml()))
@@ -112,7 +113,8 @@ test_that("quick table with cell type styling", {
               headingStyle=list("color"="cornsilk", "background-color"="maroon",
                                 "font-style"="italic", "border-color"="maroon"),
               cellStyle=list("color"="maroon", "background-color"="cornsilk",
-                             "border-color"="maroon"))
+                             "border-color"="maroon"),
+              compatibility=list(headerCellsAsTD=TRUE))
 
   # set column alignment of first column
   tbl$setStyling(2, 1, 5, 1, declarations=list("text-align"="left"))

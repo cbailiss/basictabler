@@ -37,7 +37,7 @@ test_that("empty matrix (1 NA value)", {
   m <- matrix()
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addMatrix(m)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -55,7 +55,7 @@ test_that("1 col, 1 row matrix", {
   m <- matrix(5)
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addMatrix(m)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -73,7 +73,7 @@ test_that("2x3 matrix (numeric)", {
   m <- matrix(1:6, 2, 3, dimnames=list(c("r1", "r2"), c("c1", "c2", "c3")))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addMatrix(m, rowNamesAsRowHeaders=TRUE, columnNamesAsColumnHeaders=TRUE)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -91,7 +91,7 @@ test_that("2x3 matrix (character)", {
   m <- matrix(as.character(1:6), 2, 3, dimnames=list(c("r1", "r2"), c("c1", "c2", "c3")))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addMatrix(m, rowNamesAsRowHeaders=TRUE, columnNamesAsColumnHeaders=TRUE)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")

@@ -54,7 +54,7 @@ constructing the table, where the elapsed time > 0.1 seconds.}
   the extensive vignettes supplied with this package.}
   \item{\code{new(argumentCheckMode="auto", theme=NULL,
   replaceExistingStyles=FALSE, tableStyle=NULL, headingStyle=NULL,
-  cellStyle=NULL, totalStyle=NULL, traceEnabled=FALSE,
+  cellStyle=NULL, totalStyle=NULL, compatibility=NULL, traceEnabled=FALSE,
   traceFile=NULL)}}{Create a new table, optionally specifying the name of a
   built in theme or CSS style declarations for the different cells within the
   table.}

@@ -37,7 +37,7 @@ test_that("empty data frame (0 cols)", {
   df <- data.frame()
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -55,7 +55,7 @@ test_that("empty data frame (1 col, 0 rows)", {
   df <- data.frame(a=integer(0))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -73,7 +73,7 @@ test_that("empty data frame (2 cols, 0 rows)", {
   df <- data.frame(a=integer(0), b=character(0))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -91,7 +91,7 @@ test_that("1 col, 1 row data frame", {
   df <- data.frame(a=5)
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -109,7 +109,7 @@ test_that("2 cols, 1 row data frame", {
   df <- data.frame(a=5, b="hello")
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -127,7 +127,7 @@ test_that("1 col, 2 rows data frame", {
   df <- data.frame(a=c(5, 7))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -145,7 +145,7 @@ test_that("2 cols, 2 rows data frame", {
   df <- data.frame(a=c(5, 7), b=c("hello", "world"))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -163,7 +163,7 @@ test_that("1 col, 3 rows data frame", {
   df <- data.frame(a=c(5, 7, 9))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -181,7 +181,7 @@ test_that("2 cols, 3 rows data frame", {
   df <- data.frame(a=c(5, 7, 9), b=c("hello", "world", "today"))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -209,7 +209,7 @@ test_that("data type tests", {
                                           "2003-09-08 09:30:22", "2017-09-28 23:59:59", NA), tz = "UTC"))
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(df)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")

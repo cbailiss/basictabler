@@ -36,7 +36,7 @@ context("CONSTRUCTION TESTS")
 test_that("empty", {
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
   # prepStr(as.character(tbl$getHtml()))
@@ -51,7 +51,7 @@ test_that("empty", {
 test_that("one cell (1, 1)", {
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$cells$setCell(1, 1, rawValue=10/3, formattedValue=3.33)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -67,7 +67,7 @@ test_that("one cell (1, 1)", {
 test_that("one cell (5, 7)", {
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$cells$setCell(5, 7, rawValue=10/3, formattedValue=3.33)
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")
@@ -83,7 +83,7 @@ test_that("one cell (5, 7)", {
 test_that("3x4 table", {
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
   tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
   tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
@@ -114,7 +114,7 @@ test_that("3x4 table", {
 test_that("manipulation 1", {
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
   tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
   tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
@@ -151,7 +151,7 @@ test_that("manipulation 1", {
 test_that("manipulation 2", {
 
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
   tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
   tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
@@ -197,7 +197,7 @@ test_that("column-by-column", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
   tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
   tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")
@@ -229,7 +229,7 @@ test_that("row-by-row", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$cells$setCell(1, 1, cellType="root", rawValue="Sale ID")
   tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")
   tbl$cells$setCell(1, 3, cellType="columnHeader", rawValue="Quantity")

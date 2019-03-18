@@ -42,7 +42,7 @@ test_that("merge cells test", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(data.frame(saleIds, items, quantities, prices, status),
               firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price", "Status"),
@@ -88,7 +88,7 @@ test_that("merge and manipulate test", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
 
   # populate the table
   tbl$addData(df, explicitColumnHeaders=colNames)

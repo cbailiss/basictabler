@@ -29,7 +29,8 @@
 #'   cells in the table.
 #' @param totalStyle A list of CSS style declarations that apply to the total
 #'   cells in the table.
-#' @param ... Additional arguments, currently only argumentCheckMode.
+#' @param ... Additional arguments, currently compatibility and/or
+#'   argumentCheckMode.
 #' @return A basic table.
 #' @examples
 #' qtbl(head(bhmsummary))
@@ -59,8 +60,10 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
   checkArgument(3, TRUE, "", "qtbl", totalStyle, missing(totalStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
   argumentCheckMode <- arguments$argumentCheckMode
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
+  compatibility <- arguments$compatibility
   tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode, theme=theme, replaceExistingStyles=replaceExistingStyles,
-                        tableStyle=tableStyle, headingStyle=headingStyle, cellStyle=cellStyle, totalStyle=totalStyle)
+                        tableStyle=tableStyle, headingStyle=headingStyle, cellStyle=cellStyle, totalStyle=totalStyle,
+                        compatibility=compatibility)
   if("data.frame" %in% class(dataFrameOrMatrix)) {
     tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,
@@ -104,8 +107,8 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
 #'   cells in the table.
 #' @param totalStyle A list of CSS style declarations that apply to the total
 #'   cells in the table.
-#' @param ... Additional arguments, currently only argumentCheckMode and
-#'   styleNamePrefix.
+#' @param ... Additional arguments, currently compatibility, argumentCheckMode
+#'   and/or styleNamePrefix.
 #' @return A basic table.
 #' @examples
 #' qhtbl(head(bhmsummary))
@@ -135,9 +138,11 @@ qhtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCo
   checkArgument(3, TRUE, "", "qhtbl", totalStyle, missing(totalStyle), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "TableStyle"))
   argumentCheckMode <- arguments$argumentCheckMode
   if(is.null(argumentCheckMode)) argumentCheckMode <- "auto"
+  compatibility <- arguments$compatibility
   styleNamePrefix <- arguments$styleNamePrefix
   tbl <- BasicTable$new(argumentCheckMode=argumentCheckMode, theme=theme, replaceExistingStyles=replaceExistingStyles,
-                        tableStyle=tableStyle, headingStyle=headingStyle, cellStyle=cellStyle, totalStyle=totalStyle)
+                        tableStyle=tableStyle, headingStyle=headingStyle, cellStyle=cellStyle, totalStyle=totalStyle,
+                        compatibility=compatibility)
   if("data.frame" %in% class(dataFrameOrMatrix)) {
     tbl$addData(dataFrameOrMatrix, columnNamesAsColumnHeaders=columnNamesAsColumnHeaders, explicitColumnHeaders=explicitColumnHeaders,
                 rowNamesAsRowHeaders=rowNamesAsRowHeaders, firstColumnAsRowHeaders=firstColumnAsRowHeaders,

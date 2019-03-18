@@ -41,7 +41,7 @@ test_that("export as matrix (no headings)", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(data.frame(saleIds, items, quantities, prices),
               firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
@@ -66,7 +66,7 @@ test_that("export as matrix (with headings)", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(data.frame(saleIds, items, quantities, prices),
               firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
@@ -91,7 +91,7 @@ test_that("export as data frame", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(data.frame(saleIds, items, quantities, prices),
               firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),

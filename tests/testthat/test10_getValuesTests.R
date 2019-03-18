@@ -41,7 +41,7 @@ test_that("retrieving cell value", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new()
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
   tbl$addData(data.frame(saleIds, items, quantities, prices),
               firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
