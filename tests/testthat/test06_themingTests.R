@@ -570,3 +570,26 @@ test_that("styling after creating (current)", {
   expect_identical(as.character(tbl$getCss()), css)
   expect_identical(as.character(tbl$getHtml()), html)
 })
+
+
+
+test_that("applying styling multiple times to the same cell", {
+
+  tbl <- BasicTable$new()
+  tbl$addData(data.frame(a = c(1)), columnNamesAsColumnHeaders = F)
+  tbl$setStyling(1, 1, declarations = list("font-weight" = "bold"))
+  tbl$setStyling(1, 1, declarations = list("text-align" = "center"))
+
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getCss()))
+  # prepStr(as.character(tbl$getHtml()))
+  str <- "1  "
+  css <- ".Table {border-collapse: collapse; }\r\n.ColumnHeader {font-family: Arial; font-size: 0.75em; padding: 2px; border: 1px solid lightgray; vertical-align: middle; text-align: center; font-weight: bold; background-color: #F2F2F2; }\r\n.RowHeader {font-family: Arial; font-size: 0.75em; padding: 2px 8px 2px 2px; border: 1px solid lightgray; vertical-align: middle; text-align: left; font-weight: bold; background-color: #F2F2F2; }\r\n.Cell {font-family: Arial; font-size: 0.75em; padding: 2px 2px 2px 8px; border: 1px solid lightgray; vertical-align: middle; text-align: right; }\r\n.Total {font-family: Arial; font-size: 0.75em; padding: 2px 2px 2px 8px; border: 1px solid lightgray; vertical-align: middle; text-align: right; font-weight: bold; }\r\n"
+  html <- "<table class=\"Table\">\n  <tr>\n    <td class=\"Cell\" style=\"font-weight: bold; text-align: center; \">1</td>\n  </tr>\n</table>"
+
+  expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getCss()), css)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+

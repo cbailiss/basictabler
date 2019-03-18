@@ -649,7 +649,7 @@ BasicTable <- R6::R6Class("BasicTable",
             if(!missing(style)) { cell$style <- ifelse(is.null(style, NULL, style$getCopy())) }
             if((!missing(declarations))&&(!is.null(declarations))) {
               if (is.null(cell$style)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
-              else { cell$setPropertyValues(declarations) }
+              else { cell$style$setPropertyValues(declarations) }
             }
           }
         }
@@ -667,7 +667,7 @@ BasicTable <- R6::R6Class("BasicTable",
               if(!missing(style)) { cell$style <- ifelse(is.null(style), NULL, style$getCopy()) }
               if((!missing(declarations))&&(!is.null(declarations))) {
                 if (is.null(cell$style)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
-                else { cell$setPropertyValues(declarations) }
+                else { cell$style$setPropertyValues(declarations) }
               }
             }
           }
