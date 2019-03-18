@@ -510,6 +510,12 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cTo, missing(cTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merging cells...", list(rFrom=rFrom, cFrom=cFrom, rSpan=rSpan, cSpan=cSpan, rTo=rTo, cTo=cTo))
+      # check we actually have some cells to merge
+      isRealMerge <- FALSE
+      isRealMerge <- isRealMerge || ((!is.null(rSpan)) && (rSpan > 1))
+      isRealMerge <- isRealMerge || ((!is.null(cSpan)) && (cSpan > 1))
+      if(!isRealMerge) { return(invisible()) }
+      # check no intersecting merged cell
       existingRange <- private$p_mergedCells$findIntersectingRange(rFrom=rFrom, cFrom=cFrom, rSpan=rSpan, cSpan=cSpan, rTo=rTo, cTo=cTo)
       if(!is.null(existingRange)) {
         stop(paste0("BasicTable$mergeCells(): An existing merged cell range intersects with the specified cell range."), call. = FALSE)
