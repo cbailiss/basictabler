@@ -11,7 +11,7 @@ Breaking Changes
 
 When generating HTML, previous versions of the package rendered all cells using the html **td** element.  More correctly, header cells should be rendered using the **th** element.  This also causes compatibility issues with the `pivottabler` package, which already renders header cells using **th** - i.e. pivot tables converted to basic tables were rendered differently by `basictabler` compared to `pivottabler`.
 
-Starting from this version of `basictabler`, header cells are rendered as **th** elements.  In most cases, this will make no difference to the visual appearance of the HTML, however it may cause issues for users who require the previous behaviour.  The previous behaviour is still available by specifying `compatibility=list(headerCellsAsTD=TRUE)` as an argument when creating the table, either in `BasicTable$new()` or one of the quick table functions such as `qtbl()`.
+Starting from this version of `basictabler`, header cells are rendered as **th** elements.  In most cases, this will make no difference to the visual appearance of the table, however it may cause issues for users who require the previous behaviour.  The previous behaviour is still available by specifying `compatibility=list(headerCellsAsTD=TRUE)` as an argument when creating the table, either in `BasicTable$new()` or one of the quick table functions such as `qtbl()`.
 
 Bug Fixes
 ----------------
