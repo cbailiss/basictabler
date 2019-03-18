@@ -29,6 +29,8 @@
 #' @field rawValue The original unformatted value.
 #' @field formattedValue The formatted value (i.e. normally of character data
 #'   type).
+#' @field asNBSP TRUE or FALSE to specify whether cells with no formatted
+#'   value be output as html nbsp.
 #' @field baseStyleName The name of the style applied to this cell (a character
 #'   value).  The style must exist in the TableStyles object associated with the
 #'   table.
@@ -49,7 +51,7 @@
 
 TableCell <- R6::R6Class("TableCell",
   public = list(
-   initialize = function(parentTable, rowNumber=NULL, columnNumber=NULL, cellType="cell", visible=TRUE, rawValue=NULL, formattedValue=NULL, baseStyleName=NULL, styleDeclarations=NULL) {
+   initialize = function(parentTable, rowNumber=NULL, columnNumber=NULL, cellType="cell", visible=TRUE, rawValue=NULL, formattedValue=NULL, baseStyleName=NULL, styleDeclarations=NULL, asNBSP=FALSE) {
      if(parentTable$argumentCheckMode > 0) {
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableCell", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableCell", "initialize", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
@@ -60,6 +62,7 @@ TableCell <- R6::R6Class("TableCell",
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableCell", "initialize", formattedValue, missing(formattedValue), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "complex", "character", "factor", "Date", "POSIXct", "POSIXlt"))
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableCell", "initialize", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableCell", "initialize", styleDeclarations, missing(styleDeclarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
+       checkArgument(parentTable$argumentCheckMode, FALSE, "TableCell", "initialize", asNBSP, missing(asNBSP), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
      }
      private$p_parentTable <- parentTable
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCell$new", "Creating new TableCell",
@@ -70,6 +73,7 @@ TableCell <- R6::R6Class("TableCell",
      private$p_visible <- visible
      private$p_rawValue <- rawValue
      private$p_formattedValue <- as.character(formattedValue)
+     private$p_asNBSP <- asNBSP
      private$p_baseStyleName <- baseStyleName
      if (!is.null(styleDeclarations)) private$p_style = private$p_parentTable$createInlineStyle(baseStyleName=baseStyleName, declarations=styleDeclarations)
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCell$new", "Created new TableCell")
@@ -93,7 +97,8 @@ TableCell <- R6::R6Class("TableCell",
        cellType=private$p_cellType,
        visible=private$p_visible,
        rawValue=private$p_rawValue,
-       formattedValue=private$p_formattedValue
+       formattedValue=private$p_formattedValue,
+       asNBSP=private$p_asNBSP
      )
      return(invisible(lst))
    },
@@ -141,6 +146,27 @@ TableCell <- R6::R6Class("TableCell",
        private$p_formattedValue <- as.character(value)
        return(invisible())
      }
+   },
+   asNBSP = function(value) {
+     if(missing(value)) return(invisible(private$p_asNBSP))
+     else {
+       if(private$p_parentTable$argumentCheckMode > 0) {
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCell", "asNBSP", value, missing(value), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+       }
+       private$p_formattedValue <- value
+       return(invisible())
+     }
+   },
+   fValueOrNBSP = function(value) {
+     hasValue <- FALSE
+     if(length(private$p_formattedValue)>0)
+     {
+       hasValue <- (nchar(private$p_formattedValue)>0)
+     }
+     if((!hasValue) && (private$p_asNBSP==TRUE)) {
+       return(invisible(htmltools::HTML("&nbsp;")))
+     }
+     else { return(invisible(private$p_formattedValue)) }
    },
    isMerged = function(value) { # for internal use by the renderers only
      if(missing(value)) { return(invisible(private$p_isMerged)) }
@@ -195,6 +221,7 @@ TableCell <- R6::R6Class("TableCell",
     p_visible = NULL,
     p_rawValue = NULL ,               # a value (unique to this cell)
     p_formattedValue = NULL,          # a value (unique to this cell)
+    p_asNBSP = NULL,                  # TRUE to output cells without a formatted value as &nbsp; in html
     p_baseStyleName = NULL,           # a string
     p_style = NULL                    # an object ref (may or may not be shared) to a TableStyle object
   )

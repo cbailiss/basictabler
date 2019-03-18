@@ -215,7 +215,7 @@ TableCells <- R6::R6Class("TableCells",
      }
      return(invisible(cell))
    },
-   setBlankCell = function(r=NULL, c=NULL, cellType="cell", visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL) {
+   setBlankCell = function(r=NULL, c=NULL, cellType="cell", visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL, asNBSP=FALSE) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", c, missing(c), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -225,8 +225,9 @@ TableCells <- R6::R6Class("TableCells",
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", styleDeclarations, missing(styleDeclarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", rowSpan, missing(rowSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"), minValue=1)
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", colSpan, missing(colSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"), minValue=1)
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", asNBSP, missing(asNBSP), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("logical"))
      }
-     cell <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType=cellType, visible=visible, rawValue=NULL, formattedValue=NULL, baseStyleName=baseStyleName, styleDeclarations=styleDeclarations)
+     cell <- TableCell$new(parentTable=private$p_parentTable, rowNumber=r, columnNumber=c, cellType=cellType, visible=visible, rawValue=NULL, formattedValue=NULL, baseStyleName=baseStyleName, styleDeclarations=styleDeclarations, asNBSP=asNBSP)
      self$moveCell(r, c, cell)
      if((!is.null(rowSpan))||(!is.null(colSpan))) {
        rs <- rowSpan

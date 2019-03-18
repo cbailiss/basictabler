@@ -98,12 +98,12 @@ TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
            if(cell$isMerged) {
              mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
              if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$th(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
-                                                                           class=cssCell, style=cllstyl, cell$formattedValue)
+                                                                           class=cssCell, style=cllstyl, cell$fValueOrNBSP)
              else trow[[length(trow)+1]] <- htmltools::tags$th(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
                                                                class=cssCell, style=cllstyl) # todo: check escaping
            }
            else {
-             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$th(class=cssCell, style=cllstyl, cell$formattedValue)
+             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$th(class=cssCell, style=cllstyl, cell$fValueOrNBSP)
              else trow[[length(trow)+1]] <- htmltools::tags$th(class=cssCell, style=cllstyl) # todo: check escaping
            }
          }
@@ -112,12 +112,12 @@ TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
            if(cell$isMerged) {
              mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
              if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
-                                                                           class=cssCell, style=cllstyl, cell$formattedValue)
+                                                                           class=cssCell, style=cllstyl, cell$fValueOrNBSP)
              else trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
                                                                class=cssCell, style=cllstyl) # todo: check escaping
            }
            else {
-             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(class=cssCell, style=cllstyl, cell$formattedValue)
+             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(class=cssCell, style=cllstyl, cell$fValueOrNBSP)
              else trow[[length(trow)+1]] <- htmltools::tags$td(class=cssCell, style=cllstyl) # todo: check escaping
            }
          }
