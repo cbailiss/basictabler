@@ -1,4 +1,4 @@
-basictabler 0.2.0.9000
+basictabler 0.3.0
 ================
 
 Overview
