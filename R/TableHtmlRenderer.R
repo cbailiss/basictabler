@@ -61,6 +61,8 @@ TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
      # get the dimensions of the table...
      rowCount <- private$p_parentTable$cells$rowCount
      columnCount <- private$p_parentTable$cells$columnCount
+     # compatibility to keep the explicit row/col span even if span is only 1
+     o2n <- !isTRUE(private$p_parentTable$compatibility$explicitHeaderSpansOfOne)
      # special case of no rows and no columns, return a blank empty table
      if((rowCount==0)&&(columnCount==0)) {
        tbl <- htmltools::tags$table(class=tableStyle, htmltools::tags$tr(
@@ -97,9 +99,11 @@ TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
            # th cells
            if(cell$isMerged) {
              mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
-             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$th(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
+             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$th(rowspan=oneToNULL(mergeRange$rSpan, o2n),
+                                                                           colspan=oneToNULL(mergeRange$cSpan, o2n),
                                                                            class=cssCell, style=cllstyl, cell$fValueOrNBSP)
-             else trow[[length(trow)+1]] <- htmltools::tags$th(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
+             else trow[[length(trow)+1]] <- htmltools::tags$th(rowspan=oneToNULL(mergeRange$rSpan, o2n),
+                                                               colspan=oneToNULL(mergeRange$cSpan, o2n),
                                                                class=cssCell, style=cllstyl) # todo: check escaping
            }
            else {
@@ -111,9 +115,11 @@ TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
            # td cells
            if(cell$isMerged) {
              mergeRange <- private$p_parentTable$mergedCells$ranges[[cell$mergeIndex]]
-             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
+             if(cell$visible) trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=oneToNULL(mergeRange$rSpan, o2n),
+                                                                           colspan=oneToNULL(mergeRange$cSpan, o2n),
                                                                            class=cssCell, style=cllstyl, cell$fValueOrNBSP)
-             else trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=mergeRange$rSpan, colspan=mergeRange$cSpan,
+             else trow[[length(trow)+1]] <- htmltools::tags$td(rowspan=oneToNULL(mergeRange$rSpan, o2n),
+                                                               colspan=oneToNULL(mergeRange$cSpan, o2n),
                                                                class=cssCell, style=cllstyl) # todo: check escaping
            }
            else {

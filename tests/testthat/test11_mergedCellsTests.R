@@ -42,7 +42,46 @@ test_that("merge cells test", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
+  tbl <- BasicTable$new()
+  tbl$addData(data.frame(saleIds, items, quantities, prices, status),
+              firstColumnAsRowHeaders=TRUE,
+              explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price", "Status"),
+              columnFormats=list(NULL, NULL, NULL, "%.2f", NULL))
+
+  # merge the cells and specify new heading
+  tbl$mergeCells(rFrom=1, cFrom=2, rSpan=1, cSpan=2)
+  cell <- tbl$cells$getCell(1, 2)
+  cell$rawValue <- "Item & Qty"
+  cell$formattedValue <- "Item & Qty"
+  tbl$mergeCells(rFrom=3, cFrom=3, rSpan=2, cSpan=2)
+  cell <- tbl$cells$getCell(3, 3)
+  cell$rawValue <- "??"
+  cell$formattedValue <- "??"
+
+  # tbl$renderTable()
+  # prepStr(tbl$print(asCharacter=TRUE), "str")
+  # prepStr(as.character(tbl$getHtml()))
+  str <- "Sale ID  Item & Qty  Quantity  Price  Status  \n   5334       Apple         5   0.34    Good  \n   5336      Orange        ??   0.47      OK  \n   5338      Banana         6   1.34     Bad  \n   5339  Grapefruit         2   0.56      OK  "
+  html <- "<table class=\"Table\">\n  <tr>\n    <th class=\"ColumnHeader\">Sale ID</th>\n    <th colspan=\"2\" class=\"ColumnHeader\">Item &amp; Qty</th>\n    <th class=\"ColumnHeader\">Price</th>\n    <th class=\"ColumnHeader\">Status</th>\n  </tr>\n  <tr>\n    <th class=\"RowHeader\">5334</th>\n    <td class=\"Cell\">Apple</td>\n    <td class=\"Cell\">5</td>\n    <td class=\"Cell\">0.34</td>\n    <td class=\"Cell\">Good</td>\n  </tr>\n  <tr>\n    <th class=\"RowHeader\">5336</th>\n    <td class=\"Cell\">Orange</td>\n    <td rowspan=\"2\" colspan=\"2\" class=\"Cell\">??</td>\n    <td class=\"Cell\">OK</td>\n  </tr>\n  <tr>\n    <th class=\"RowHeader\">5338</th>\n    <td class=\"Cell\">Banana</td>\n    <td class=\"Cell\">Bad</td>\n  </tr>\n  <tr>\n    <th class=\"RowHeader\">5339</th>\n    <td class=\"Cell\">Grapefruit</td>\n    <td class=\"Cell\">2</td>\n    <td class=\"Cell\">0.56</td>\n    <td class=\"Cell\">OK</td>\n  </tr>\n</table>"
+
+  expect_identical(tbl$print(asCharacter=TRUE), str)
+  expect_identical(as.character(tbl$getHtml()), html)
+})
+
+
+
+test_that("merge cells test (compatibility mode)", {
+
+  # data for the table
+  saleIds <- c(5334, 5336, 5338, 5339)
+  items <- c("Apple", "Orange", "Banana", "Grapefruit")
+  quantities <- c(5, 8, 6, 2)
+  prices <- c(0.34452354, 0.4732543, 1.3443243, 0.5628432)
+  status <- c("Good", "OK", "Bad", "OK")
+
+  # construct the table
+  library(basictabler)
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE, explicitHeaderSpansOfOne=TRUE))
   tbl$addData(data.frame(saleIds, items, quantities, prices, status),
               firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price", "Status"),
@@ -88,7 +127,7 @@ test_that("merge and manipulate test", {
 
   # construct the table
   library(basictabler)
-  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
+  tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE, explicitHeaderSpansOfOne=TRUE))
 
   # populate the table
   tbl$addData(df, explicitColumnHeaders=colNames)
