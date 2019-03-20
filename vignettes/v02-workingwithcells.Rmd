@@ -33,7 +33,7 @@ The cells collection is accessed via `tbl$cells`.
 
 ## Properties of a Table Cell
 
-Each TableCell object has the following basic properies:
+Each TableCell object has the following basic properties:
 
 - rowNumber - the number of the row where the cell exists in the table.
 - columnNumber - the number of the column where the cell exists in the table.

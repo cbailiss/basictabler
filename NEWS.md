@@ -44,7 +44,7 @@ This release includes:
 Breaking Changes
 ----------------
 
-The default value of the `specifyCellsAsList` argument in the `tbl$getCells()` function has been changed to `TRUE` (previously `FALSE`) since this argument usage is more intuative and is consistent with the `pt$getCells()` function in the `pivottabler` package. 
+The default value of the `specifyCellsAsList` argument in the `tbl$getCells()` function has been changed to `TRUE` (previously `FALSE`) since this argument usage is more intuitive and is consistent with the `pt$getCells()` function in the `pivottabler` package. 
 
 Improvements
 ----------------

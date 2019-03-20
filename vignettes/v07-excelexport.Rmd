@@ -196,7 +196,7 @@ Rows/columns are sized to meet all of the minimum sizes specified.  E.g. if thre
 
 ## Performance
 
-Creating Excel files is relatively effort intensive.  Outputing tables to Excel files requires more time than creating a HTML representation of a table.  In order of increasing time required:
+Creating Excel files is relatively effort intensive.  Outputting tables to Excel files requires more time than creating a HTML representation of a table.  In order of increasing time required:
 
 * Unstyled Tables - these will be written to Excel quicker than styled tables.
 * Tables using only base styles - i.e. where no additional styles have been applied to individual cells in the table - these take a moderate amount of time to write to Excel.

@@ -22,7 +22,7 @@ vignette: >
 
 ## Overview
 
-The `basictabler` package supports outputing a table in a number of different forms:
+The `basictabler` package supports outputting a table in a number of different forms:
 
 - A htmlwidget for R-Studio - using `tbl$renderTable()` to render the table into the "Viewer" tab in R-Studio,
 - A htmlwidget for Shiny applications - using `basictabler(tbl)` to render the table into the Shiny app,
