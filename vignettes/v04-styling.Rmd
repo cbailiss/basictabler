@@ -41,7 +41,7 @@ To apply styles to a rangle of cells, e.g. rows 2 to 3 and columns 1 to 5:
 
 `tbl$setStyling(2, 1, 3, 5, declarations=list("font-weight"="bold", "text-align"="center")`
 
-The above sets CSS style attributes on the individual cells.  This is quick and easy, though very verbose.  Named styles are more efficient for large pivot tables (hundreds/thousands of cells) and are described in the following sections. 
+The above sets CSS style attributes on the individual cells.  This is quick and easy, though very verbose.  Named styles are more efficient for large tables (hundreds/thousands of cells) and are described in the following sections. 
 
 ## Styles and Themes
 

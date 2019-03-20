@@ -38,6 +38,9 @@ default styling that is applied to the cell.}
 \item{\code{formattedValue}}{The formatted value (i.e. normally of character data
 type).}
 
+\item{\code{asNBSP}}{TRUE or FALSE to specify whether cells with no formatted
+value be output as html nbsp.}
+
 \item{\code{baseStyleName}}{The name of the style applied to this cell (a character
 value).  The style must exist in the TableStyles object associated with the
 table.}
