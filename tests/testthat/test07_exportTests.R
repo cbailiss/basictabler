@@ -99,7 +99,7 @@ test_that("export as data frame", {
 
   # output as data frame
   df <- tbl$asDataFrame(firstRowAsColumnNames=TRUE, rawValue=TRUE, stringsAsFactors=FALSE)
-  prepStr(paste(as.character(df), sep=" ", collapse=" "))
+  # prepStr(paste(as.character(df), sep=" ", collapse=" "))
   text <- "c(5334, 5336, 5338) c(\"Apple\", \"Orange\", \"Banana\") c(5, 8, 6) c(0.34452354, 0.4732543, 1.3443243)"
 
   expect_identical(paste(as.character(df), sep=" ", collapse=" "), text)
