@@ -1,34 +1,7 @@
-basictabler 0.3.0.9000
+basictabler 0.3.1
 ================
 
-Overview
---------
-
-This release includes:
-
-* TBC
-* TBC
-* TBC
-
-Breaking Changes
-----------------
-
-TBC
-
-Improvements
-----------------
-
-TBC
-
-Bug Fixes
-----------------
-
-TBC
-
-Upcoming Changes
-----------------
-
-TBC
+This is a maintenance release that fixes a couple of compatibility issues around the new default of stringsAsFactors=FALSE in data.frame() in the upcoming R 4.0.0 release.
 
 
 basictabler 0.3.0

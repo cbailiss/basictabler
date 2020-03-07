@@ -42,7 +42,7 @@ test_that("retrieving cell value", {
   # construct the table
   library(basictabler)
   tbl <- BasicTable$new(compatibility=list(headerCellsAsTD=TRUE))
-  tbl$addData(data.frame(saleIds, items, quantities, prices),
+  tbl$addData(data.frame(saleIds, items, quantities, prices, stringsAsFactors=FALSE),
               firstColumnAsRowHeaders=TRUE,
               explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
               columnFormats=list(NULL, NULL, NULL, "%.2f"))
@@ -63,6 +63,6 @@ test_that("retrieving cell value", {
   expect_identical(as.character(tbl$getHtml()), html)
   expect_equal(v1, 0.34452354)
   expect_identical(v2, "0.34")
-  expect_identical(rowValues, "list: 5334, 1, 5, 0.34452354")
+  expect_identical(rowValues, "list: 5334, Apple, 5, 0.34452354")
   expect_identical(columnValues, "numeric: 5, 8, 6")
 })

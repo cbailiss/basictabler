@@ -114,8 +114,8 @@
 #'   firstColumnAsRowNames=FALSE, rawValue=FALSE)}}{Gets the table as
 #'   a matrix, with or without headings.}
 #'   \item{\code{asDataFrame(firstRowAsColumnNames=FALSE,
-#'   firstColumnAsRowNames=FALSE, rawValue=FALSE)}}{Gets the table as a data
-#'   frame, with or without headings.}
+#'   firstColumnAsRowNames=FALSE, rawValue=FALSE, stringsAsFactors)}}{
+#'   Gets the table as a data frame, with or without headings.}
 #'   \item{\code{getCss(styleNamePrefix)}}{Get the CSS declarations for the
 #'   entire table.}
 #'   \item{\code{getHtml(styleNamePrefix)}}{Get the HTML representation of the
@@ -857,11 +857,12 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asMatrix", "Got table as a matrix.")
       return(m)
     },
-    asDataFrame = function(firstRowAsColumnNames=FALSE, firstColumnAsRowNames=FALSE, rawValue=FALSE) {
+    asDataFrame = function(firstRowAsColumnNames=FALSE, firstColumnAsRowNames=FALSE, rawValue=FALSE, stringsAsFactors=default.stringsAsFactors()) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "asDataFrame", firstRowAsColumnNames, missing(firstRowAsColumnNames), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "asDataFrame", firstColumnAsRowNames, missing(firstColumnAsRowNames), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "asDataFrame", rawValue, missing(rawValue), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "asDataFrame", stringsAsFactors, missing(stringsAsFactors), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asDataFrame", "Getting table as a data frame...",
                     list(includeHeaders=includeHeaders, rawValue=rawValue))
@@ -918,7 +919,7 @@ BasicTable <- R6::R6Class("BasicTable",
       if(is.null(columnNames)) {
         columnNames <- paste0("C", sprintf("%03d", 1:(columnCount - columnOffset)))
       }
-      df <- as.data.frame(dfColumns, col.names=columnNames)
+      df <- as.data.frame(dfColumns, col.names=columnNames, stringsAsFactors=stringsAsFactors)
       if(!is.null(rowNames)) rownames(df) <- rowNames
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asDataFrame", "Got table as a data frame.")
       return(df)
