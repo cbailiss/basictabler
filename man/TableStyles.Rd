@@ -5,9 +5,6 @@
 \alias{TableStyles}
 \title{A class that defines a collection of styles.}
 \format{\code{\link{R6Class}} object.}
-\usage{
-TableStyles
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods that
   define styles/a theme for a table.
@@ -88,4 +85,3 @@ TableStyles$addStyle(styleName="MyNewStyle", list(
     "background-color"="#F2F2F2"
   ))
 }
-\keyword{datasets}

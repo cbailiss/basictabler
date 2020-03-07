@@ -5,9 +5,6 @@
 \alias{TableCell}
 \title{A class that represents a cell in a table}
 \format{\code{\link{R6Class}} object.}
-\usage{
-TableCell
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods that
   define a single table cell
@@ -72,4 +69,3 @@ cell1 <- tbl$cells$setCell(r=4, c=1, cellType="cell", rawValue=5)
 cell2 <- tbl$cells$setCell(r=4, c=2, cellType="cell", rawValue=6)
 tbl$renderTable()
 }
-\keyword{datasets}

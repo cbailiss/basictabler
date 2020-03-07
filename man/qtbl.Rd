@@ -4,12 +4,22 @@
 \alias{qtbl}
 \title{Quickly build a basic table.}
 \usage{
-qtbl(dataFrameOrMatrix, columnNamesAsColumnHeaders = TRUE,
-  explicitColumnHeaders = NULL, rowNamesAsRowHeaders = FALSE,
-  firstColumnAsRowHeaders = FALSE, explicitRowHeaders = NULL,
-  columnFormats = NULL, theme = NULL, replaceExistingStyles = FALSE,
-  tableStyle = NULL, headingStyle = NULL, cellStyle = NULL,
-  totalStyle = NULL, ...)
+qtbl(
+  dataFrameOrMatrix,
+  columnNamesAsColumnHeaders = TRUE,
+  explicitColumnHeaders = NULL,
+  rowNamesAsRowHeaders = FALSE,
+  firstColumnAsRowHeaders = FALSE,
+  explicitRowHeaders = NULL,
+  columnFormats = NULL,
+  theme = NULL,
+  replaceExistingStyles = FALSE,
+  tableStyle = NULL,
+  headingStyle = NULL,
+  cellStyle = NULL,
+  totalStyle = NULL,
+  ...
+)
 }
 \arguments{
 \item{dataFrameOrMatrix}{The data frame or matrix containing the data to be

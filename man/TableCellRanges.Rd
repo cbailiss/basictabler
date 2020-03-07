@@ -5,9 +5,6 @@
 \alias{TableCellRanges}
 \title{A class that manages cell ranges (e.g. for merged cells).}
 \format{\code{\link{R6Class}} object.}
-\usage{
-TableCellRanges
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods that help
   manage cell ranges.
@@ -48,4 +45,3 @@ the functioning of the BasicTable class.
 # TableCellRanges objects are never created outside of the BasicTable class.
 # For examples of working with merged cells, see the Introduction vignette.
 }
-\keyword{datasets}

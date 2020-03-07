@@ -5,9 +5,6 @@
 \alias{TableOpenXlsxRenderer}
 \title{A class that renders a table into an Excel worksheet.}
 \format{\code{\link{R6Class}} object.}
-\usage{
-TableOpenXlsxRenderer
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods that
   render to Excel via the openxlsx package
@@ -53,4 +50,3 @@ tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
                          applyStyles=TRUE, mapStylesFromCSS=TRUE)
 # Use saveWorkbook() to save the Excel file.
 }
-\keyword{datasets}

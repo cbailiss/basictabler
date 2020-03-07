@@ -5,9 +5,6 @@
 \alias{TableOpenXlsxStyle}
 \title{A class that specifies Excel styling as used by the openxlsx package.}
 \format{\code{\link{R6Class}} object.}
-\usage{
-TableOpenXlsxStyle
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods that help
   define styles.
@@ -121,4 +118,3 @@ tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
                          applyStyles=TRUE, mapStylesFromCSS=TRUE)
 # Use saveWorkbook() to save the Excel file.
 }
-\keyword{datasets}

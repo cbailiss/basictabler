@@ -5,9 +5,6 @@
 \alias{BasicTable}
 \title{A class that defines a basic table.}
 \format{\code{\link{R6Class}} object.}
-\usage{
-BasicTable
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods that
   define a basic table.
@@ -100,8 +97,8 @@ constructing the table, where the elapsed time > 0.1 seconds.}
   firstColumnAsRowNames=FALSE, rawValue=FALSE)}}{Gets the table as
   a matrix, with or without headings.}
   \item{\code{asDataFrame(firstRowAsColumnNames=FALSE,
-  firstColumnAsRowNames=FALSE, rawValue=FALSE)}}{Gets the table as a data
-  frame, with or without headings.}
+  firstColumnAsRowNames=FALSE, rawValue=FALSE, stringsAsFactors)}}{
+  Gets the table as a data frame, with or without headings.}
   \item{\code{getCss(styleNamePrefix)}}{Get the CSS declarations for the
   entire table.}
   \item{\code{getHtml(styleNamePrefix)}}{Get the HTML representation of the
@@ -153,4 +150,3 @@ tbl$addData(tocsummary, columnNamesAsColumnHeaders=FALSE,
   explicitColumnHeaders=columnHeaders, columnFormats=columnFormats)
 tbl$renderTable()
 }
-\keyword{datasets}

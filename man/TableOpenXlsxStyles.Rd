@@ -6,9 +6,6 @@
 \title{A class that defines a collection of Excel styles as used by the openxlsx
 package.}
 \format{\code{\link{R6Class}} object.}
-\usage{
-TableOpenXlsxStyles
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods that
   define styles/a theme for a table.
@@ -58,4 +55,3 @@ tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
                          applyStyles=TRUE, mapStylesFromCSS=TRUE)
 # Use saveWorkbook() to save the Excel file.
 }
-\keyword{datasets}

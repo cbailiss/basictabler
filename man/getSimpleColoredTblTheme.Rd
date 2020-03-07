@@ -4,8 +4,12 @@
 \alias{getSimpleColoredTblTheme}
 \title{Get a simple coloured theme.}
 \usage{
-getSimpleColoredTblTheme(parentTable, themeName = "coloredTheme", colors,
-  fontName)
+getSimpleColoredTblTheme(
+  parentTable,
+  themeName = "coloredTheme",
+  colors,
+  fontName
+)
 }
 \arguments{
 \item{parentTable}{Owning table.}

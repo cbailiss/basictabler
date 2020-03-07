@@ -5,9 +5,6 @@
 \alias{TableHtmlRenderer}
 \title{A class that renders a table in HTML.}
 \format{\code{\link{R6Class}} object.}
-\usage{
-TableHtmlRenderer
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods that
   render to HTML.
@@ -42,4 +39,3 @@ library(basictabler)
 tbl <- qtbl(data.frame(a=1:2, b=3:4))
 tbl$renderTable()
 }
-\keyword{datasets}

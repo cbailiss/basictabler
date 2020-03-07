@@ -5,9 +5,6 @@
 \alias{TableCells}
 \title{A class that contains the cells from a table.}
 \format{\code{\link{R6Class}} object.}
-\usage{
-TableCells
-}
 \value{
 Object of \code{\link{R6Class}} with properties and methods relating
   to the cells of a table.
@@ -97,4 +94,3 @@ cells$setCell(r=4, c=1, cellType="cell", rawValue=5)
 cells$setCell(r=4, c=2, cellType="cell", rawValue=6)
 tbl$renderTable()
 }
-\keyword{datasets}
