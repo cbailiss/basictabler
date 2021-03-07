@@ -494,17 +494,40 @@ BasicTable <- R6::R6Class("BasicTable",
     #' @param cSpan The number of columns that the merged cell spans.
     #' @param rTo The row-number of the bottom-right cell being merged.
     #' @param cTo The column-number of the bottom-right cell being merged.
+    #' @param rowNumbers A vector specifying the row numbers of the cells to be merged.
+    #' @param columnNumbers A vector specifying the columns numbers of the cells to be merged.
     #' @return No return value.
-    mergeCells = function(rFrom=NULL, cFrom=NULL, rSpan=NULL, cSpan=NULL, rTo=NULL, cTo=NULL) {
+    mergeCells = function(rFrom=NULL, cFrom=NULL, rSpan=NULL, cSpan=NULL, rTo=NULL, cTo=NULL, rowNumbers=NULL, columnNumbers=NULL) {
       if(private$p_argumentCheckMode > 0) {
-        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rFrom, missing(rFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cFrom, missing(cFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rFrom, missing(rFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cFrom, missing(cFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rSpan, missing(rSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cSpan, missing(cSpan), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rTo, missing(rTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", cTo, missing(cTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
       }
-      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merging cells...", list(rFrom=rFrom, cFrom=cFrom, rSpan=rSpan, cSpan=cSpan, rTo=rTo, cTo=cTo))
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merging cells...", list(rFrom=rFrom, cFrom=cFrom, rSpan=rSpan, cSpan=cSpan, rTo=rTo, cTo=cTo, rowNumbers=rowNumbers, columnNumbers=columnNumbers))
+      # determine the top-left cell
+      if(is.null(rFrom)) rFrom <- min(rowNumbers)
+      if(is.null(rFrom)) stop("BasicTable$mergeCells(): The row number of the top-left cell of the cells to be merge must be specified (using rFrom or rowNumbers).", call. = FALSE)
+      if(is.null(cFrom)) cFrom <- min(columnNumbers)
+      if(is.null(cFrom)) stop("BasicTable$mergeCells(): The column number of the top-left cell of the cells to be merge must be specified (using cFrom or columnNumbers).", call. = FALSE)
+      # determine the bottom-right cell
+      if(is.null(rTo)) {
+        if(!is.null(rSpan)) rTo <- rFrom + rSpan - 1
+        else rTo <- max(rowNumbers)
+      }
+      if(is.null(rTo)) stop("BasicTable$mergeCells(): The row number of the bottom-right cell of the cells to be merge must be specified (using rTo or rowNumbers, or indirectly via rSpan).", call. = FALSE)
+      if(is.null(cTo)) {
+        if(!is.null(cSpan)) cTo <- cFrom + cSpan - 1
+        else cTo <- max(columnNumbers)
+      }
+      if(is.null(cTo)) stop("BasicTable$mergeCells(): The column number of the bottom-right cell of the cells to be merge must be specified (using cTo or columnNumbers, or indirectly via cSpan).", call. = FALSE)
+      # determine the span
+      if(is.null(rSpan)) rSpan <- rTo - rFrom + 1
+      if(is.null(cSpan)) cSpan <- cTo - cFrom + 1
       # check we actually have some cells to merge
       isRealMerge <- FALSE
       isRealMerge <- isRealMerge || ((!is.null(rSpan)) && (rSpan > 1))

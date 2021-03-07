@@ -8,6 +8,15 @@ Breaking Changes
 
 From R 4.1.0, the default value of the `stringsAsFactors` argument in `tbl$asDataFrame()` changes to FALSE due to the deprecation of `default.stringsAsFactors()`.  When the package is used on versions of R < 4.1.0, the package behaviour is unchanged.  When the package used on R 4.0.x versions, a warning message is displayed about the change in future behaviour. 
 
+Documentation Changes
+---------------------
+
+* The code documentation for `basictabler` has been re-written to use the R6 documentation capabilities in `roxygen2`.  As a result the documentation is now more detailed than in previous versions, e.g. arguments in object method calls are now properly documented.  Nonetheless, the easiest way to learn the package is using the vignettes. 
+
+Improvements
+----------------
+
+* The `tbl$mergecells()` method gains new parameters `rowNumbers` and `columnNumbers` to allow vectors to be used to specify the range of cells to be merged.
 
 
 basictabler 0.3.1
