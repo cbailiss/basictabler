@@ -57,6 +57,7 @@ TableCell <- R6::R6Class("TableCell",
      private$p_parentTable <- parentTable
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCell$new", "Creating new TableCell",
                                    list(rowNumber=rowNumber, columnNumber=columnNumber))
+     private$p_instanceId <- private$p_parentTable$getNextInstanceId()
      private$p_rowNumber <- rowNumber
      private$p_columnNumber <- columnNumber
      private$p_cellType <- cellType
@@ -117,6 +118,12 @@ TableCell <- R6::R6Class("TableCell",
    asJSON = function() { return(jsonlite::toJSON(asList())) }
   ),
   active = list(
+
+   #' @field instanceId An integer value that uniquely identifies this cell.
+   #' NB:  This number is guaranteed to be unique within the table,
+   #' but the method of generation of the values may change in future, so
+   #' you are advised not to base any logic on specific values.
+   instanceId = function(value) { return(invisible(private$p_instanceId)) },
 
    #' @field cellType One of the following values that specifies the type of cell:
    #' root, rowHeader, columnHeader, cell, total.  The cellType controls the
@@ -259,6 +266,7 @@ TableCell <- R6::R6Class("TableCell",
   ),
   private = list(
     p_parentTable = NULL,             # an object ref (the single table instance)
+    p_instanceId = NULL,              # an integer
     p_rowNumber = NULL,               # an integer
     p_columnNumber = NULL,            # an integer
     p_cellType = NULL,                # root, rowHeader, columnHeader, cell, total

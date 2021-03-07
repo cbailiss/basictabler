@@ -110,6 +110,7 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Creating new Basic Table...")
       # Create the basic parts of the table
+      private$p_lastInstanceId <- 0
       private$p_cells <- TableCells$new(self)
       private$p_mergedCells <- TableCellRanges$new(self)
       private$p_htmlRenderer <- TableHtmlRenderer$new(parentTable=self)
@@ -215,6 +216,20 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Created new Basic Table.")
       return(invisible())
+    },
+
+    #' @description
+    #' Get the next unique object instance identifier.
+    #' @details
+    #' R6 classes cannot be easily compared to check if two variables are both
+    #' referring to the same object instance.  Instance ids are a mechanism to
+    #' work around this problem.  Each cell is assigned an
+    #' instance id during object creation, which enables reliable reference
+    #' comparisons.
+    #' @return An integer instance id.
+    getNextInstanceId = function() { # used for reliable object instance comparisons (since R6 cannot easily compare object instances)
+      private$p_lastInstanceId <- private$p_lastInstanceId + 1
+      return(invisible(private$p_lastInstanceId))
     },
 
     #' @description
@@ -936,10 +951,6 @@ BasicTable <- R6::R6Class("BasicTable",
     #' "10<=v && v<15".\cr
     #' Basic R functions that test the value can also be
     #' used, e.g. is.na(v).\cr
-    #' @param rowNumbers A vector of row numbers that specify the rows or
-    #' cells to constrain the search.
-    #' @param columnNumbers A vector of column numbers that specify the columns
-    #' or cells to constrain the search.
     #' @param minValue A numerical value specifying a minimum value threshold.
     #' @param maxValue A numerical value specifying a maximum value threshold.
     #' @param exactValues A vector or list specifying a set of allowed values.
@@ -952,6 +963,10 @@ BasicTable <- R6::R6Class("BasicTable",
     #' then the cell value must match any of one the specified expressions.  See details.
     #' @param emptyCells A word that specifies how empty cells are matched -
     #' must be one of "include" (default), "exclude" or "only".
+    #' @param rowNumbers A vector of row numbers that specify the rows or
+    #' cells to constrain the search.
+    #' @param columnNumbers A vector of column numbers that specify the columns
+    #' or cells to constrain the search.
     #' @param cellCoordinates A list of two-element vectors that specify the
     #' coordinates of cells to constrain the search.
     #' @param cells A `TableCell` object or a list of `TableCell`
@@ -966,21 +981,28 @@ BasicTable <- R6::R6Class("BasicTable",
     #' Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are
     #' affected by the match mode.  All other arguments are not.
     #' @return A list of `TableCell` objects.
-    findCells = function(rowNumbers=NULL, columnNumbers=NULL,
-                         minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE) {
+    findCells = function(minValue=NULL, maxValue=NULL, exactValues=NULL, valueRanges=NULL, includeNull=TRUE, includeNA=TRUE, emptyCells="include",
+                         rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL, cells=NULL, rowColumnMatchMode="simple") {
       if(private$p_argumentCheckMode > 0) {
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", minValue, missing(minValue), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", maxValue, missing(maxValue), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", exactValues, missing(exactValues), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", listElementsMustBeAtomic=TRUE)
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", valueRanges, missing(valueRanges), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", includeNull, missing(includeNull), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", includeNA, missing(includeNA), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", emptyCells, missing(emptyCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("include", "exclude", "only"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", cellCoordinates, missing(cellCoordinates), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", cells, missing(cells), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("TableCell", "list"), allowedListElementClasses="TableCell")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "findCells", rowColumnMatchMode, missing(rowColumnMatchMode), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("simple", "combinations"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$findCells", "Finding cells...")
       if(is.null(private$p_cells)) stop("BasicTable$findCells():  No cells exist to retrieve.", call. = FALSE)
-      cells <- private$p_cells$findCells(rowNumbers=rowNumbers, columnNumbers=columnNumbers,
-                                         minValue=minValue, maxValue=maxValue, exactValues=exactValues, includeNull=includeNull, includeNA=includeNA)
+      cells <- private$p_cells$findCells(minValue=minValue, maxValue=maxValue, exactValues=exactValues, valueRanges=valueRanges,
+                                         includeNull=includeNull, includeNA=includeNA, emptyCells=emptyCells,
+                                         rowNumbers=rowNumbers, columnNumbers=columnNumbers,
+                                         cellCoordinates=cellCoordinates, cells=cells, rowColumnMatchMode=rowColumnMatchMode)
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$findCells", "Found cells.")
       return(invisible(cells))
     },
@@ -1584,6 +1606,7 @@ BasicTable <- R6::R6Class("BasicTable",
     p_argumentCheckMode = 4,
     p_traceEnabled = FALSE,
     p_processingLibrary = NULL,
+    p_lastInstanceId = NULL,
     p_data = NULL,
     p_styles = NULL,
     p_cells = NULL,

@@ -443,14 +443,35 @@ tbl$renderTable()
 
 The `findCells()` function is used to search for cells within the body of the table matching one or more criteria.  The function returns a list of cell objects.  This function has the following parameters:
 
-- `rowNumbers` - a numerical value specifying one or multiple row numbers to search in the table.
-- `columnNumbers` - a numerical value specifying one or multiple column numbers to search in the table.
 - `minValue` - a numerical value specifying a minimum value threshold when matching cells.
 - `maxValue` - a numerical value specifying a maximum value threshold when matching cells.
 - `exactValues` - vector specifying a set of allowed values when matching cells.
+- `valueRanges` - a vector specifying one or more value range expressions to use when matching cells.  The expression(s) can be any of the following forms:
+    + a specific value, e.g. 12.
+    + a specific value equality condition, e.g. `"v==12"`, where v represents the cell value.
+    + a value range expression using the following abbreviated form:  "value1<=v<value2", e.g. `"10<=v<15"`.  
+        - Only "<" or "<=" can be used in these abbreviated value range expressions.
+    +  a standard R logical expression, e.g. `"10<=v && v<15"`.
+        - Basic R functions that test the value can also be used, e.g. `"is.na(v)"`.
 - `includeNA` - specify TRUE to include NA in the matched cells, FALSE to exclude NA values.
+- `includeNull` - specify TRUE to include cells with no value, FALSE to exclude cells with no value.
+- `emptyCells` - a word that specifies how empty cells are matched - must be one of:
+    + `include` to match empty and non-empty cells.
+    + `exclude` to match only non-empty cells.
+    + `only` to match only empty cells.
 
-This is typically used for conditional formatting, as illustrated in the next section.
+In addition, the following parameters can also be used with `pt$findCells()`:
+
+- `rowNumbers` - an integer vector specifying row numbers.
+- `columnNumbers` - an integer vector specifying column numbers.
+- `cellCoordinates` - a list of two-element vectors that specify the coordinates of cells to retrieve.  Ignored when `specifyCellsAsList=FALSE`.
+- `cells` - a `PivotCell` object or a list of `PivotCell` objects to restrict the cells that are matched. 
+- `rowColumnMatchMode` - either "simple" or "combinations".
+    + "simple" specifies that row and column arguments are considered separately (logical OR), e.g. `rowNumbers=1` and `columnNumbers=2` will match all cells in row 1 and all cells in column 2.
+    + "combinations" specifies that row and column arguments are considered together (logical AND), e.g. `rowNumbers=1` and `columnNumbers=2` will match only the cell single at location (1, 2).
+    + Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are affected by the match mode.  All other arguments are not.
+
+`findCells()` is typically used for conditional formatting, as illustrated in the next section.
 
 ### Comparing to `getCells()`
 

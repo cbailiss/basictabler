@@ -778,72 +778,136 @@ TableCells <- R6::R6Class("TableCells",
      return(invisible(cells))
    },
 
-   # TODO
-   findCells = function(rowNumbers=NULL, columnNumbers=NULL,
-                        minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE) {
-     if(private$p_parentTable$argumentCheckMode > 0) {
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", minValue, missing(minValue), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", maxValue, missing(maxValue), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", exactValues, missing(exactValues), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", listElementsMustBeAtomic=TRUE)
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", includeNull, missing(includeNull), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
-       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", includeNA, missing(includeNA), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
-     }
-     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$findCells", "Finding cells...")
-     matches <- list()
-     if(length(private$p_rows) > 0) {
-       for(r in 1:length(private$p_rows)) {
-         # a) row number tests
-         if(!is.null(rowNumbers)) {
-           if(!(r %in% rowNumbers)) next
-         }
-         if(length(private$p_rows[[r]]) > 0) {
-           for(c in 1:length(private$p_rows[[r]])) {
-             # b) column number tests
-             if(!is.null(columnNumbers)) {
-               if(!(c %in% columnNumbers)) next
-             }
-             cell <- private$p_rows[[r]][[c]]
-             if(is.null(cell)) next
-             rowColFilters <- cell$rowColFilters
-             # c) value tests:  is null, NA, minValue, maxValue, exactValues
-             if(is.null(cell$rawValue)) {
-               if(includeNull==FALSE) next
-             }
-             else if(length(cell$rawValue)==0) {
-               if(includeNull==FALSE) next
-             }
-             else {
-               if(is.na(cell$rawValue)) {
-                 if(includeNA==FALSE) next
-               }
-               else {
-                 if((!is.null(minValue))||(!is.null(maxValue))) {
-                   cls <- class(cell$rawValue)
-                   if(("integer" %in% cls)||("numeric" %in% cls)) {
-                     if(!is.null(minValue)) {
-                       if(cell$rawValue < minValue) next
+   #' @description
+   #' Find cells matching specified criteria.
+   #' See the "Finding and Formatting" vignette for graphical examples.
+   #' @param minValue A numerical value specifying a minimum value threshold.
+   #' @param maxValue A numerical value specifying a maximum value threshold.
+   #' @param exactValues A vector or list specifying a set of allowed values.
+   #' @param valueRanges A vector specifying one or more value range expressions which
+   #' the cell values must match.  If multiple value range expressions are specified,
+   #' then the cell value must match any of one the specified expressions.
+   #' @param includeNull Specify TRUE to include `NULL` in the matched cells,
+   #' FALSE to exclude `NULL` values.
+   #' @param includeNA Specify TRUE to include `NA` in the matched cells,
+   #' FALSE to exclude `NA` values.
+   #' @param emptyCells A word that specifies how empty cells are matched -
+   #' must be one of "include" (default), "exclude" or "only".
+   #' @param rowNumbers A vector of row numbers that specify the rows or
+   #' cells to constrain the search.
+   #' @param columnNumbers A vector of column numbers that specify the columns
+   #' or cells to constrain the search.
+   #' @param cellCoordinates A list of two-element vectors that specify the
+   #' coordinates of cells to constrain the search.
+   #' @param cells A `TableCell` object or a list of `TableCell`
+   #' objects to constrain the scope of the search.
+   #' @param rowColumnMatchMode Either "simple" (default) or "combinations":\cr
+   #' "simple" specifies that row and column arguments are considered separately
+   #' (logical OR), e.g. rowNumbers=1 and columnNumbers=2 will match all cells in
+   #' row 1 and all cells in column 2.\cr
+   #' "combinations" specifies that row and column arguments are considered together
+   #' (logical AND), e.g. rowNumbers=1 and columnNumbers=2 will match only the
+   #' cell single at location (1, 2).\cr
+   #' Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are
+   #' affected by the match mode.  All other arguments are not.
+   #' @return A list of `TableCell` objects.
+   findCells = function(minValue=NULL, maxValue=NULL, exactValues=NULL, valueRanges=NULL, includeNull=TRUE, includeNA=TRUE, emptyCells="include",
+                        rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL, cells=NULL, rowColumnMatchMode="simple") {
+      if(private$p_parentTable$argumentCheckMode > 0) {
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", minValue, missing(minValue), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", maxValue, missing(maxValue), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", exactValues, missing(exactValues), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer","numeric", "character", "logical", "date", "Date", "POSIXct", "list"), listElementsMustBeAtomic=TRUE)
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", valueRanges, missing(valueRanges), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", includeNull, missing(includeNull), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", includeNA, missing(includeNA), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", emptyCells, missing(emptyCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("include", "exclude", "only"))
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", cellCoordinates, missing(cellCoordinates), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("integer", "numeric"))
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", cells, missing(cells), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("TableCell", "list"), allowedListElementClasses="TableCell")
+         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "findCells", rowColumnMatchMode, missing(rowColumnMatchMode), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("simple", "combinations"))
+      }
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$findCells", "Finding cells...")
+      if("TableCell" %in% class(cells)) cells <- list(cells)
+      cellInstanceIds <- NULL
+      if((length(rowNumbers)>0)||(length(columnNumbers)>0)|(length(cellCoordinates)>0)) {
+         exclEmptyCells <- FALSE
+         if(emptyCells=="exclude") exclEmptyCells <- TRUE
+         constrainingCells <- self$getCells(specifyCellsAsList=TRUE, excludeEmptyCells=exclEmptyCells,
+                                            rowNumbers=rowNumbers, columnNumbers=columnNumbers, cellCoordinates=cellCoordinates,
+                                            matchMode=rowColumnMatchMode)
+         cellInstanceIds <- as.integer(sapply(constrainingCells, function(x) { x$instanceId }))
+      }
+      if(length(cells)>0) {
+         cellInstanceIds <- union(cellInstanceIds, as.integer(sapply(cells, function(x) { x$instanceId })))
+      }
+      # do the searching
+      matches <- list()
+      if(length(private$p_rows) > 0) {
+         for(r in 1:length(private$p_rows)) {
+            if(length(private$p_rows[[r]]) > 0) {
+               for(c in 1:length(private$p_rows[[r]])) {
+                  cell <- private$p_rows[[r]][[c]]
+                  # a) check missing cells
+                  cellIsEmpty <- is.null(cell)
+                  if((emptyCells=="exclude")&&(cellIsEmpty==TRUE)) next
+                  if((emptyCells=="only")&&(cellIsEmpty==FALSE)) next
+                  # b) check if one of allowed cells
+                  if(length(cellInstanceIds)>0) {
+                     if(!(cell$instanceId %in% cellInstanceIds)) next
+                  }
+                  # g) value tests:  is null, NA, minValue, maxValue, exactValues
+                  if(is.null(cell$rawValue)) {
+                     if(includeNull==FALSE) next
+                     if((emptyCells=="exclude")&&(cellIsEmpty==TRUE)) next
+                     if((emptyCells=="only")&&(cellIsEmpty==FALSE)) next
+                  }
+                  else if(length(cell$rawValue)==0) {
+                     if(includeNull==FALSE) next
+                     if((emptyCells=="exclude")&&(cellIsEmpty==TRUE)) next
+                     if((emptyCells=="only")&&(cellIsEmpty==FALSE)) next
+                  }
+                  else {
+                     if(is.na(cell$rawValue)) {
+                        if(includeNA==FALSE) next
                      }
-                     if(!is.null(maxValue)) {
-                       if(cell$rawValue > maxValue) next
+                     else {
+                        if((!is.null(minValue))||(!is.null(maxValue))) {
+                           cls <- class(cell$rawValue)
+                           if(("integer" %in% cls)||("numeric" %in% cls)) {
+                              if(!is.null(minValue)) {
+                                 if(cell$rawValue < minValue) next
+                              }
+                              if(!is.null(maxValue)) {
+                                 if(cell$rawValue > maxValue) next
+                              }
+                           }
+                           else next
+                        }
+                        if(!is.null(exactValues)) {
+                           if(!(cell$rawValue %in% exactValues)) next
+                        }
                      }
-                   }
-                   else next
-                 }
-                 if(!is.null(exactValues)) {
-                   if(!(cell$rawValue %in% exactValues)) next
-                 }
+                  }
+                  # h) value range expressions
+                  if(length(valueRanges)>0) {
+                     vreMatch <- FALSE
+                     for (vre in valueRanges) {
+                        if(vreIsMatch(vre, cell$rawValue)) {
+                           vreMatch <- TRUE
+                           break
+                        }
+                     }
+                     if(!vreMatch) next
+                  }
+                  # is a match
+                  matches[[length(matches)+1]] <- cell
                }
-             }
-             # is a match
-             matches[[length(matches)+1]] <- cell
-           }
+            }
          }
-       }
-     }
-     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$findCells", "Found cells.")
-     return(invisible(matches))
+      }
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$findCells", "Found cells.")
+      return(invisible(matches))
    },
 
    #' @description
