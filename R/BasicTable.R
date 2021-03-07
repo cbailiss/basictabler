@@ -1070,10 +1070,10 @@ BasicTable <- R6::R6Class("BasicTable",
     #' @param rawValue `FALSE` (default) outputs the formatted (character) values.
     #' Specify `TRUE` to output the raw cell values.
     #' @param stringsAsFactors Specify `TRUE` to convert strings to factors,
-    #' default is currently `default.stringsAsFactors()`, though this will change
-    #' to `FALSE` in a future version of R.
+    #' default is `default.stringsAsFactors()` for R < 4.1.0 and `FALSE`
+    #' for R >= 4.1.0.
     #' @return A matrix.
-    asDataFrame = function(firstRowAsColumnNames=FALSE, firstColumnAsRowNames=FALSE, rawValue=FALSE, stringsAsFactors=default.stringsAsFactors()) {
+    asDataFrame = function(firstRowAsColumnNames=FALSE, firstColumnAsRowNames=FALSE, rawValue=FALSE, stringsAsFactors=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "asDataFrame", firstRowAsColumnNames, missing(firstRowAsColumnNames), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "asDataFrame", firstColumnAsRowNames, missing(firstColumnAsRowNames), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
@@ -1083,6 +1083,24 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asDataFrame", "Getting table as a data frame...",
                     list(includeHeaders=includeHeaders, rawValue=rawValue))
       if(is.null(private$p_cells)) stop("BasicTable$asDataFrame():  No cells exist to retrieve.", call. = FALSE)
+      # stringsAsFactors default depends on the version of R...
+      if(is.null(stringsAsFactors)) {
+        if(getRversion() < "4.0.0") {
+          # old version, retain existing behaviour with no warning
+          stringsAsFactors <- default.stringsAsFactors()
+        }
+        else if (getRversion() < "4.1.0") {
+          stringsAsFactors <- default.stringsAsFactors()
+          # generate a warning if the default is TRUE as this will change to FALSE in future
+          if(stringsAsFactors) {
+            warning("PivotTable$asTidyDataFrame(): In a future version of R, default.stringsAsFactors() will be deprecated and removed, at which time the 'stringsAsFactors' argument will default to FALSE.  Explictly set the 'stringsAsFactors' argument to remove this warning.")
+          }
+        }
+        else {
+          # default to FALSE for R 4.1.0 onwards
+          stringsAsFactors <- FALSE
+        }
+      }
       # size the data frame
       rowCount <- private$p_cells$rowCount
       columnCount <- private$p_cells$columnCount

@@ -1,7 +1,19 @@
+basictabler 1.0.0
+================
+
+This is mostly a maintenance release that also polishes a few features.
+
+Breaking Changes
+----------------
+
+From R 4.1.0, the default value of the `stringsAsFactors` argument in `tbl$asDataFrame()` changes to FALSE due to the deprecation of `default.stringsAsFactors()`.  When the package is used on versions of R < 4.1.0, the package behaviour is unchanged.  When the package used on R 4.0.x versions, a warning message is displayed about the change in future behaviour. 
+
+
+
 basictabler 0.3.1
 ================
 
-This is a maintenance release that fixes a couple of compatibility issues around the new default of stringsAsFactors=FALSE in data.frame() in the upcoming R 4.0.0 release.
+This is a maintenance release that fixes a couple of compatibility issues around the new default of `stringsAsFactors=FALSE` in data.frame() in the upcoming R 4.0.0 release.
 
 
 basictabler 0.3.0
