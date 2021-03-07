@@ -485,9 +485,9 @@ BasicTable <- R6::R6Class("BasicTable",
 
     #' @description
     #' Merge table cells by specifying either:\cr
-    #' The top left cell (rFrom, cFrom) and the merged cell size (rSpan, cSpan),
-    #' or\cr
-    #' The top left cell (rFrom, cFrom) and bottom-right cell (rTo, cTo).
+    #' The top left cell (rFrom, cFrom) and the merged cell size (rSpan, cSpan) or,
+    #' The top left cell (rFrom, cFrom) and bottom-right cell (rTo, cTo), or
+    #' The ranges of rows/columns as vectors using rowNumbers and columnNumbers.
     #' @param rFrom The row-number of the top-left cell being merged.
     #' @param cFrom The column number of the top-left cell being merged.
     #' @param rSpan The number of rows that the merged cell spans.
@@ -511,20 +511,20 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merging cells...", list(rFrom=rFrom, cFrom=cFrom, rSpan=rSpan, cSpan=cSpan, rTo=rTo, cTo=cTo, rowNumbers=rowNumbers, columnNumbers=columnNumbers))
       # determine the top-left cell
       if(is.null(rFrom)) rFrom <- min(rowNumbers)
-      if(is.null(rFrom)) stop("BasicTable$mergeCells(): The row number of the top-left cell of the cells to be merge must be specified (using rFrom or rowNumbers).", call. = FALSE)
+      if(is.null(rFrom)) stop("BasicTable$mergeCells(): The row number of the top-left cell of the cells to be merged must be specified (using rFrom or rowNumbers).", call. = FALSE)
       if(is.null(cFrom)) cFrom <- min(columnNumbers)
-      if(is.null(cFrom)) stop("BasicTable$mergeCells(): The column number of the top-left cell of the cells to be merge must be specified (using cFrom or columnNumbers).", call. = FALSE)
+      if(is.null(cFrom)) stop("BasicTable$mergeCells(): The column number of the top-left cell of the cells to be merged must be specified (using cFrom or columnNumbers).", call. = FALSE)
       # determine the bottom-right cell
       if(is.null(rTo)) {
         if(!is.null(rSpan)) rTo <- rFrom + rSpan - 1
         else rTo <- max(rowNumbers)
       }
-      if(is.null(rTo)) stop("BasicTable$mergeCells(): The row number of the bottom-right cell of the cells to be merge must be specified (using rTo or rowNumbers, or indirectly via rSpan).", call. = FALSE)
+      if(is.null(rTo)) stop("BasicTable$mergeCells(): The row number of the bottom-right cell of the cells to be merged must be specified (using rTo or rowNumbers, or indirectly via rSpan).", call. = FALSE)
       if(is.null(cTo)) {
         if(!is.null(cSpan)) cTo <- cFrom + cSpan - 1
         else cTo <- max(columnNumbers)
       }
-      if(is.null(cTo)) stop("BasicTable$mergeCells(): The column number of the bottom-right cell of the cells to be merge must be specified (using cTo or columnNumbers, or indirectly via cSpan).", call. = FALSE)
+      if(is.null(cTo)) stop("BasicTable$mergeCells(): The column number of the bottom-right cell of the cells to be merged must be specified (using cTo or columnNumbers, or indirectly via cSpan).", call. = FALSE)
       # determine the span
       if(is.null(rSpan)) rSpan <- rTo - rFrom + 1
       if(is.null(cSpan)) cSpan <- cTo - cFrom + 1
