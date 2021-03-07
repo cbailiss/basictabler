@@ -593,6 +593,7 @@ The `tbl$setStyling()` function is used in the example above.  This function has
 
 * `rFrom` and `cFrom` are the coordinates of the cell where the styling is to be applied.  If the styling is being applied to multiple cells, this is the top-left cell in the rectangular cell range where the styling is to be applied.
 * `rTo` and `cTo`  are the coordinates of the bottom right cell when styling is being applied to a rectangular range of cells.  If styling is only being applied to a single cell, these arguments are not needed. 
+* `rowNumbers` and `columnNumbers` are integer vectors of row and/or column numbers specifying where the styling is to be applied.  If both `rowNumbers` and `columnNumbers` are specified, then the cells at the intersection of the specified row numbers and column numbers are styled.
 * `cells` is a list of cells to apply styling to.  Either `rFrom`/`cFrom` or `cells` is typically specified - not both.
 * `baseStyleName` is the name of a style in the table theme to apply to the specified cells.  Set this explicitly to NULL to revert to the default style specified in the table theme.
 * `style` is a `TableStyle` override object to apply to the specified cells.  This is created by calling `tbl$createInlineStyle()` as shown in the example above.

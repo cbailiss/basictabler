@@ -17,6 +17,7 @@ Improvements
 ----------------
 
 * The `tbl$mergecells()` method gains new parameters `rowNumbers` and `columnNumbers` to allow vectors to be used to specify the range of cells to be merged.
+* `pt$setStyling()` gains new integer/numeric vector arguments `rowNumbers` and/or `columnNumbers`.  It is now also possible to specify only a set of row numbers and then all cells in those rows will be styled (and similarly for column numbers).  Previously, if only row numbers or only column numbers were specified, then no cells would be styled.  Users who require the old logic can specify the argument `compatibility=list(legacySetStylingRowColumnNumbers=TRUE)` when calling `PivotTable$new()`.
 
 
 basictabler 0.3.1

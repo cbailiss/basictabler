@@ -734,12 +734,15 @@ BasicTable <- R6::R6Class("BasicTable",
     #' @param declarations CSS style declarations to apply in the form of a list,
     #' e.g. `list("font-weight"="bold", "color"="#0000FF")`
     #' @return No return value.
-    setStyling = function(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL, cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL) {
+    setStyling = function(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL, rowNumbers=NULL, columnNumbers=NULL,
+                          cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rFrom, missing(rFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cFrom, missing(cFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rTo, missing(rTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cTo, missing(cTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "PivotTable", "setStyling", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "PivotTable", "setStyling", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cells, missing(cells), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("list", "TableCell"), allowedListElementClasses="TableCell")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
@@ -747,29 +750,77 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Setting styling...")
       if(missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of baseStyleName, style or declarations.", call. = FALSE) }
+      # style a cell or list of cells
       if(!is.null(cells)) {
         if("TableCell" %in% class(cells)) {
           cells <- list(cells)
         }
-        for(i in 1:length(cells)) {
-          cell <- cells[[i]]
-          if(!is.null(cell)) {
-            if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
-            if(!missing(style)) { cell$style <- ifelse(is.null(style, NULL, style$getCopy())) }
-            if((!missing(declarations))&&(!is.null(declarations))) {
-              if (is.null(cell$style)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
-              else { cell$style$setPropertyValues(declarations) }
+        if(length(cells)>0) {
+          for(i in 1:length(cells)) {
+            cell <- cells[[i]]
+            if(!is.null(cell)) {
+              if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
+              if(!missing(style)) { cell$style <- ifelse(is.null(style, NULL, style$getCopy())) }
+              if((!missing(declarations))&&(!is.null(declarations))) {
+                if (is.null(cell$style)) { cell$style <- TableStyle$new(parentTable=self, declarations=declarations) }
+                else { cell$style$setPropertyValues(declarations) }
+              }
             }
           }
         }
       }
-      if((!is.null(rFrom))&&(!is.null(cFrom))) {
-        if(is.null(rTo)) rTo <- rFrom
-        if(is.null(cTo)) cTo <- cFrom
-        if(rTo<rFrom) { stop("BasicTable$setStyling():  rTo must be greater than or equal to rFrom.", call. = FALSE) }
-        if(cTo<cFrom) { stop("BasicTable$setStyling():  cTo must be greater than or equal to cFrom.", call. = FALSE) }
-        for(r in rFrom:rTo) {
-          for(c in cFrom:cTo) {
+      # styling cells by coordinates...
+      styleCells <- FALSE
+      rowCount <- self$rowCount
+      columnCount <- self$columnCount
+      ## switch to use the option legacy coordinates (this ignores the rowNumbers and columnNumbers parameters)
+      if(isTRUE(private$p_compatibility$legacySetStylingRowColumnNumbers)) {
+        if((!is.null(rFrom))&&(!is.null(cFrom))) {
+          if(is.null(rTo)) rTo <- rFrom
+          if(is.null(cTo)) cTo <- cFrom
+          if(rTo<rFrom) { stop("BasicTable$setStyling():  rTo must be greater than or equal to rFrom.", call. = FALSE) }
+          if(cTo<cFrom) { stop("BasicTable$setStyling():  cTo must be greater than or equal to cFrom.", call. = FALSE) }
+          rowNumbers <- rFrom:rTo
+          columnNumbers <- cFrom:cTo
+          styleCells <- TRUE
+        }
+      }
+      else {
+        ## check if a single cell has been specified
+        if((length(rowNumbers)==0)&&(length(columnNumbers)==0)&&
+           (!is.null(rFrom))&&(!is.null(cFrom))&&(is.null(rTo))&&(is.null(cTo))) {
+          rowNumbers <- rFrom
+          columnNumbers <- cFrom
+        }
+        else
+        {
+          # specifying a range of cells
+          if((length(rowNumbers)>0)||(!is.null(rFrom))||(!is.null(rTo))) {
+            if(length(rowNumbers)==0) rowNumbers <- 1:max(rowCount, 1)
+            if(!is.null(rFrom)) rowNumbers <- rowNumbers[rowNumbers >= min(rFrom)]
+            if(!is.null(rTo)) rowNumbers <- rowNumbers[rowNumbers <= max(rTo)]
+          }
+          if((length(columnNumbers)>0)||(!is.null(cFrom))||(!is.null(cTo))) {
+            if(length(columnNumbers)==0) columnNumbers <- 1:max(columnCount, 1)
+            if(!is.null(cFrom)) columnNumbers <- columnNumbers[columnNumbers >= min(cFrom)]
+            if(!is.null(cTo)) columnNumbers <- columnNumbers[columnNumbers <= max(cTo)]
+          }
+        }
+        styleCells <- (length(rowNumbers)>0)||(length(columnNumbers)>0)
+      }
+      if(styleCells==TRUE) {
+        if(is.null(private$p_cells)) stop("BasicTable$setStyling():  No cells exist in the table.", call. = FALSE)
+        # set defaults for other axes
+        if((length(rowNumbers)==0)&&(length(columnNumbers)>0)) rowNumbers <- 1:rowCount
+        if((length(rowNumbers)>0)&&(length(columnNumbers)==0)) columnNumbers <- 1:columnCount
+        # silently remove invalid row/column numbers
+        if(min(rowNumbers)<1) rowNumbers <- rowNumbers[rowNumbers >= 1]
+        if(max(rowNumbers)>rowCount) rowNumbers <- rowNumbers[rowNumbers <= rowCount]
+        if(min(columnNumbers)<1) columnNumbers <- columnNumbers[columnNumbers >= 1]
+        if(max(columnNumbers)>columnCount) columnNumbers <- columnNumbers[columnNumbers <= columnCount]
+        # style cells
+        for(r in rowNumbers) {
+          for(c in columnNumbers) {
             cell <- self$cells$getCell(r, c)
             if(!is.null(cell)) {
               if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
@@ -782,6 +833,7 @@ BasicTable <- R6::R6Class("BasicTable",
           }
         }
       }
+
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Set styling.")
     },
 
