@@ -620,13 +620,63 @@ TableCells <- R6::R6Class("TableCells",
      return(invisible())
    },
 
-   # TODO
-   getCells = function(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL) {
+   #' @description
+   #' Retrieve cells by a combination of row and/or column numbers.
+   #' See the "Finding and Formatting" vignette for graphical examples.
+   #' @details
+   #' When `specifyCellsAsList=TRUE` (the default):\cr
+   #' Get one or more rows by specifying the row numbers as a vector as
+   #' the rowNumbers argument and leaving the columnNumbers argument set
+   #' to the default value of `NULL`, or\cr
+   #' Get one or more columns by specifying the column numbers as a vector
+   #' as the columnNumbers argument and leaving the rowNumbers argument
+   #' set to the default value of `NULL`, or\cr
+   #' Get one or more individual cells by specifying the cellCoordinates
+   #' argument as a list of vectors of length 2, where each element in the
+   #' list is the row and column number of one cell,\cr
+   #' e.g. `list(c(1, 2), c(3, 4))` specifies two cells, the first located
+   #' at row 1, column 2 and the second located at row 3, column 4.\cr
+   #' When `specifyCellsAsList=FALSE`:\cr
+   #' Get one or more rows by specifying the row numbers as a vector as the
+   #' rowNumbers argument and leaving the columnNumbers argument set to the
+   #' default value of `NULL`, or\cr
+   #' Get one or more columns by specifying the column numbers as a vector
+   #' as the columnNumbers argument and leaving the rowNumbers argument set
+   #' to the default value of `NULL`, or\cr
+   #' Get one or more cells by specifying the row and column numbers as vectors
+   #' for the rowNumbers and columnNumbers arguments, or\cr
+   #' a mixture of the above, where for entire rows/columns the element in the
+   #' other vector is set to `NA`, e.g. to retrieve whole rows, specify the row
+   #' numbers as the rowNumbers but set the corresponding elements in the
+   #' columnNumbers vector to `NA`.
+   #' @param specifyCellsAsList `TRUE`/`FALSE` to specify how cells are retrieved.
+   #' Default `TRUE`. More information is provided in the details section.
+   #' @param rowNumbers A vector of row numbers that specify the rows or
+   #' cells to retrieve.
+   #' @param columnNumbers A vector of row numbers that specify the columns
+   #' or cells to retrieve.
+   #' @param cellCoordinates A list of two-element vectors that specify the
+   #' coordinates of cells to retrieve.  Ignored when `specifyCellsAsList=FALSE`.
+   #' @param excludeEmptyCells Default `FALSE`.  Specify `TRUE` to exclude empty
+   #' cells.
+   #' @param matchMode Either "simple" (default) or "combinations"\cr
+   #' "simple" specifies that row and column arguments are considered separately
+   #' (logical OR), e.g. rowNumbers=1 and columnNumbers=2 will match all cells in
+   #' row 1 and all cells in column 2.\cr
+   #' "combinations" specifies that row and column arguments are considered together
+   #' (logical AND), e.g. rowNumbers=1 and columnNumbers=2 will match only the
+   #' cell single at location (1, 2).\cr
+   #' Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are
+   #' affected by the match mode.  All other arguments are not.
+   #' @return A list of `TableCell` objects.
+   getCells = function(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL, excludeEmptyCells=FALSE, matchMode="simple") {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getCells", specifyCellsAsList, missing(specifyCellsAsList), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getCells", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getCells", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getCells", cellCoordinates, missing(cellCoordinates), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("integer", "numeric"))
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getCells", excludeEmptyCells, missing(excludeEmptyCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getCells", matchMode, missing(matchMode), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("simple", "combinations"))
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$getCells", "Getting cells...")
      if(specifyCellsAsList==FALSE) {
@@ -675,23 +725,6 @@ TableCells <- R6::R6Class("TableCells",
          stop("TableCells$getCells():  When specifyCellsAsList=TRUE, rowNumbers/columnNumbers should not contain NA and cell coordinates should be specified using the specifyCellsAsList argument.  Please see the \"Finding and Formatting\" vignette for more details.", call. = FALSE)
        }
      }
-     # if no rows, columns or cells specified, then return all cells
-     cells <- list()
-     if(is.null(rowNumbers)&&is.null(columnNumbers)&&(length(cellCoordinates)==0)) {
-       if(length(private$p_rows) > 0) {
-         for(r in 1:length(private$p_rows)) {
-           if(length(private$p_rows[[r]]) > 0) {
-             for(c in 1:length(private$p_rows[[r]])) {
-               if(length(private$p_rows[[r]]) < c) next
-               cell <- private$p_rows[[r]][[c]]
-               cells[[length(cells)+1]] <- cell
-             }
-           }
-         }
-       }
-       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$getCells", "Got cells.")
-       return(invisible(cells))
-     }
      # check the row and column coordinates
      if(length(rowNumbers[rowNumbers > self$rowCount])>0) {
        stop("TableCells$getCells():  All rowNumbers should be less than or equal to the row count in the table.", call. = FALSE)
@@ -711,21 +744,35 @@ TableCells <- R6::R6Class("TableCells",
        stop("TableCells$getCells():  All column numbers in cellCoordinates should be less than or equal to the column count in the table.", call. = FALSE)
      }
      # iterate the cells and return
+     cells <- list()
      if(length(private$p_rows) > 0) {
-       for(r in 1:length(private$p_rows)) {
-         if(length(private$p_rows[[r]]) > 0) {
-           for(c in 1:length(private$p_rows[[r]])) {
-             if(length(private$p_rows[[r]]) < c) next
-             rowMatch <- sum(r==rowNumbers) > 0
-             columnMatch <- sum(c==columnNumbers) > 0
-             cellMatch <- sum((r==cellRowNumbers)&(c==cellColumnNumbers)) > 0
-             if(rowMatch||columnMatch||cellMatch) {
-               cell <- private$p_rows[[r]][[c]]
-               cells[[length(cells)+1]] <- cell
-             }
+        for(r in 1:length(private$p_rows)) {
+           if(length(private$p_rows[[r]]) > 0) {
+              for(c in 1:length(private$p_rows[[r]])) {
+                 if(length(private$p_rows[[r]]) < c) next
+                 rowMatch <- sum(r==rowNumbers) > 0
+                 columnMatch <- sum(c==columnNumbers) > 0
+                 cellMatch <- sum((r==cellRowNumbers)&(c==cellColumnNumbers)) > 0
+                 isMatch <- FALSE
+                 if(matchMode=="simple") {
+                    isMatch <- rowMatch||columnMatch||cellMatch
+                 }
+                 else if(matchMode=="combinations") {
+                    noRowCriteria <- (length(rowNumbers)==0)&&(length(rowGrpsRowNumbers)==0)
+                    noColCriteria <- (length(columnNumbers)==0)&&(length(columnGrpsColumnNumbers)==0)
+                    netRowMatch <- noRowCriteria||rowMatch
+                    netColMatch <- noColCriteria||columnMatch
+                    isMatch <- (netRowMatch&&netColMatch)||cellMatch
+                 }
+                 if(isMatch) {
+                    cell <- private$p_rows[[r]][[c]]
+                    cellIsEmpty <- is.null(cell$rawValue)
+                    if(excludeEmptyCells && cellIsEmpty) next
+                    cells[[length(cells)+1]] <- cell
+                 }
+              }
            }
-         }
-       }
+        }
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$getCells", "Got cells.")
      return(invisible(cells))

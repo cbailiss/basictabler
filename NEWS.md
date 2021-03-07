@@ -1,10 +1,12 @@
 basictabler 1.0.0
 ================
 
-This is mostly a maintenance release that also polishes a few features.
+This release includes one potentially breaking change and some small enhancements across various parts of the package.
 
 Breaking Changes
 ----------------
+
+**stringsAsFactors in R 4.0.x and 4.1.x**
 
 From R 4.1.0, the default value of the `stringsAsFactors` argument in `tbl$asDataFrame()` changes to FALSE due to the deprecation of `default.stringsAsFactors()`.  When the package is used on versions of R < 4.1.0, the package behaviour is unchanged.  When the package used on R 4.0.x versions, a warning message is displayed about the change in future behaviour. 
 
@@ -18,6 +20,8 @@ Improvements
 
 * The `tbl$mergecells()` method gains new parameters `rowNumbers` and `columnNumbers` to allow vectors to be used to specify the range of cells to be merged.
 * `pt$setStyling()` gains new integer/numeric vector arguments `rowNumbers` and/or `columnNumbers`.  It is now also possible to specify only a set of row numbers and then all cells in those rows will be styled (and similarly for column numbers).  Previously, if only row numbers or only column numbers were specified, then no cells would be styled.  Users who require the old logic can specify the argument `compatibility=list(legacySetStylingRowColumnNumbers=TRUE)` when calling `PivotTable$new()`.
+* `tbl$getCells()` also gains a new `excludeEmptyCells` argument making it easier to exclude cells containing no values.  See the "Finding and Formatting" vignette for details.
+* `tbl$getCells()` also gains a new `matchMode` argument making it easier to retrieve cells based on combinations of row and column criteria.  See the "Finding and Formatting" vignette for details.
 
 
 basictabler 0.3.1

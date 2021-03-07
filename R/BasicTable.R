@@ -883,7 +883,7 @@ BasicTable <- R6::R6Class("BasicTable",
     #' other vector is set to `NA`, e.g. to retrieve whole rows, specify the row
     #' numbers as the rowNumbers but set the corresponding elements in the
     #' columnNumbers vector to `NA`.
-    #' @param specifyCellsAsList `TRUE` to specify how cells are retrieved.
+    #' @param specifyCellsAsList Specify how cells are retrieved.
     #' Default `TRUE`. More information is provided in the details section.
     #' @param rowNumbers A vector of row numbers that specify the rows or
     #' cells to retrieve.
@@ -903,17 +903,19 @@ BasicTable <- R6::R6Class("BasicTable",
     #' Arguments `rowNumbers` and `columnNumbers` are
     #' affected by the match mode.  All other arguments are not.
     #' @return A list of `TableCell` objects.
-    getCells = function(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL) {
+    getCells = function(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL, excludeEmptyCells=FALSE, matchMode="simple") {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", specifyCellsAsList, missing(specifyCellsAsList), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", cellCoordinates, missing(cellCoordinates), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", excludeEmptyCells, missing(excludeEmptyCells), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", matchMode, missing(matchMode), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("simple", "combinations"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$getCells", "Getting cells...")
       if(is.null(private$p_cells)) stop("BasicTable$getCells():  No cells exist to retrieve.", call. = FALSE)
-      # need to miss the specifyCellsAsList argument out if it is missing here, so the warning message is generated
-      cells <- private$p_cells$getCells(specifyCellsAsList=specifyCellsAsList, rowNumbers=rowNumbers, columnNumber=columnNumbers, cellCoordinates=cellCoordinates)
+      cells <- private$p_cells$getCells(specifyCellsAsList=specifyCellsAsList, rowNumbers=rowNumbers, columnNumbers=columnNumbers,
+                                        cellCoordinates=cellCoordinates, excludeEmptyCells=excludeEmptyCells, matchMode=matchMode)
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$getCells", "Got cells.")
       return(invisible(cells))
     },

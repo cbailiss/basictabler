@@ -56,7 +56,19 @@ tbl$renderTable()
 
 ## Getting Cells By Row and/or Column Numbers
 
-The `getCells()` function can be used to retrieve one or more cells by row/column number in the body of the table.  The arguments can be specified in two different ways depending on the value of the `specifyCellsAsList` argument.  The `specifyCellsAsList` can have the values `TRUE` or `FALSE`, `TRUE` is the default value. 
+The `getCells()` function can be used to retrieve one or more cells by row/column number in the body of the table. This function has the following parameters:
+
+- `specifyCellsAsList` - a logical value, usage and default value described below.
+- `rowNumbers` - an integer vector specifying row numbers.
+- `columnNumbers` - an integer vector specifying column numbers.
+- `cellCoordinates` - a list of two-element vectors that specify the coordinates of cells to retrieve.  Ignored when `specifyCellsAsList=FALSE`.
+- `excludeEmptyCells` - a logical value that specifies whether cells with no value should be excluded, default `TRUE`.
+- `matchMode` - either "simple" or "combinations".
+    + "simple" specifies that row and column arguments are considered separately (logical OR), e.g. `rowNumbers=1` and `columnNumbers=2` will match all cells in row 1 and all cells in column 2.
+    + "combinations" specifies that row and column arguments are considered together (logical AND), e.g. `rowNumbers=1` and `columnNumbers=2` will match only the cell single at location (1, 2).
+    + Arguments `rowNumbers` and `columnNumbers` are affected by the match mode.  All other arguments are not. 
+
+The arguments can be specified in two different ways depending on the value of the `specifyCellsAsList` argument.  The `specifyCellsAsList` can have the values `TRUE` or `FALSE`, `TRUE` is the default value. 
 
 The `getCells()` function returns a list of cell objects.
 
