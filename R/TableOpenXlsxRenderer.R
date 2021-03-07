@@ -1,16 +1,17 @@
-#' A class that renders a table into an Excel worksheet.
+#' R6 class that renders a table into an Excel worksheet.
 #'
-#' The TableOpenXlsxRenderer class creates a representation of a table in an Excel file using the openxlsx package.
+#' @description
+#' The `TableOpenXlsxRenderer` class creates a representation of a table in an
+#' Excel file using the `openxlsx` package.  See the Excel Output vignette for
+#' more details.
 #'
 #' @docType class
 #' @importFrom R6 R6Class
-#' @import htmltools
-#' @return Object of \code{\link{R6Class}} with properties and methods that
-#'   render to Excel via the openxlsx package
+#' @import openxlsx
 #' @format \code{\link{R6Class}} object.
 #' @examples
-#' # This class should not be used by end users.  It is an internal class
-#' # created only by the BasicTable class.  It is used when rendering to Excel.
+#' # This class is for internal use only.  It is
+#' # created only by the BasicTable class when rendering to Excel.
 #' library(basictabler)
 #' tbl <- qtbl(data.frame(a=1:2, b=3:4))
 #' library(openxlsx)
@@ -20,27 +21,14 @@
 #'                          topRowNumber=1, leftMostColumnNumber=1,
 #'                          applyStyles=TRUE, mapStylesFromCSS=TRUE)
 #' # Use saveWorkbook() to save the Excel file.
-#' @field parentTable Owning table.
-
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For more complete explanations and examples please see
-#'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(...)}}{Create a new table renderer, specifying the
-#'   field value documented above.}
-#'
-#'   \item{\code{writeToCell(wb=NULL, wsName=NULL, rowNumber=NULL,
-#'   columnNumber=NULL, value=NULL, applyStyles=TRUE, baseStyleName=NULL,
-#'   style=NULL, mapFromCss=TRUE)}}{Writes a value to a cell and applies styling
-#'   as needed.}
-#'   \item{\code{writeToWorksheet(wb=NULL, wsName=NULL, topRowNumber=NULL,
-#'   leftMostColumnNumber=NULL, outputValuesAs="value", applyStyles=TRUE,
-#'   mapStylesFromCSS=TRUE)}}{Output the table into the specified workbook
-#'   and worksheet at the specified row-column location.}
-#' }
 
 TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
   public = list(
+
+    #' @description
+    #' Create a new `TableOpenXlsxRenderer` object.
+    #' @param parentTable Owning table.
+    #' @return No return value.
     initialize = function(parentTable) {
       if(parentTable$argumentCheckMode > 0) {
         checkArgument(parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
@@ -50,6 +38,32 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
       private$p_styles <- TableOpenXlsxStyles$new(parentTable=private$p_parentTable)
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableOpenXlsxRenderer$new", "Created new OpenXlsx Renderer.")
     },
+
+    #' @description
+    #' Write a value to a cell, optionally with styling and cell merging.
+    #' @param wb A workbook object from the openxlsx package.
+    #' @param wsName The name of the worksheet where the value is to be written.
+    #' @param rowNumber The row number of the cell where the value is to be
+    #'   written.
+    #' @param columnNumber The column number of the cell where the value is to be
+    #'   written.
+    #' @param value The value to be written.
+    #' @param applyStyles `TRUE` (default) to also set the styling of the cell,
+    #'   `FALSE` to only write the value.
+    #' @param baseStyleName The name of the style from the table theme to apply
+    #'   to the cell.
+    #' @param style A `TableStyle` object that contains additional styling to
+    #'   apply to the cell.
+    #' @param mapFromCss `TRUE` (default) to map the basictabler CSS styles to
+    #'   corresponding Excel styles, `FALSE` to apply only the specified xl
+    #'   styles.
+    #' @param mergeRows If the cell is to be merged with adjacent cells, then an
+    #'   integer or numeric vector specifying the row numbers of the merged
+    #'   cell.  NULL (default) to not merge cells.
+    #' @param mergeColumns If the cell is to be merged with adjacent cells, then
+    #'   an integer or numeric vector specifying the column numbers of the
+    #'   merged cell.  NULL (default) to not merge cells.
+    #' @return No return value.
     writeToCell = function(wb=NULL, wsName=NULL, rowNumber=NULL, columnNumber=NULL, value=NULL, applyStyles=TRUE, baseStyleName=NULL, style=NULL, mapFromCss=TRUE, mergeRows=NULL, mergeColumns=NULL) {
        if(private$p_parentTable$argumentCheckMode > 0) {
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToCell", wb, missing(wb), allowMissing=TRUE, allowNull=TRUE, allowedClasses="Workbook")
@@ -104,6 +118,24 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
       }
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableOpenXlsxRenderer$writeToWorksheet", "Written to cell.")
     },
+
+    #' @description
+    #' Write a table to an Excel worksheet.
+    #' @param wb A workbook object from the openxlsx package.
+    #' @param wsName The name of the worksheet where the value is to be written.
+    #' @param topRowNumber The row number of the top-left cell where the table
+    #'   is to be written.
+    #' @param leftMostColumnNumber The column number of the top-left cell where
+    #'   the table is to be written.
+    #' @param outputValuesAs Specify whether the raw or formatted values should
+    #'   be written to the worksheet.  Value must be one of "rawValue",
+    #'   "formattedValueAsText", "formattedValueAsNumber".
+    #' @param applyStyles `TRUE` (default) to also set the styling of the cells,
+    #'   `FALSE` to only write the value.
+    #' @param mapStylesFromCSS `TRUE` (default) to map the basictabler CSS styles to
+    #'   corresponding Excel styles, `FALSE` to apply only the specified xl
+    #'   styles.
+    #' @return No return value.
     writeToWorksheet = function(wb=NULL, wsName=NULL, topRowNumber=NULL, leftMostColumnNumber=NULL, outputValuesAs="rawValue", applyStyles=TRUE, mapStylesFromCSS=TRUE) {
       if(private$p_parentTable$argumentCheckMode > 0) {
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", wb, missing(wb), allowMissing=TRUE, allowNull=TRUE, allowedClasses="Workbook")

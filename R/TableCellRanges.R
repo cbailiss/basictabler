@@ -1,41 +1,25 @@
-#' A class that manages cell ranges (e.g. for merged cells).
+#' R6 class that manages cell ranges (e.g. for merged cells).
 #'
-#' The TableCellRanges class contains a list of cell ranges and provides
+#' @description
+#' The `TableCellRanges` class contains a list of cell ranges and provides
 #' basic utility methods such as finding intersecting ranges to support
-#' the functioning of the BasicTable class.
+#' the functioning of the `BasicTable` class.
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
-#' @export
-#' @return Object of \code{\link{R6Class}} with properties and methods that help
-#'   manage cell ranges.
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # TableCellRanges objects are never created outside of the BasicTable class.
 #' # For examples of working with merged cells, see the Introduction vignette.
-#' @field parentTable Owning table.
-#' @field ranges A list of cell ranges.
-
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For more complete explanations and examples please see
-#'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(...)}}{Create a new object to manage cell ranges.}
-#'
-#'   \item{\code{addRange(rFrom, cFrom, rSpan=NULL, cSpan=NULL, rTo=NULL,
-#'   cTo=NULL)}}{Add a cell range to the list of cell ranges.}
-#'   \item{\code{findIntersectingRange(rFrom, cFrom, rSpan=NULL, cSpan=NULL,
-#'   rTo=NULL, cTo=NULL)}}{Find a cell range that intersects with the
-#'   specified cell range.}
-#'   \item{\code{deleteRange(r, c)}}{Delete the cell range covering the
-#'   specified cell.}
-#'   \item{\code{asList()}}{Get a list representation of this style.}
-#'   \item{\code{asJSON()}}{Get a JSON representation of this style.}
-#' }
 
 TableCellRanges <- R6::R6Class("TableCellRanges",
   public = list(
+
+    #' @description
+    #' Create a new `TableCellRanges` object.
+    #' @param parentTable Owning table.
+    #' @return No return value.
     initialize = function(parentTable) {
       if(parentTable$argumentCheckMode > 0) {
         checkArgument(parentTable$argumentCheckMode, FALSE, "TableCellRanges", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
@@ -45,6 +29,19 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       private$p_ranges <- list()
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$new", "Created new Table Cell Ranges.")
     },
+
+    #' @description
+    #' Add a cell range to the list of cell ranges.  It is not
+    #' necessary to specify all parameters. rFrom and cFrom must be specified.
+    #' Only one of rSpan and rTo needs to be specified. Only one of cSpan and
+    #' cTo needs to be specified.
+    #' @param rFrom Row number of the top-left cell in the cell range.
+    #' @param cFrom Column number of the top-left cell in the cell range.
+    #' @param rSpan Number of rows spanned by the cell range.
+    #' @param cSpan Number of columns spanned by the cell range.
+    #' @param rTo Row number of the bottom-right cell in the cell range.
+    #' @param cTo Column number of the bottom-right cell in the cell range.
+    #' @return No return value.
     addRange = function(rFrom=NULL, cFrom=NULL, rSpan=NULL, cSpan=NULL, rTo=NULL, cTo=NULL) {
       if(private$p_parentTable$argumentCheckMode > 0) {
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCellRanges", "addRange", rFrom, missing(rFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
@@ -62,6 +59,19 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$addRange", "Added range.")
       return(invisible(range))
     },
+
+    #' @description
+    #' Find a cell range in the list of cell ranges that intersects with the
+    #' specified cell range. It is not necessary to specify all parameters.
+    #' rFrom and cFrom must be specified. Only one of rSpan and rTo needs to be
+    #' specified. Only one of cSpan and cTo needs to be specified.
+    #' @param rFrom Row number of the top-left cell in the cell range.
+    #' @param cFrom Column number of the top-left cell in the cell range.
+    #' @param rSpan Number of rows spanned by the cell range.
+    #' @param cSpan Number of columns spanned by the cell range.
+    #' @param rTo Row number of the bottom-right cell in the cell range.
+    #' @param cTo Column number of the bottom-right cell in the cell range.
+    #' @return No return value.
     findIntersectingRange = function(rFrom=NULL, cFrom=NULL, rSpan=NULL, cSpan=NULL, rTo=NULL, cTo=NULL) {
       if(private$p_parentTable$argumentCheckMode > 0) {
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCellRanges", "findIntersectingRange", rFrom, missing(rFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
@@ -89,6 +99,12 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$findIntersectingRange", "Searched for intersecting range.")
       return(invisible(NULL))
     },
+
+    #' @description
+    #' Delete the cell range from the list that contains the specified cell.
+    #' @param r Row number of a cell in the cell range to be deleted.
+    #' @param cFrom Column number of a cell in the cell range to be deleted.
+    #' @return No return value.
     deleteRange = function(r=NULL, c=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$deleteRange", "Deleting range...", list(r=r, c=c))
       rangeIndex <- self$findIntersectingRange(rFrom=r, cFrom=c, rSpan=1, cSpan=1)
@@ -98,11 +114,19 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$deleteRange", "Deleted range.", list(rangeIndex=rangeIndex))
       return(invisible(!is.null(rangeIndex))) # returns TRUE if range found and deleted
     },
+
+    #' @description
+    #' Clear the list of cell ranges.
+    #' @return No return value.
     clear = function() {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$clear", "Clearing ranges...")
       private$p_ranges <- list()
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$clear", "Cleared ranges.")
     },
+
+    #' @description
+    #' Internal use only.
+    #' @return No return value.
     updateAfterRowInsert = function(r=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowInsert", "Updating...", list(r=r))
       if(length(private$p_ranges) > 0) {
@@ -121,6 +145,10 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowInsert", "Updated.")
       return(invisible())
     },
+
+    #' @description
+    #' Internal use only.
+    #' @return No return value.
     updateAfterRowDelete = function(r=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowDelete", "Updating...", list(r=r))
       if(length(private$p_ranges) > 0) {
@@ -147,6 +175,10 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowDelete", "Updated.")
       return(invisible())
     },
+
+    #' @description
+    #' Internal use only.
+    #' @return No return value.
     updateAfterColumnInsert = function(c=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnInsert", "Updating...", list(c=c))
       if(length(private$p_ranges) > 0) {
@@ -165,6 +197,10 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnInsert", "Updated.")
       return(invisible())
     },
+
+    #' @description
+    #' Internal use only.
+    #' @return No return value.
     updateAfterColumnDelete = function(c=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnDelete", "Updating...", list(c=c))
       if(length(private$p_ranges) > 0) {
@@ -191,15 +227,25 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnDelete", "Updated.")
       return(invisible())
     },
+
+    #' @description
+    #' Return the contents of this object as a list for debugging.
+    #' @return A list of various object properties.
     asList = function() {
       lst <- list(
         ranges = private$p_ranges
       )
       return(invisible(lst))
     },
+
+    #' @description
+    #' Return the contents of this object as JSON for debugging.
+    #' @return A JSON representation of various object properties.
     asJSON = function() { return(jsonlite::toJSON(asList())) }
   ),
   active = list(
+    #' @field ranges A list of cell ranges - where each element in the list is
+    #'   another list containing the range extent.
     ranges = function(value) { return(invisible(private$p_ranges)) }
   ),
   private = list(

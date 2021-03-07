@@ -1,6 +1,7 @@
-#' A class that defines a basic table.
+#' R6 class that defines a basic table.
 #'
-#' The BasicTable class represents a table with styling and formatting that can
+#' @description
+#' The `BasicTable` class represents a table with styling and formatting that can
 #' be rendered to multiple output formats.
 #'
 #' @docType class
@@ -9,8 +10,6 @@
 #' @import htmltools
 #' @import jsonlite
 #' @export
-#' @return Object of \code{\link{R6Class}} with properties and methods that
-#'   define a basic table.
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # The package vignettes have many more examples of working with the
@@ -44,97 +43,40 @@
 #'   firstColumnAsRowHeaders=TRUE,
 #'   explicitColumnHeaders=columnHeaders, columnFormats=columnFormats)
 #' tbl$renderTable()
-#' @field argumentCheckMode A number (0-4 meaning none, minimal, basic,
-#'   balanced, full) indicating the argument checking level.
-#' @field traceEnabled A logical value indicating whether actions are logged to
-#'   a trace file.
-#' @field rowCount The number of rows in the table.
-#' @field columnCount The number of columns in the table.
-#' @field cells A TableCells object containing all of the cells in the body of
-#'   the table.
-#' @field theme The name of the theme currently applied to the table.
-#' @field styles A TableStyles object containing the styles used to theme the
-#'   table.
-#' @field allowExternalStyles Enable support for external styles, when producing
-#'   content for external systems.
-#' @field allTimings The time taken for various activities related to
-#'   constructing the table.
-#' @field significantTimings The time taken for various activities related to
-#'   constructing the table, where the elapsed time > 0.1 seconds.
-
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For more complete explanations and examples please see
-#'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(argumentCheckMode="auto", theme=NULL,
-#'   replaceExistingStyles=FALSE, tableStyle=NULL, headingStyle=NULL,
-#'   cellStyle=NULL, totalStyle=NULL, compatibility=NULL, traceEnabled=FALSE,
-#'   traceFile=NULL)}}{Create a new table, optionally specifying the name of a
-#'   built in theme or CSS style declarations for the different cells within the
-#'   table.}
-#'   \item{\code{addData(dataFrame=NULL, columnNamesAsColumnHeaders=TRUE,
-#'   explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
-#'   firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL,
-#'   baseStyleNames=NULL)}}{Generate the table from a data frame, specifying
-#'   headers and value formatting.}
-#'   \item{\code{addMatrix(matrix=NULL, columnNamesAsColumnHeaders=TRUE,
-#'   explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
-#'   explicitRowHeaders=NULL, columnFormats=NULL,
-#'   baseStyleNames=NULL)}}{Generate the table from a matrix, specifying headers
-#'   and value formatting.l}
-#'   \item{\code{mergeCells(rFrom, cFrom, rSpan=NULL, cSpan=NULL,
-#'   rTo=NULL, cTo=NULL)}}{Merge cells in the table.  This does not delete
-#'   the other cells covered by the merged cell.  When the table is output, the
-#'   top-left most cell in the merged cell range is rendered over the other
-#'   cells (which are effectively hidden).}
-#'   \item{\code{unmergeCells(r, c, errorIfNotFound=TRUE)}}{Delete a merged cell
-#'   range by specifying any of the cells covered by the merged cell.}
-#'   \item{\code{applyCellMerges()}}{Updates the isMerged, isMergeRoot and
-#'   mergeIndex properties of the cells.}
-#'   \item{\code{formatValue(value=NULL, format=NULL)}}{Format a value for
-#'   display, using either sprintf(), format() or a custom formatting function.}
-#'   \item{\code{addStyle(styleName, declarations)}}{Define a new TableStyle and
-#'   add it to the TableStyles collection.}
-#'   \item{\code{createInlineStyle(baseStyleName, declarations)}}{Create a
-#'   TableStyle object that can be used to style individual cells in the table.}
-#'   \item{\code{setStyling(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL,
-#'   cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL)}}{Set the
-#'   style settings across a range of cells.}
-#'   \item{\code{resetCells()}}{Clear the cells of the table.}
-#'   \item{\code{getCells(specifyCellsAsList=TRUE, rowNumbers=NULL,
-#'   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
-#'   of row and/or column numbers.}
-#'   \item{\code{findCells(rowNumbers=NULL, columnNumbers=NULL,
-#'   minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE,
-#'   includeNA=TRUE)}}{Find cells in the body of the table matching
-#'   the specified criteria.}
-#'   \item{\code{print(asCharacter=FALSE)}}{Either print the table to the
-#'   console or retrieve it as a character value.}
-#'   \item{\code{asMatrix(firstRowAsColumnNames=FALSE,
-#'   firstColumnAsRowNames=FALSE, rawValue=FALSE)}}{Gets the table as
-#'   a matrix, with or without headings.}
-#'   \item{\code{asDataFrame(firstRowAsColumnNames=FALSE,
-#'   firstColumnAsRowNames=FALSE, rawValue=FALSE, stringsAsFactors)}}{
-#'   Gets the table as a data frame, with or without headings.}
-#'   \item{\code{getCss(styleNamePrefix)}}{Get the CSS declarations for the
-#'   entire table.}
-#'   \item{\code{getHtml(styleNamePrefix)}}{Get the HTML representation of the
-#'   table, specifying the CSS style name prefix to use.}
-#'   \item{\code{saveHtml(filePath, fullPageHTML=TRUE, styleNamePrefix)}}{Save
-#'   the HTML representation of the table to a file.}
-#'   \item{\code{renderTable(width, height, styleNamePrefix)}}{Render the table
-#'   as a htmlwidget.}
-#'   \item{\code{writeToExcelWorksheet(wb=NULL, wsName=NULL, topRowNumber=NULL,
-#'   leftMostColumnNumber=NULL, mapStylesFromCSS=TRUE)}}{Output the table
-#'   into the specified workbook and worksheet at the specified row-column
-#'   location.}
-#'   \item{\code{asList()}}{Get a list representation of the table.}
-#'   \item{\code{asJSON()}}{Get a JSON representation of the table.}
-#'   \item{\code{viewJSON()}}{View the JSON representation of the table.}
-#' }
 
 BasicTable <- R6::R6Class("BasicTable",
   public = list(
+
+    #' @description
+    #' Create a new `BasicTable` object.
+    #' @param argumentCheckMode The level of argument checking to perform.
+    #' Must be one of "auto", "none", "minimal", "basic", "balanced" (default)
+    #' or "full".
+    #' @param theme A theme to use to style the table. Either:\cr
+    #' (1) The name of a built in theme, or\cr
+    #' (2) A list of simple style settings, or\cr
+    #' (3) A `TableStyles` object containing a full set of styles.\cr
+    #' See the "Styling" vignette for many examples.
+    #' @param replaceExistingStyles Default `FALSE` to retain existing styles in
+    #' the styles collection and add specified styles as new custom styles.
+    #' Specify `TRUE` to update the definitions of existing styles.
+    #' @param tableStyle Styling to apply to the table.  Either:\cr
+    #' (1) The name of a built in style, or\cr
+    #' (2) A list of CSS style declarations, e.g.\cr
+    #' `list("font-weight"="bold", "color"="#0000FF")`, or\cr
+    #' (3) A `TableStyle` object.
+    #' @param headingStyle Styling to apply to the headings.
+    #' See the `tableStyle` argument for details.
+    #' @param cellStyle Styling to apply to the normal cells.
+    #' See the `tableStyle` argument for details.
+    #' @param totalStyle Styling to apply to the total cells.
+    #' See the `tableStyle` argument for details.
+    #' @param compatibility A list containing compatibility options to force
+    #' legacy behaviours.  See the NEWS file for details.
+    #' @param traceEnabled Default `FALSE`.  Specify `TRUE` to generate a trace
+    #' for debugging purposes.
+    #' @param traceFile If tracing is enabled, the location to generate the trace file.
+    #' @return No return value.
     initialize = function(argumentCheckMode="auto", theme=NULL, replaceExistingStyles=FALSE,
                           tableStyle=NULL, headingStyle=NULL, cellStyle=NULL, totalStyle=NULL,
                           compatibility=NULL, traceEnabled=FALSE, traceFile=NULL) {
@@ -274,6 +216,26 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$new", "Created new Basic Table.")
       return(invisible())
     },
+
+    #' @description
+    #' Populate the table from a data frame, specifying headers and value
+    #'   formatting.
+    #' @param dataFrame The data frame to generate the table from.
+    #' @param columnNamesAsColumnHeaders `TRUE` to use the data frame column names
+    #'   as column headings in the table.  Default value `TRUE.`
+    #' @param explicitColumnHeaders A character vector of column names to use as
+    #'   column headings in the table.
+    #' @param rowNamesAsRowHeaders `TRUE` to use the data frame row names as row
+    #'   headings in the table.  Default value `FALSE.`
+    #' @param firstColumnAsRowHeaders `TRUE` to use the first column in the data
+    #'   frame as row headings in the table.  Default value `FALSE.`
+    #' @param explicitRowHeaders A character vector of row names to use as row
+    #'   headings in the table.
+    #' @param columnFormats A character, list or custom function to format the
+    #'   calculation values.
+    #' @param baseStyleNames A character vector of style names (from the table
+    #'   theme) used to style the column values.
+    #' @return No return value.
     addData = function(dataFrame=NULL,
                        columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
                        rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
@@ -389,6 +351,26 @@ BasicTable <- R6::R6Class("BasicTable",
       private$addTiming(paste0("addData()"), timeStart)
       return(invisible())
     },
+
+    #' @description
+    #' Populate the table from a matrix, specifying headers and value
+    #'   formatting.
+    #' @param matrix The matrix to generate the table from.
+    #' @param columnNamesAsColumnHeaders `TRUE` to use the matrix column names
+    #'   as column headings in the table.  Default value `TRUE.`
+    #' @param explicitColumnHeaders A character vector of column names to use as
+    #'   column headings in the table.
+    #' @param rowNamesAsRowHeaders `TRUE` to use the matrix row names as row
+    #'   headings in the table.  Default value `FALSE.`
+    #' @param firstColumnAsRowHeaders `TRUE` to use the first column in the matrix
+    #'   as row headings in the table.  Default value `FALSE.`
+    #' @param explicitRowHeaders A character vector of row names to use as row
+    #'   headings in the table.
+    #' @param columnFormats A character, list or custom function to format the
+    #'   calculation values.
+    #' @param baseStyleNames A character vector of style names (from the table
+    #'   theme) used to style the column values.
+    #' @return No return value.
     addMatrix = function(matrix=NULL,
                        columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
                        rowNamesAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL, baseStyleNames=NULL) {
@@ -500,6 +482,19 @@ BasicTable <- R6::R6Class("BasicTable",
       private$addTiming(paste0("addMatrix()"), timeStart)
       return(invisible())
     },
+
+    #' @description
+    #' Merge table cells by specifying either:\cr
+    #' The top left cell (rFrom, cFrom) and the merged cell size (rSpan, cSpan),
+    #' or\cr
+    #' The top left cell (rFrom, cFrom) and bottom-right cell (rTo, cTo).
+    #' @param rFrom The row-number of the top-left cell being merged.
+    #' @param cFrom The column number of the top-left cell being merged.
+    #' @param rSpan The number of rows that the merged cell spans.
+    #' @param cSpan The number of columns that the merged cell spans.
+    #' @param rTo The row-number of the bottom-right cell being merged.
+    #' @param cTo The column-number of the bottom-right cell being merged.
+    #' @return No return value.
     mergeCells = function(rFrom=NULL, cFrom=NULL, rSpan=NULL, cSpan=NULL, rTo=NULL, cTo=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "mergeCells", rFrom, missing(rFrom), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
@@ -524,6 +519,15 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Merged cells.")
       return(invisible())
     },
+
+    #' @description
+    #' Unmerge a set of merged cells by specifying any cell within the set of
+    #' merged cells.
+    #' @param r The row number of any cell within the merged cell.
+    #' @param c The column number of any cell within the merged cell.
+    #' @param errorIfNotFound `TRUE` to ignore any attempt to unmerge a cell that
+    #'   is not merged.  Default value `TRUE.`
+    #' @return A new `TableCell` object.
     unmergeCells = function(r=NULL, c=NULL, errorIfNotFound=TRUE) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "unmergeCells", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
@@ -537,6 +541,11 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mergeCells", "Unmerged cells.")
       return(invisible())
     },
+
+    #' @description
+    #' Internal method that sets the `isMerged` and `mergeIndex` properties on
+    #' each cell based on the cell merges that have been specified.
+    #' @return No return value.
     applyCellMerges = function() {
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$applyCellMerges", "Applying cell merges...")
       # clear existing cell merge info
@@ -573,6 +582,16 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$applyCellMerges", "Applied cell merges.")
       return(invisible())
     },
+
+    #' @description
+    #' Format a value using a variety of different methods.
+    #' @param value The value to format.
+    #' @param format Either a character format string to be used with `sprintf()`,
+    #' a list of arguments to be used with `base::format()` or a custom R function
+    #' which will be invoked once per value to be formatted.
+    #' @return The formatted value if `format` is specified, otherwise the `value`
+    #' converted to a character value.
+    #' @return No return value.
     formatValue = function(value=NULL, format=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "formatValue", value, missing(value), allowMissing=FALSE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "complex", "character", "factor", "Date", "POSIXct", "POSIXlt"))
@@ -606,6 +625,13 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$formatValue", "Formated value.")
       return(invisible(value))
     },
+
+    #' @description
+    #' Add a new named style to the table.
+    #' @param styleName The name of the new style.
+    #' @param declarations CSS style declarations in the form of a list, e.g.
+    #' `list("font-weight"="bold", "color"="#0000FF")`
+    #' @return The newly created `TableStyle` object.
     addStyle = function(styleName=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addStyle", styleName, missing(styleName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
@@ -616,6 +642,20 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addStyle", "Added style.")
       return(invisible(style))
     },
+
+    #' @description
+    #' Create an inline style that can be used to override a base style.
+    #' For general use cases, the `setStyling()` method provides a simpler
+    #' and more direct way of styling specific parts of a table.
+    #' @details
+    #' Inline styles are typically used to override the style of some specific
+    #' cells in a table.  Inline styles have no name.
+    #' In HTML, they are rendered as 'style' attributes on specific table cells,
+    #' where as named styles are linked to cells using the 'class' attribute.
+    #' @param baseStyleName The name of an existing style to base the new style on.
+    #' @param declarations CSS style declarations in the form of a list, e.g.
+    #' `list("font-weight"="bold", "color"="#0000FF")`
+    #' @return The newly created `TableStyle` object.
     createInlineStyle = function(baseStyleName=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "createInlineStyle", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
@@ -633,6 +673,44 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$createInlineStyle", "Created inline style.")
       return(invisible(style))
     },
+
+    #' @description
+    #' Apply styling to a set of cells in the table.
+    #' @details
+    #' There are five ways to specify the part(s) of a table to apply
+    #' styling to:\cr
+    #' (1) By specifying a list of data groups using the `groups` argument.\cr
+    #' (2) By specifying a list of cells using the `cells` argument.\cr
+    #' (3) By specifying a single cell using the `rFrom` and `cFrom` arguments.\cr
+    #' (4) By specifying a rectangular cell range using the `rFrom`, `cFrom`,
+    #' `rTo` and `cTo` arguments.\cr
+    #' (5) By specifying a vector of rowNumbers and/or columnNumbers.  If both
+    #' rowNumbers and columnNumbers are specified, then the cells at the
+    #' intersection of the specified row numbers and column numbers are styled.\cr
+    #' If both rFrom/rTo and rowNumbers are specified, then rFrom/rTo constrain
+    #' the row numbers specified in rowNumbers.\cr
+    #' If both cFrom/cTo and columnNumbers are specified, then cFrom/cTo constrain
+    #' the column numbers specified in columnNumbers.\cr
+    #' See the "Styling" and "Finding and Formatting" vignettes for more
+    #' information and many examples.
+    #' @param rFrom An integer row number that specifies the start row for the
+    #' styling changes.
+    #' @param cFrom An integer column number that specifies the start column for the
+    #' styling changes.
+    #' @param rTo An integer row number that specifies the end row for the styling
+    #' changes.
+    #' @param cTo An integer column number that specifies the end column for the
+    #' styling changes.
+    #' @param rowNumbers An integer vector that specifies the row numbers for the
+    #' styling changes.
+    #' @param columnNumbers An integer vector that specifies the column numbers for
+    #' the styling changes.
+    #' @param cells A list containing `TableCell` objects.
+    #' @param baseStyleName The name of a style to apply.
+    #' @param style A `TableStyle` object to apply.
+    #' @param declarations CSS style declarations to apply in the form of a list,
+    #' e.g. `list("font-weight"="bold", "color"="#0000FF")`
+    #' @return No return value.
     setStyling = function(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL, cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rFrom, missing(rFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
@@ -683,6 +761,13 @@ BasicTable <- R6::R6Class("BasicTable",
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Set styling.")
     },
+
+    #' @description
+    #' Clear the cells of the table.
+    #' @details
+    #' The cells are reset automatically when structural changes are made to the
+    #' table, so this method often doesn't needs to be called explicitly.
+    #' @return No return value.
     resetCells = function() {
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$resetCells", "Resetting cells...")
       if(private$p_evaluated==TRUE){
@@ -693,6 +778,56 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$resetCells", "Reset cells.")
       return(invisible())
     },
+
+    #' @description
+    #' Retrieve cells by a combination of row and/or column numbers.
+    #' See the "Finding and Formatting" vignette for graphical examples.
+    #' @details
+    #' When `specifyCellsAsList=TRUE` (the default):\cr
+    #' Get one or more rows by specifying the row numbers as a vector as
+    #' the rowNumbers argument and leaving the columnNumbers argument set
+    #' to the default value of `NULL`, or\cr
+    #' Get one or more columns by specifying the column numbers as a vector
+    #' as the columnNumbers argument and leaving the rowNumbers argument
+    #' set to the default value of `NULL`, or\cr
+    #' Get one or more individual cells by specifying the cellCoordinates
+    #' argument as a list of vectors of length 2, where each element in the
+    #' list is the row and column number of one cell,\cr
+    #' e.g. `list(c(1, 2), c(3, 4))` specifies two cells, the first located
+    #' at row 1, column 2 and the second located at row 3, column 4.\cr
+    #' When `specifyCellsAsList=FALSE`:\cr
+    #' Get one or more rows by specifying the row numbers as a vector as the
+    #' rowNumbers argument and leaving the columnNumbers argument set to the
+    #' default value of `NULL`, or\cr
+    #' Get one or more columns by specifying the column numbers as a vector
+    #' as the columnNumbers argument and leaving the rowNumbers argument set
+    #' to the default value of `NULL`, or\cr
+    #' Get one or more cells by specifying the row and column numbers as vectors
+    #' for the rowNumbers and columnNumbers arguments, or\cr
+    #' a mixture of the above, where for entire rows/columns the element in the
+    #' other vector is set to `NA`, e.g. to retrieve whole rows, specify the row
+    #' numbers as the rowNumbers but set the corresponding elements in the
+    #' columnNumbers vector to `NA`.
+    #' @param specifyCellsAsList `TRUE` to specify how cells are retrieved.
+    #' Default `TRUE`. More information is provided in the details section.
+    #' @param rowNumbers A vector of row numbers that specify the rows or
+    #' cells to retrieve.
+    #' @param columnNumbers A vector of column numbers that specify the columns
+    #' or cells to retrieve.
+    #' @param cellCoordinates A list of two-element vectors that specify the
+    #' coordinates of cells to retrieve.  Ignored when `specifyCellsAsList=FALSE`.
+    #' @param excludeEmptyCells Default `FALSE`.  Specify `TRUE` to exclude empty
+    #' cells.
+    #' @param matchMode Either "simple" (default) or "combinations":\cr
+    #' "simple" specifies that row and column arguments are considered separately
+    #' (logical OR), e.g. rowNumbers=1 and columnNumbers=2 will match all cells in
+    #' row 1 and all cells in column 2.\cr
+    #' "combinations" specifies that row and column arguments are considered together
+    #' (logical AND), e.g. rowNumbers=1 and columnNumbers=2 will match only the
+    #' cell single at location (1, 2).\cr
+    #' Arguments `rowNumbers` and `columnNumbers` are
+    #' affected by the match mode.  All other arguments are not.
+    #' @return A list of `TableCell` objects.
     getCells = function(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "getCells", specifyCellsAsList, missing(specifyCellsAsList), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
@@ -707,6 +842,53 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$getCells", "Got cells.")
       return(invisible(cells))
     },
+
+    #' @description
+    #' Find cells matching specified criteria.
+    #' See the "Finding and Formatting" vignette for graphical examples.
+    #' @details
+    #' The valueRanges parameter can be any of the following
+    #' forms:\cr
+    #' (1) a specific value, e.g. 12.\cr
+    #' (2) a specific value equality condition, e.g. "v==12", where v
+    #' represents the cell value.\cr
+    #' (3) a value range expression using the following abbreviated form:
+    #' "value1<=v<value2", e.g. "10<=v<15".  Only "<" or "<=" can be used
+    #' in these value range expressions.\cr
+    #' (4) a standard R logical expression, e.g.
+    #' "10<=v && v<15".\cr
+    #' Basic R functions that test the value can also be
+    #' used, e.g. is.na(v).\cr
+    #' @param rowNumbers A vector of row numbers that specify the rows or
+    #' cells to constrain the search.
+    #' @param columnNumbers A vector of column numbers that specify the columns
+    #' or cells to constrain the search.
+    #' @param minValue A numerical value specifying a minimum value threshold.
+    #' @param maxValue A numerical value specifying a maximum value threshold.
+    #' @param exactValues A vector or list specifying a set of allowed values.
+    #' @param includeNull specify TRUE to include `NULL` in the matched cells,
+    #' FALSE to exclude `NULL` values.
+    #' @param includeNA specify TRUE to include `NA` in the matched cells,
+    #' FALSE to exclude `NA` values.
+    #' @param valueRanges A vector specifying one or more value range expressions which
+    #' the cell values must match.  If multiple value range expressions are specified,
+    #' then the cell value must match any of one the specified expressions.  See details.
+    #' @param emptyCells A word that specifies how empty cells are matched -
+    #' must be one of "include" (default), "exclude" or "only".
+    #' @param cellCoordinates A list of two-element vectors that specify the
+    #' coordinates of cells to constrain the search.
+    #' @param cells A `TableCell` object or a list of `TableCell`
+    #' objects to constrain the scope of the search.
+    #' @param rowColumnMatchMode Either "simple" (default) or "combinations":\cr
+    #' "simple" specifies that row and column arguments are considered separately
+    #' (logical OR), e.g. rowNumbers=1 and columnNumbers=2 will match all cells in
+    #' row 1 and all cells in column 2.\cr
+    #' "combinations" specifies that row and column arguments are considered together
+    #' (logical AND), e.g. rowNumbers=1 and columnNumbers=2 will match only the
+    #' cell single at location (1, 2).\cr
+    #' Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are
+    #' affected by the match mode.  All other arguments are not.
+    #' @return A list of `TableCell` objects.
     findCells = function(rowNumbers=NULL, columnNumbers=NULL,
                          minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE) {
       if(private$p_argumentCheckMode > 0) {
@@ -725,6 +907,13 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$findCells", "Found cells.")
       return(invisible(cells))
     },
+
+    #' @description
+    #' Outputs a plain text representation of the table to the console or
+    #' returns a character representation of the table.
+    #' @param asCharacter `FALSE` (default) outputs to the console, specify `TRUE`
+    #' to instead return a character value (does not output to console).
+    #' @return Plain text representation of the table.
     print = function(asCharacter=FALSE) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "print", asCharacter, missing(asCharacter), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
@@ -795,6 +984,18 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$print", "Printed.")
       return(invisible(paste0(returnLines, sep="", collapse="\n")))
     },
+
+    #' @description
+    #' Convert the table to a matrix, with or without headings.
+    #' @details
+    #' See the "Outputs" vignette for a comparison of outputs.
+    #' @param firstRowAsColumnNames `TRUE` to use the first row of the table as
+    #'   the column names in the matrix.  Default value `FALSE`.
+    #' @param firstColumnAsRowNames `TRUE` to use the first column of the table
+    #'   as the row names in the matrix.  Default value `FALSE`.
+    #' @param rawValue `FALSE` (default) outputs the formatted (character) values.
+    #' Specify `TRUE` to output the raw cell values.
+    #' @return A matrix.
     asMatrix = function(firstRowAsColumnNames=FALSE, firstColumnAsRowNames=FALSE, rawValue=FALSE) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "asMatrix", firstRowAsColumnNames, missing(firstRowAsColumnNames), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
@@ -857,6 +1058,21 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asMatrix", "Got table as a matrix.")
       return(m)
     },
+
+    #' @description
+    #' Convert the table to a data frame, with or without headings.
+    #' @details
+    #' See the "Outputs" vignette for a comparison of outputs.
+    #' @param firstRowAsColumnNames `TRUE` to use the first row of the table as
+    #'   the column names in the data frame  Default value `FALSE`.
+    #' @param firstColumnAsRowNames `TRUE` to use the first column of the table
+    #'   as the row names in the data frame.  Default value `FALSE`.
+    #' @param rawValue `FALSE` (default) outputs the formatted (character) values.
+    #' Specify `TRUE` to output the raw cell values.
+    #' @param stringsAsFactors Specify `TRUE` to convert strings to factors,
+    #' default is currently `default.stringsAsFactors()`, though this will change
+    #' to `FALSE` in a future version of R.
+    #' @return A matrix.
     asDataFrame = function(firstRowAsColumnNames=FALSE, firstColumnAsRowNames=FALSE, rawValue=FALSE, stringsAsFactors=default.stringsAsFactors()) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "asDataFrame", firstRowAsColumnNames, missing(firstRowAsColumnNames), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
@@ -924,6 +1140,14 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asDataFrame", "Got table as a data frame.")
       return(df)
     },
+
+    #' @description
+    #' Get the CSS declarations for the table.
+    #' @details
+    #' See the "Outputs" vignette for more details and examples.
+    #' @param styleNamePrefix A character variable specifying a prefix for all named
+    #' CSS styles, to avoid style name collisions where multiple tables exist.
+    #' @return A character value containing the CSS style declaration.
     getCss = function(styleNamePrefix=NULL) {
       timeStart <- proc.time()
       if(private$p_argumentCheckMode > 0) {
@@ -942,6 +1166,15 @@ BasicTable <- R6::R6Class("BasicTable",
       private$addTiming("getCss", timeStart)
       return(invisible(styles))
     },
+
+    #' @description
+    #' Generate a HTML representation of the table.
+    #' @details
+    #' See the "Outputs" vignette for more details and examples.
+    #' @param styleNamePrefix A character variable specifying a prefix for all named
+    #' CSS styles, to avoid style name collisions where multiple tables exist.
+    #' @return A list containing HTML tags from the `htmltools` package.
+    #' Convert this to a character variable using `as.character()`.
     getHtml = function(styleNamePrefix=NULL) {
       timeStart <- proc.time()
       if(private$p_argumentCheckMode > 0) {
@@ -954,6 +1187,17 @@ BasicTable <- R6::R6Class("BasicTable",
       private$addTiming("getHtml", timeStart)
       return(invisible(htmlTable))
     },
+
+    #' @description
+    #' Save a HTML representation of the table to file.
+    #' @details
+    #' See the "Outputs" vignette for more details and examples.
+    #' @param filePath The file to save the HTML to.
+    #' @param fullPageHTML `TRUE` (default) includes basic HTML around the
+    #' table HTML so that the result file is a valid HTML file.
+    #' @param styleNamePrefix A character variable specifying a prefix for all named
+    #' CSS styles, to avoid style name collisions where multiple tables exist.
+    #' @return No return value.
     saveHtml = function(filePath=NULL, fullPageHTML=TRUE, styleNamePrefix=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "saveHtml", filePath, missing(filePath), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
@@ -987,6 +1231,16 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$saveHtml", "Saved HTML.")
       return(invisible())
     },
+
+    #' @description
+    #' Render a HTML representation of the table as an HTML widget.
+    #' @details
+    #' See the "Outputs" vignette for more details and examples.
+    #' @param width The width of the widget.
+    #' @param height The height of the widget.
+    #' @param styleNamePrefix A character variable specifying a prefix for all named
+    #' CSS styles, to avoid style name collisions where multiple tables exist.
+    #' @return A HTML widget from the `htmlwidgets` package.
     renderTable = function(width=NULL, height=NULL, styleNamePrefix=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "renderTable", width, missing(width), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
@@ -1011,6 +1265,27 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$renderTable", "Rendered htmlwidget.")
       return(w)
     },
+
+    #' @description
+    #' Write the table into the specified workbook and worksheet at
+    #' the specified row-column location.
+    #' @details
+    #' See the Excel Output vignette for more details.
+    #' @param wb A `Workbook` object representing the Excel file being written
+    #' to.
+    #' @param wsName A character value specifying the name of the worksheet to
+    #' write to.
+    #' @param topRowNumber An integer value specifying the row number in the
+    #' Excel worksheet to write the table.
+    #' @param leftMostColumnNumber An integer value specifying the column number
+    #' in the Excel worksheet to write the table.
+    #' @param outputValuesAs Must be one of "rawValue" (default),
+    #' "formattedValueAsText" or "formattedValueAsNumber" to specify
+    #' how cell values are written into the Excel sheet.
+    #' @param applyStyles Default `TRUE` to write styling information to the cell.
+    #' @param mapStylesFromCSS Default `TRUE` to automatically convert CSS style
+    #' declarations to their Excel equivalents.
+    #' @return No return value.
     writeToExcelWorksheet = function(wb=NULL, wsName=NULL, topRowNumber=NULL, leftMostColumnNumber=NULL, outputValuesAs="rawValue", applyStyles=TRUE, mapStylesFromCSS=TRUE) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", wb, missing(wb), allowMissing=TRUE, allowNull=TRUE, allowedClasses="Workbook")
@@ -1031,6 +1306,14 @@ BasicTable <- R6::R6Class("BasicTable",
                                                   applyStyles=applyStyles, mapStylesFromCSS=mapStylesFromCSS)
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$writeToExcelWorksheet", "Written to worksheet.")
     },
+
+    #' @description
+    #' Capture a call for tracing purposes.
+    #' This is an internal method.
+    #' @param methodName The name of the method being invoked.
+    #' @param desc Short description of method call.
+    #' @param detailList A list containing detail such as parameter values.
+    #' @return No return value.
     trace = function(methodName, desc, detailList=NULL) {
       if(!private$p_traceEnabled) return()
       stackdepth <- length(sys.calls())
@@ -1056,6 +1339,10 @@ BasicTable <- R6::R6Class("BasicTable",
       if(is.null(private$p_traceFile)) { message(msg) }
       else { cat(msg, file=private$p_traceFile, sep="\r\n", append=TRUE)}
     },
+
+    #' @description
+    #' Return the contents of the table as a list for debugging.
+    #' @return A list of various object properties..
     asList = function() {
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asList", "Getting list...")
       lst <- list(
@@ -1065,20 +1352,42 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asList", "Got list.")
       return(lst)
     },
+
+    #' @description
+    #' Return the contents of the table as JSON for debugging.
+    #' @return A JSON representation of various object properties.
     asJSON = function() { return(jsonlite::toJSON(self$asList())) },
+
+    #' @description
+    #' Use the `listviewer` package to view the table as JSON for debugging.
+    #' @return No return value.
     viewJSON = function() {
       if (!requireNamespace("listviewer", quietly = TRUE)) {
         stop("BasicTable$asJSON():  The listviewer package is needed to view the internal structure of the BasicTable as JSON.  Please install it.", call. = FALSE)
       }
       listviewer::jsonedit(self$asList(), mode="code")
     },
+
+    #' @description
+    #' Clean-up the table.
+    #' @return No return value.
     finalize = function() {
       if(!is.null(private$p_traceFile)) close(private$p_traceFile)
     }
   ),
   active = list(
+
+    #' @field argumentCheckMode The level of argument checking to perform.
+    #' One of "auto", "none", "minimal", "basic", "balanced" (default)
+    #' or "full".
     argumentCheckMode = function(value) { return(private$p_argumentCheckMode) },
+
+    #' @field compatibility A list containing compatibility options to force
+    #' legacy behaviours.  See the NEWS file for details.
     compatibility = function(value) { return(private$p_compatibility) },
+
+    #' @field traceEnabled A logical value indicating whether actions are logged to
+    #'   a trace file.
     traceEnabled = function(value){
       if(missing(value)) return(invisible(private$p_traceEnabled))
       else {
@@ -1087,11 +1396,28 @@ BasicTable <- R6::R6Class("BasicTable",
         return(invisible())
       }
     },
+
+    #' @field cells A `TableCells` object containing all of the cells in the body of
+    #'   the table.
     cells = function(value) { return(invisible(private$p_cells)) },
+
+    #' @field cells A `TableCellRanges` object describing the merged cells.
     mergedCells = function(value) { return(invisible(private$p_mergedCells)) },
+
+    #' @field rowCount The number of rows in the table.
     rowCount = function(value) { return(invisible(private$p_cells$rowCount)) },
+
+    #' @field columnCount The number of columns in the table.
     columnCount = function(value) { return(invisible(private$p_cells$columnCount)) },
+
+    #' @field asCharacter The plain-text representation of the table.
     asCharacter = function() { return(self$print(asCharacter=TRUE)) },
+
+    #' @field theme The name of the theme used to style the table.
+    #' If setting this property, either a theme name can be used, or
+    #' a list can be used (which specifies a simple theme) or a
+    #' `TableStyles` object can be used.
+    #' See the "Styling" vignette for details and examples.
     theme = function(value) {
       if(missing(value)) {
         if(is.null(private$p_styles)) return(invisible(NULL))
@@ -1107,6 +1433,9 @@ BasicTable <- R6::R6Class("BasicTable",
         return(invisible())
       }
     },
+
+    #' @field styles A `TableStyles` object containing the styles used to theme the
+    #'   table.
     styles = function(value) {
       if(missing(value)) return(invisible(private$p_styles))
       else {
@@ -1117,6 +1446,13 @@ BasicTable <- R6::R6Class("BasicTable",
         return(invisible())
       }
     },
+
+    #' @field allowExternalStyles Default `FALSE`, which means the `TableStyles`
+    #' object checks that style names specified for styling the different
+    #' parts of the table must exist in the styles collection.  If they do
+    #' not an error will occur.  Specify `TRUE` to disable this check, e.g. if
+    #' the style definitions are not managed by `basictabler` but instead
+    #' in an external system.
     allowExternalStyles = function(value) {
       if(missing(value)) {
         if(is.null(private$p_styles)) return(invisible(NULL))
@@ -1130,6 +1466,9 @@ BasicTable <- R6::R6Class("BasicTable",
         return(invisible())
       }
     },
+
+    #' @field allTimings The time taken for various activities related to
+    #'   constructing the table.
     allTimings = function(value) {
       descriptions <- sapply(private$p_timings, function(x) { return(ifelse(is.null(x$desc), NA, x$desc)) })
       user <- sapply(private$p_timings, function(x) { return(ifelse(is.null(x$time["user.self"]), NA, x$time["user.self"])) })
@@ -1137,6 +1476,9 @@ BasicTable <- R6::R6Class("BasicTable",
       elapsed <- sapply(private$p_timings, function(x) { return(ifelse(is.null(x$time["elapsed"]), NA, x$time["elapsed"])) })
       return(data.frame(action=descriptions, user=user, system=system, elapsed=elapsed))
     },
+
+    #' @field significantTimings The time taken for various activities related to
+    #'   constructing the table, where the elapsed time > 0.1 seconds.
     significantTimings = function(value) {
       df <- self$allTimings
       df <- df[df$elapsed>0.1, ]

@@ -1,49 +1,29 @@
-#' A class that specifies styling.
+#' R6 class that specifies styling.
 #'
-#' The TableStyle class specifies the styling for headers and cells in a
+#' @description
+#' The `TableStyle` class specifies the styling for headers and cells in a
 #' table.  Styles are specified in the form of Cascading Style Sheet (CSS)
 #' name-value pairs.
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
-#' @export
-#' @return Object of \code{\link{R6Class}} with properties and methods that help
-#'   define styles.
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # TableStyle objects are normally created indirectly via one of the helper
 #' # methods.
-#' # For an example, see the TableStyles class.
-#' @field parentTable Owning table.
-#' @field styleName Style unique name.
-#' @field declarations CSS style declarations.
-
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For more complete explanations and examples please see
-#'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(...)}}{Create a new style declaration, specifying the field
-#'   values documented above.}
-#'
-#'   \item{\code{setPropertyValue(property, value)}}{Set a single style
-#'   property.}
-#'   \item{\code{setPropertyValues(declarations)}}{Set multiple style
-#'   properties, where declarations is a list similar to the code example
-#'   below.}
-#'   \item{\code{getPropertyValue(property)}}{Get the style declarations for a
-#'   single property.}
-#'   \item{\code{asCSSRule(selector)}}{Get this style definition in the form of
-#'   a CSS rule.}
-#'   \item{\code{asNamedCSSStyle(styleNamePrefix)}}{Get this style definition in
-#'   the form of a named CSS style.}
-#'   \item{\code{getCopy(newStyleName)}}{Get a copy of this style.}
-#'   \item{\code{asList()}}{Get a list representation of this style.}
-#'   \item{\code{asJSON()}}{Get a JSON representation of this style.}
-#' }
+#' # For an example, see the `TableStyles` class.
 
 TableStyle <- R6::R6Class("TableStyle",
   public = list(
+
+   #' @description
+   #' Create a new `TableStyle` object.
+   #' @param parentTable Owning table.
+   #' @param styleName A unique name for the style.
+   #' @param declarations A list containing CSS style declarations.
+   #' Example: `declarations = list(font="...", color="...")`
+   #' @return No return value.
    initialize = function(parentTable, styleName=NULL, declarations= NULL) { # declarations = list(font="...", color="...")
      if(parentTable$argumentCheckMode > 0) {
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableStyle", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
@@ -68,6 +48,12 @@ TableStyle <- R6::R6Class("TableStyle",
      }
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$new", "Created new Table Style")
    },
+
+   #' @description
+   #' Set the value of a single style property.
+   #' @param property The CSS style property name, e.g. color.
+   #' @param value The value of the style property, e.g. red.
+   #' @return No return value.
    setPropertyValue = function(property=NULL, value=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "setPropertyValue", property, missing(property), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
@@ -78,6 +64,12 @@ TableStyle <- R6::R6Class("TableStyle",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$setPropertyValue", "Set property value.")
      return(invisible())
    },
+
+   #' @description
+   #' Set the values of multiple style properties.
+   #' @param declarations A list containing CSS style declarations.
+   #' Example: `declarations = list(font="...", color="...")`
+   #' @return No return value.
    setPropertyValues = function(declarations=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "setPropertyValues", declarations, missing(declarations), allowMissing=FALSE, allowNull=FALSE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
@@ -94,6 +86,11 @@ TableStyle <- R6::R6Class("TableStyle",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$setPropertyValues", "Set property values.")
      return(invisible())
    },
+
+   #' @description
+   #' Get the value of a single style property.
+   #' @param property The CSS style property name, e.g. color.
+   #' @return No return value.
    getPropertyValue = function(property=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "getPropertyValue", property, missing(property), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
@@ -103,6 +100,11 @@ TableStyle <- R6::R6Class("TableStyle",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$getPropertyValue", "Got property value.")
      return(invisible(val))
    },
+
+   #' @description
+   #' Generate a CSS style rule from this table style.
+   #' @param selector The CSS selector name.  Default value `NULL`.
+   #' @return The CSS style rule, e.g. { text-align: center; color: red; }
    asCSSRule = function(selector=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "asCSSRule", selector, missing(selector), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
@@ -122,6 +124,12 @@ TableStyle <- R6::R6Class("TableStyle",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$asCSSRule", "Got CSS rule.")
      return(invisible(cssRule))
    },
+
+   #' @description
+   #' Generate a named CSS style from this table style.
+   #' @param styleNamePrefix A character variable specifying a prefix for all named
+   #' CSS styles, to avoid style name collisions where multiple tables exist.
+   #' @return The CSS style rule, e.g. cell { text-align: center; color: red; }
    asNamedCSSStyle = function(styleNamePrefix=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "asNamedCSSStyle", styleNamePrefix, missing(styleNamePrefix), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
@@ -133,6 +141,11 @@ TableStyle <- R6::R6Class("TableStyle",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableStyle$asNamedCSSStyle", "Got named CSS rule.")
      return(invisible(cssRule))
    },
+
+   #' @description
+   #' Create a copy of this `TableStyle` object.
+   #' @param newStyleName The name of the new style.
+   #' @return The new `TableStyle` object.
    getCopy = function(newStyleName=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyle", "getCopy", newStyleName, missing(newStyleName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
@@ -140,6 +153,10 @@ TableStyle <- R6::R6Class("TableStyle",
      copy <- TableStyle$new(parentTable=private$p_parentTable, styleName=newStyleName, declarations=private$p_declarations)
      return(invisible(copy))
    },
+
+   #' @description
+   #' Return the contents of this object as a list for debugging.
+   #' @return A list of various object properties.
    asList = function() {
      lst <- list(
        name = private$p_name,
@@ -147,10 +164,20 @@ TableStyle <- R6::R6Class("TableStyle",
      )
      return(invisible(lst))
    },
+
+   #' @description
+   #' Return the contents of this object as JSON for debugging.
+   #' @return A JSON representation of various object properties.
    asJSON = function() { return(jsonlite::toJSON(asList())) }
   ),
   active = list(
+
+    #' @field name The unique name of the style (must be unique among the style
+    #'   names in the table theme).
     name = function(value) { return(invisible(private$p_name)) },
+
+    #' @field declarations A list containing CSS style declarations.
+    #' Example: `declarations = list(font="...", color="...")`
     declarations = function(value) { return(invisible(private$p_declarations)) }
   ),
   private = list(

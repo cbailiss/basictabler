@@ -1,35 +1,27 @@
-#' A class that renders a table in HTML.
+#' R6 class that renders a table in HTML.
 #'
-#' The TableHtmlRenderer class creates a HTML representation of a table.
+#' @description
+#' The `TableHtmlRenderer` class creates a HTML representation of a table.
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import htmltools
-#' @return Object of \code{\link{R6Class}} with properties and methods that
-#'   render to HTML.
 #' @format \code{\link{R6Class}} object.
 #' @examples
-#' # This class should not be used by end users.  It is an internal class
-#' # created only by the BasicTable class.  It is used when rendering to HTML.
+#' # This class is for internal use only.  It is
+#' # created only by the BasicTable class when rendering to HTML.
 #' # See the package vignettes for more information about outputs.
 #' library(basictabler)
 #' tbl <- qtbl(data.frame(a=1:2, b=3:4))
 #' tbl$renderTable()
-#' @field parentTable Owning table.
-
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For more complete explanations and examples please see
-#'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(...)}}{Create a new table renderer, specifying the
-#'   field value documented above.}
-#'
-#'   \item{\code{getTableHtml(styleNamePrefix=NULL)}}{Get a HTML representation
-#'   of the table.}
-#' }
 
 TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
   public = list(
+
+    #' @description
+    #' Create a new `TableHtmlRenderer` object.
+    #' @param parentTable Owning table.
+    #' @return No return value.
    initialize = function(parentTable) {
      if(parentTable$argumentCheckMode > 0) {
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableHtmlRenderer", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
@@ -38,6 +30,13 @@ TableHtmlRenderer <- R6::R6Class("TableHtmlRenderer",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableHtmlRenderer$new", "Creating new Html Renderer...")
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableHtmlRenderer$new", "Created new Html Renderer.")
    },
+
+   #' @description
+   #' Generate a HTML representation of the table.
+   #' @param styleNamePrefix A character variable specifying a prefix for all named
+   #' CSS styles, to avoid style name collisions where multiple tables exist.
+   #' @return A list containing HTML tags from the `htmltools` package.
+   #' Convert this to a character variable using `as.character()`.
    getTableHtml = function(styleNamePrefix=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableHtmlRenderer", "getTableHtml", styleNamePrefix, missing(styleNamePrefix), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")

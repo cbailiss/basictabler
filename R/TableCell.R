@@ -1,13 +1,12 @@
-#' A class that represents a cell in a table
+#' R6 class that represents a cell in a table.
 #'
-#' The TableCell class represents a cell in a table.  Both header cells and body
+#' @description
+#' The `TableCell` class represents a cell in a table.  Both header cells and body
 #' cells are represented by this class.
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
-#' @return Object of \code{\link{R6Class}} with properties and methods that
-#'   define a single table cell
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # This class should only be created by using the functions in the table.
@@ -17,40 +16,31 @@
 #' cell1 <- tbl$cells$setCell(r=4, c=1, cellType="cell", rawValue=5)
 #' cell2 <- tbl$cells$setCell(r=4, c=2, cellType="cell", rawValue=6)
 #' tbl$renderTable()
-#' @field parentTable Owning table.
-#' @field rowNumber The row number of the cell.  1 = the first (i.e. top) data
-#'   row.
-#' @field columnNumber The column number of the cell.  1 = the first (i.e.
-#'   leftmost) data column.
-#' @field cellType One of the following values that specifies the type of cell:
-#' root, rowHeader, columnHeader, cell, total.  The cellType controls the
-#' default styling that is applied to the cell.
-#' @field visible TRUE or FALSE to specify whether the cell is rendered.
-#' @field rawValue The original unformatted value.
-#' @field formattedValue The formatted value (i.e. normally of character data
-#'   type).
-#' @field asNBSP TRUE or FALSE to specify whether cells with no formatted
-#'   value be output as html nbsp.
-#' @field baseStyleName The name of the style applied to this cell (a character
-#'   value).  The style must exist in the TableStyles object associated with the
-#'   table.
-#' @field style A TableStyle object that can apply overrides to the base style
-#'   for this cell.
-
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For more complete explanations and examples please see
-#'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(...)}}{Create a new table cell, specifying the field
-#'   values documented above.}
-#'
-#'   \item{\code{getCopy())}}{Get a copy of this cell.}
-#'   \item{\code{asList())}}{Get a list representation of this cell}
-#'   \item{\code{asJSON()}}{Get a JSON representation of this cell}
-#' }
 
 TableCell <- R6::R6Class("TableCell",
   public = list(
+
+   #' @description
+   #' Create a new `TableCell` object.
+   #' @param parentTable Owning table.
+   #' @param rowNumber The row number of the cell.  1 = the first (i.e. top) data
+   #'   row.
+   #' @param columnNumber The column number of the cell.  1 = the first (i.e.
+   #'   leftmost) data column.
+   #' @param cellType One of the following values that specifies the type of cell:
+   #' root, rowHeader, columnHeader, cell, total.  The cellType controls the
+   #' default styling that is applied to the cell.
+   #' @param visible `TRUE` or `FALSE` to specify whether the cell is rendered.
+   #' @param rawValue The original unformatted value.
+   #' @param formattedValue The formatted value (i.e. normally of character data
+   #'   type).
+   #' @param baseStyleName The name of the style applied to this cell (a character
+   #'   value).  The style must exist in the TableStyles object associated with the
+   #'   table.
+   #' @param styleDeclarations A list containing CSS style declarations.
+   #' @param asNBSP `TRUE` or `FALSE` to specify whether cells with no formatted
+   #'   value be output as html nbsp.
+   #' @return No return value.
    initialize = function(parentTable, rowNumber=NULL, columnNumber=NULL, cellType="cell", visible=TRUE, rawValue=NULL, formattedValue=NULL, baseStyleName=NULL, styleDeclarations=NULL, asNBSP=FALSE) {
      if(parentTable$argumentCheckMode > 0) {
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableCell", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
@@ -78,6 +68,16 @@ TableCell <- R6::R6Class("TableCell",
      if (!is.null(styleDeclarations)) private$p_style = private$p_parentTable$createInlineStyle(baseStyleName=baseStyleName, declarations=styleDeclarations)
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCell$new", "Created new TableCell")
    },
+
+   #' @description
+   #' Set the cell location in the table.  Mainly exists for internal use.
+   #' Typically used after rows/columns/cells are inserted or deleted (which
+   #' shifts other cells).
+   #' @param rowNumber The row number of the cell.  1 = the first (i.e. top) data
+   #'   row.
+   #' @param columnNumber The column number of the cell.  1 = the first (i.e.
+   #'   leftmost) data column.
+   #' @return No return value.
    updatePosition = function(rowNumber=NULL, columnNumber=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCell", "updatePosition", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
@@ -86,10 +86,18 @@ TableCell <- R6::R6Class("TableCell",
      private$p_rowNumber <- rowNumber
      private$p_columnNumber <- columnNumber
    },
+
+   #' @description
+   #' Stub only (ignore).
+   #' @return No return value.
    getCopy = function() {
      copy <- list()
      return(invisible(copy))
    },
+
+   #' @description
+   #' Return the contents of this object as a list for debugging.
+   #' @return A list of various object properties.
    asList = function() {
      lst <- list(
        row=private$p_rowNumber,
@@ -102,9 +110,17 @@ TableCell <- R6::R6Class("TableCell",
      )
      return(invisible(lst))
    },
+
+   #' @description
+   #' Return the contents of this object as JSON for debugging.
+   #' @return A JSON representation of various object properties.
    asJSON = function() { return(jsonlite::toJSON(asList())) }
   ),
   active = list(
+
+   #' @field cellType One of the following values that specifies the type of cell:
+   #' root, rowHeader, columnHeader, cell, total.  The cellType controls the
+   #' default styling that is applied to the cell.
    cellType = function(value) {
      if(missing(value)) return(invisible(private$p_cellType))
      else {
@@ -115,8 +131,16 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field rowNumber The row number of the cell.  1 = the first (i.e. top) data
+   #'   row.
    rowNumber = function(value) { return(invisible(private$p_rowNumber)) },
+
+   #' @field columnNumber The column number of the cell.  1 = the first (i.e.
+   #'   leftmost) data column.
    columnNumber = function(value) { return(invisible(private$p_columnNumber)) },
+
+   #' @field visible TRUE or FALSE to specify whether the cell is rendered.
    visible = function(value) {
      if(missing(value)) return(invisible(private$p_visible))
      else {
@@ -127,6 +151,8 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field rawValue The original unformatted value.
    rawValue = function(value) {
      if(missing(value)) return(invisible(private$p_rawValue))
      else {
@@ -137,6 +163,9 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field formattedValue The formatted value (i.e. normally of character data
+   #'   type).
    formattedValue = function(value) {
      if(missing(value)) return(invisible(private$p_formattedValue))
      else {
@@ -147,6 +176,9 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field asNBSP TRUE or FALSE to specify whether cells with no formatted
+   #'   value be output as html nbsp.
    asNBSP = function(value) {
      if(missing(value)) return(invisible(private$p_asNBSP))
      else {
@@ -157,6 +189,8 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field fValueOrNBSP For internal use by the renderers only.
    fValueOrNBSP = function(value) {
      hasValue <- FALSE
      if(length(private$p_formattedValue)>0)
@@ -168,6 +202,8 @@ TableCell <- R6::R6Class("TableCell",
      }
      else { return(invisible(private$p_formattedValue)) }
    },
+
+   #' @field isMerged For internal use by the renderers only.
    isMerged = function(value) { # for internal use by the renderers only
      if(missing(value)) { return(invisible(private$p_isMerged)) }
      else {
@@ -175,6 +211,8 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field isMergeRoot For internal use by the renderers only.
    isMergeRoot = function(value) { # for internal use by the renderers only
      if(missing(value)) { return(invisible(private$p_isMergeRoot)) }
      else {
@@ -182,6 +220,8 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field mergeIndex For internal use by the renderers only.
    mergeIndex = function(value) { # for internal use by the renderers only
      if(missing(value)) { return(invisible(private$p_mergeIndex)) }
      else {
@@ -189,6 +229,10 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field baseStyleName The name of the style applied to this cell (a character
+   #'   value).  The style must exist in the TableStyles object associated with the
+   #'   table.
    baseStyleName = function(value) {
      if(missing(value)) { return(invisible(private$p_baseStyleName)) }
      else {
@@ -199,6 +243,9 @@ TableCell <- R6::R6Class("TableCell",
        return(invisible())
      }
    },
+
+   #' @field style A TableStyle object that can apply overrides to the base style
+   #'   for this cell.
    style = function(value) {
      if(missing(value)) { return(invisible(private$p_style)) }
      else {

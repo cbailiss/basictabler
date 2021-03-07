@@ -1,13 +1,12 @@
-#' A class that contains the cells from a table.
+#' R6 class that manages cells in a table.
 #'
-#' The TableCells class contains all of the TableCell objects that comprise a
-#' table.
+#' @description
+#' The `TableCells` manages the `TableCell` objects that comprise a
+#' `BasicTable` object.
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
-#' @return Object of \code{\link{R6Class}} with properties and methods relating
-#'   to the cells of a table.
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # This class should only be created by the table.
@@ -18,72 +17,14 @@
 #' cells$setCell(r=4, c=1, cellType="cell", rawValue=5)
 #' cells$setCell(r=4, c=2, cellType="cell", rawValue=6)
 #' tbl$renderTable()
-#' @field parentTable Owning table.
-#' @field rows The rows of cells in the table.
-
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For more complete explanations and examples please see
-#'   the extensive vignettes supplied with this package.}
-#'   \item{\code{new(...)}}{Create a new set of table cells, specifying
-#'   the field values documented above.}
-#'   \item{\code{reset())}}{Clears and removes all of the cells.}
-#'   \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
-#'   column coordinates in the table.}
-#'   \item{\code{getValue(r, c))}}{Get the value at the specified row and
-#'   column coordinates in the table.}
-#'   \item{\code{getRowValues(rowNumber=NULL, columnNumbers=NULL,
-#'   formattedValue=FALSE, asList=FALSE, rebase=TRUE)}}{Get a vector or list of
-#'   the values in a row.}
-#'   \item{\code{getColumnValues(columnNumber=NULL, rowNumbers=NULL,
-#'   formattedValue=FALSE, asList=FALSE, rebase=TRUE)}}{Get a vector or list of
-#'   the values in a column.}
-#'   \item{\code{setCell(r, c, cellType="cell", rawValue=NULL,
-#'   formattedValue=NULL, visible=TRUE, baseStyleName=NULL,
-#'   styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL)}}{Set the details of a
-#'   cell in the table.}
-#'   \item{\code{setBlankCell(r, c, cellType="cell", visible=TRUE,
-#'   baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL,
-#'   colSpan=NULL)}}{Set a cell to be empty in the table.}
-#'   \item{\code{deleteCell(r, c)}}{Remove a cell from the table (replacing it
-#'   with a blank one).}
-#'   \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
-#'   value of a cell.}
-#'   \item{\code{setRow(rowNumber=NULL, startAtColumnNumber=1, cellTypes=NULL,
-#'   rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE,
-#'   baseStyleNames=NULL)}}{Set multiple cells across a row at once.}
-#'   \item{\code{setColumn(columnNumber=NULL, startAtRowNumber=1,
-#'   cellTypes=NULL, rawValues=NULL, formattedValues=NULL, formats=NULL,
-#'   visiblity=TRUE, baseStyleNames=NULL)}}{Set multiple cells down a column at
-#'   once.}
-#'   \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
-#'   \item{\code{moveCell(r, c, cell))}}{Move the cell to the specified row
-#'   and column coordinates in the table.}
-#'   \item{\code{insertRow(rowNumber, insertBlankCells=TRUE, headerCells=1,
-#'   totalCells=0)}}{Insert a new row (moving the rows underneath down), where
-#'   headerCells and totalCells control default styling.}
-#'   \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
-#'   underneath up.}
-#'   \item{\code{insertColumn(columnNumber, insertBlankCells=TRUE,
-#'   headerCells=1, totalCells=0)}}{Insert a new column (moving other columns
-#'   rightwards, where headerCells and totalCells control default styling.}
-#'   \item{\code{deleteColumn(columnNumber=NULL)}}{Delete a column (moving other
-#'   columns leftwards.}
-#'   \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
-#'   columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
-#'   of row and/or column numbers.}
-#'   \item{\code{findCells(rowNumbers=NULL, columnNumbers=NULL, minValue=NULL,
-#'   maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE)}}{Find
-#'   cells matching the specified criteria.}
-#'   \item{\code{getColumnWidths())}}{Retrieve the width of the longest value
-#'   (in characters) in each column.}
-#'   \item{\code{asList())}}{Get a list representation of the table
-#'   cells.}
-#'   \item{\code{asJSON()}}{Get a JSON representation of the table cells.}
-#' }
 
 TableCells <- R6::R6Class("TableCells",
   public = list(
+
+   #' @description
+   #' Create a new `TableCells` object.
+   #' @param parentTable Owning table.
+   #' @return No return value.
    initialize = function(parentTable=NULL) {
      if(parentTable$argumentCheckMode > 0) {
        checkArgument(parentTable$argumentCheckMode, FALSE, "TableCells", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
@@ -94,6 +35,10 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$new", "Creating new TableCells...")
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$new", "Created new TableCells.")
    },
+
+   #' @description
+   #' Clear all cells from the table.
+   #' @return No return value.
    reset = function() {
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$resetCells", "Resetting cells...")
      private$p_rows <- NULL
@@ -101,6 +46,13 @@ TableCells <- R6::R6Class("TableCells",
      private$p_parentTable$mergedCells$clear()
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$resetCells", "Reset cells.")
    },
+
+   #' @description
+   #' Retrieve a specific `TableCell` object at the specified location in the
+   #' table.
+   #' @param r The row number of the cell to retrieve.
+   #' @param c The column number of the cell to retrieve.
+   #' @return A `TableCell` object.
    getCell = function(r=NULL, c=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
@@ -117,6 +69,16 @@ TableCells <- R6::R6Class("TableCells",
      if(length(private$p_rows[[r]]) < c) return(invisible(NULL))
      return(invisible(private$p_rows[[r]][[c]]))
    },
+
+   #' @description
+   #' Retrieve the value of a specific `TableCell` object at the specified
+   #' location in the table.
+   #' @param r The row number of the cell value to retrieve.
+   #' @param c The column number of the cell value to retrieve.
+   #' @param formattedValue `TRUE` to retrieve the formatted (character) cell
+   #'   value, `FALSE` (default) to retrieve the raw cell value (typically
+   #'   numeric).
+   #' @return The value of the cell.
    getValue = function(r=NULL, c=NULL, formattedValue=FALSE) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getValue", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
@@ -128,6 +90,22 @@ TableCells <- R6::R6Class("TableCells",
      if(formattedValue) return(invisible(cell$formattedValue))
      else return(invisible(cell$rawValue))
    },
+
+   #' @description
+   #' Get a vector or list of the values in a row for the entire row or a subset
+   #' of columns.
+   #' @param rowNumber The row number to retrieve the values for (a single row
+   #'   number).
+   #' @param columnNumbers The column numbers of the cell value to retrieve (can
+   #'   be a vector of column numbers).
+   #' @param formattedValue `TRUE` to retrieve the formatted (character) cell
+   #'   value, `FALSE` (default) to retrieve the raw cell value (typically
+   #'   numeric).
+   #' @param asList `TRUE` to retrieve the values as a list, `FALSE` (default)
+   #'   to retrieve the values as a vector.
+   #' @param rebase `TRUE` to rebase the list/vector so that the first element
+   #'   is at index 1, `FALSE` to retain the original column numbers.
+   #' @return A vector or list of the cell values.
    getRowValues = function(rowNumber=NULL, columnNumbers=NULL, formattedValue=FALSE, asList=FALSE, rebase=TRUE) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getRowValues", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
@@ -160,6 +138,22 @@ TableCells <- R6::R6Class("TableCells",
      }
      return(invisible(rv))
    },
+
+   #' @description
+   #' Get a vector or list of the values in a column for the entire column or a
+   #' subset of rows.
+   #' @param columnNumber The column number to retrieve the values for (a single
+   #'   column number).
+   #' @param rowNumbers The row numbers of the cell value to retrieve (can be a
+   #'   vector of row numbers).
+   #' @param formattedValue `TRUE` to retrieve the formatted (character) cell
+   #'   value, `FALSE` (default) to retrieve the raw cell value (typically
+   #'   numeric).
+   #' @param asList `TRUE` to retrieve the values as a list, `FALSE` (default)
+   #'   to retrieve the values as a vector.
+   #' @param rebase `TRUE` to rebase the list/vector so that the first element
+   #'   is at index 1, `FALSE` to retain the original row numbers.
+   #' @return A vector or list of the cell values.
    getColumnValues = function(columnNumber=NULL,rowNumbers=NULL, formattedValue=FALSE, asList=FALSE, rebase=TRUE) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getColumnValues", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
@@ -192,6 +186,28 @@ TableCells <- R6::R6Class("TableCells",
      }
      return(invisible(cv))
    },
+
+   #' @description
+   #' Create a cell in the table and set the details of the cell.
+   #' @param r The row number of the cell.
+   #' @param c The column number of the cell.
+   #' @param cellType The type of the cell - must be one of the following
+   #'   values:  root, rowHeader, columnHeader, cell, total.
+   #' @param rawValue The raw value of the cell - typically a numeric value.
+   #' @param formattedValue The formatted value of the cell - typically a
+   #'   character value.
+   #' @param visible `TRUE` (default) to specify that the cell is visible,
+   #'   `FALSE` to specify that the cell will be invisible.
+   #' @param baseStyleName The name of a style from the table theme that will be
+   #'   used to style this cell.
+   #' @param styleDeclarations A list of CSS style definitions.
+   #' @param rowSpan A number greater than 1 to indicate that this cell is
+   #'   merged with cells below. `NULL` (default) or 1 means the cell is not
+   #'   merged across rows.
+   #' @param colSpan A number greater than 1 to indicate that this cell is
+   #'   merged with cells to the right. `NULL` (default) or 1 means the cell is
+   #'   not merged across columns.
+   #' @return A vector or list of the cell values.
    setCell = function(r=NULL, c=NULL, cellType="cell", rawValue=NULL, formattedValue=NULL, visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -215,6 +231,27 @@ TableCells <- R6::R6Class("TableCells",
      }
      return(invisible(cell))
    },
+
+   #' @description
+   #' Create an empty cell in the table and set the details of the cell.
+   #' @param r The row number of the cell.
+   #' @param c The column number of the cell.
+   #' @param cellType The type of the cell - must be one of the following
+   #'   values:  root, rowHeader, columnHeader, cell, total.
+   #' @param visible `TRUE` (default) to specify that the cell is visible,
+   #'   `FALSE` to specify that the cell will be invisible.
+   #' @param baseStyleName The name of a style from the table theme that will be
+   #'   used to style this cell.
+   #' @param styleDeclarations A list of CSS style definitions.
+   #' @param rowSpan A number greater than 1 to indicate that this cell is
+   #'   merged with cells below. `NULL` (default) or 1 means the cell is not
+   #'   merged across rows.
+   #' @param colSpan A number greater than 1 to indicate that this cell is
+   #'   merged with cells to the right. `NULL` (default) or 1 means the cell is
+   #'   not merged across columns.
+   #' @param asNBSP `TRUE` if the cell should be rendered as &nbsp; in HTML,
+   #'   `FALSE` (default) otherwise.
+   #' @return A vector or list of the cell values.
    setBlankCell = function(r=NULL, c=NULL, cellType="cell", visible=TRUE, baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL, asNBSP=FALSE) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setBlankCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -238,10 +275,26 @@ TableCells <- R6::R6Class("TableCells",
      }
      return(invisible(cell))
    },
+
+   #' @description
+   #' Replace the `TableCell` object at the specified
+   #' location in the table with a blank cell.
+   #' @param r The row number of the cell value to delete
+   #' @param c The column number of the cell value to delete
+   #' @return The `TableCell` object that is the new blank cell.
    deleteCell = function(r=NULL, c=NULL) {
      cell <- self$setBlankCell(r, c, visible=FALSE)
      return(invisible(cell))
    },
+
+   #' @description
+   #' Update the value of a cell in the table.
+   #' @param r The row number of the cell.
+   #' @param c The column number of the cell.
+   #' @param rawValue The raw value of the cell - typically a numeric value.
+   #' @param formattedValue The formatted value of the cell - typically a
+   #'   character value.
+   #' @return No return value.
    setValue = function(r=NULL, c=NULL, rawValue=NULL, formattedValue=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setValue", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
@@ -254,6 +307,28 @@ TableCells <- R6::R6Class("TableCells",
      if(missing(formattedValue)) cell$formattedValue <- rawValue
      else cell$formattedValue <- formattedValue
    },
+
+   #' @description
+   #' Create multiple cells in one row of a table.
+   #' @param rowNumber The row number where the cells will be created.
+   #' @param startAtColumnNumber The column number to start generating cells at.
+   #'   Default value 1.
+   #' @param cellTypes The types of the cells - either a single value or a
+   #'   vector of the same length as rawValues.  Each cellType must be one of
+   #'   the following values:  root, rowHeader, columnHeader, cell, total.
+   #' @param rawValues A vector or list of values.  A cell will be generated in
+   #'   the table for each element in the vector/list.
+   #' @param formattedValues A vector or list of formatted values.  Must be
+   #'   either `NULL`, a single value or a vector of the same length as
+   #'   rawValues.
+   #' @param formats A vector or list of formats.  Must be either `NULL`, a
+   #'   single value or a vector of the same length as rawValues.
+   #' @param visiblity A logical vector.  Must be either a single logical value
+   #'   or a vector of the same length as rawValues.
+   #' @param baseStyleNames A character vector.  Must be either a single style
+   #'   name (from the table theme) or a vector of style names of the same
+   #'   length as rawValues.
+   #' @return No return value.
    setRow = function(rowNumber=NULL, startAtColumnNumber=1, cellTypes="cell", rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE, baseStyleNames=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -302,6 +377,28 @@ TableCells <- R6::R6Class("TableCells",
        self$setCell(r=rowNumber, c=c, cellType=cellType, rawValue=v, formattedValue=formattedValue, visible=visible, baseStyleName=baseStyleName)
      }
    },
+
+   #' @description
+   #' Create multiple cells in one column of a table.
+   #' @param columnNumber The column number where the cells will be created.
+   #' @param startAtRowNumber The row number to start generating cells at.
+   #'   Default value 2.
+   #' @param cellTypes The types of the cells - either a single value or a
+   #'   vector of the same length as rawValues.  Each cellType must be one of
+   #'   the following values:  root, rowHeader, columnHeader, cell, total.
+   #' @param rawValues A vector or list of values.  A cell will be generated in
+   #'   the table for each element in the vector/list.
+   #' @param formattedValues A vector or list of formatted values.  Must be
+   #'   either `NULL`, a single value or a vector of the same length as
+   #'   rawValues.
+   #' @param formats A vector or list of formats.  Must be either `NULL`, a
+   #'   single value or a vector of the same length as rawValues.
+   #' @param visiblity A logical vector.  Must be either a single logical value
+   #'   or a vector of the same length as rawValues.
+   #' @param baseStyleNames A character vector.  Must be either a single style
+   #'   name (from the table theme) or a vector of style names of the same
+   #'   length as rawValues.
+   #' @return No return value.
    setColumn = function(columnNumber=NULL, startAtRowNumber=2, cellTypes="cell", rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE, baseStyleNames=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -350,6 +447,12 @@ TableCells <- R6::R6Class("TableCells",
        self$setCell(r=r, c=columnNumber, cellType=cellType, rawValue=v, formattedValue=formattedValue, visible=visible, baseStyleName=baseStyleName)
      }
    },
+
+   #' @description
+   #' Enlarge a table to the specified size.
+   #' @param rowCount The number of rows in the enlarged table.
+   #' @param columnCount The number of columns in the enlarged table.
+   #' @return No return value.
    extendCells = function(rowCount=NULL, columnCount=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "extendCells", rowCount, missing(rowCount), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -373,6 +476,13 @@ TableCells <- R6::R6Class("TableCells",
      private$p_columnCount <- cTo
      return(invisible())
    },
+
+   #' @description
+   #' Move a table cell to a different location in the table.
+   #' @param r The new row number to move the cell to.
+   #' @param c The new column number to move the cell to.
+   #' @param cell The `TableCell` object to move.
+   #' @return No return value.
    moveCell = function(r=NULL, c=NULL, cell=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "moveCell", r, missing(r), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -388,6 +498,14 @@ TableCells <- R6::R6Class("TableCells",
      cell$updatePosition(r, c)
      return(invisible())
    },
+
+   #' @description
+   #' Insert a new row in the table at the specified row number and shift existing cells on/below this row down by one row.
+   #' @param rowNumber The row number where the new row is to be inserted.
+   #' @param insertBlankCells `TRUE` (default) to insert blank cells in the new row, `FALSE` to create no cells in the new row.
+   #' @param headerCells The number of header cells to create at the start of the row.  Default value 1.
+   #' @param totalCells The number of total cells to create at the end of the row.  Default value 0.
+   #' @return No return value.
    insertRow = function(rowNumber=NULL, insertBlankCells=TRUE, headerCells=1, totalCells=0) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -416,6 +534,11 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertRow", "Inserted row.")
      return(invisible())
    },
+
+   #' @description
+   #' Delete the row in the table at the specified row number and shift existing cells below this row up by one row.
+   #' @param rowNumber The row number of the row to be deleted.
+   #' @return No return value.
    deleteRow = function(rowNumber=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "deleteRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$rowCount)
@@ -434,6 +557,14 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteRow", "Deleted row.")
      return(invisible())
    },
+
+   #' @description
+   #' Insert a new column in the table at the specified column number and shift existing cells in/to the right of this column across by one row.
+   #' @param columnNumber The column number where the new column is to be inserted.
+   #' @param insertBlankCells `TRUE` (default) to insert blank cells in the new column, `FALSE` to create no cells in the new column
+   #' @param headerCells The number of header cells to create at the top of the column.  Default value 1.
+   #' @param totalCells The number of total cells to create at the bottom of the column.  Default value 0.
+   #' @return No return value.
    insertColumn = function(columnNumber=NULL, insertBlankCells=TRUE, headerCells=1, totalCells=0) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "insertColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
@@ -462,6 +593,11 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$insertColumn", "Inserted column")
      return(invisible())
    },
+
+   #' @description
+   #' Delete the column in the table at the specified column number and shift existing cells to the right of this column to the left by one column.
+   #' @param columnNumber The column number of the column to be deleted.
+   #' @return No return value.
    deleteColumn = function(columnNumber=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "deleteColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
@@ -483,6 +619,8 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$deleteColumn", "Deleted column.")
      return(invisible())
    },
+
+   # TODO
    getCells = function(specifyCellsAsList=TRUE, rowNumbers=NULL, columnNumbers=NULL, cellCoordinates=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "getCells", specifyCellsAsList, missing(specifyCellsAsList), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
@@ -592,6 +730,8 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$getCells", "Got cells.")
      return(invisible(cells))
    },
+
+   # TODO
    findCells = function(rowNumbers=NULL, columnNumbers=NULL,
                         minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE) {
      if(private$p_parentTable$argumentCheckMode > 0) {
@@ -658,6 +798,11 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$findCells", "Found cells.")
      return(invisible(matches))
    },
+
+   #' @description
+   #' Retrieve the width of the longest value
+   #'   (in characters) in each column.
+    #' @return The width of the column in characters.
    getColumnWidths = function() {
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$getColumnWidths", "Getting column widths...")
      widths <- integer(0)
@@ -677,6 +822,10 @@ TableCells <- R6::R6Class("TableCells",
      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCells$getColumnWidths", "Got column widths.")
      return(invisible(widths))
    },
+
+   #' @description
+   #' Return the contents of this object as a list for debugging.
+   #' @return A list of various object properties.
    asList = function() {
      lst <- list()
      if(length(private$p_rows) > 0) {
@@ -693,11 +842,22 @@ TableCells <- R6::R6Class("TableCells",
      }
      return(invisible(lst))
    },
+
+   #' @description
+   #' Return the contents of this object as JSON for debugging.
+   #' @return A JSON representation of various object properties.
    asJSON = function() { return(jsonlite::toJSON(asList())) }
   ),
   active = list(
+
+   #' @field rowCount The number of rows in the table.
    rowCount = function(value) { return(invisible(length(private$p_rows))) },
+
+   #' @field columnCount The number of columns in the table.
    columnCount = function(value) { return(invisible(private$p_columnCount)) },
+
+   #' @field rows The rows of cells in the table - represented as a list, each
+   #'   element of which is a list of `TableCell` objects.
    rows = function(value) { return(invisible(private$p_rows)) }
   ),
   private = list(
