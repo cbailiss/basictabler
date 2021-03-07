@@ -3,45 +3,300 @@
 \docType{class}
 \name{TableCellRanges}
 \alias{TableCellRanges}
-\title{A class that manages cell ranges (e.g. for merged cells).}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that help
-  manage cell ranges.
+\title{R6 class that manages cell ranges (e.g. for merged cells).}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableCellRanges class contains a list of cell ranges and provides
+The `TableCellRanges` class contains a list of cell ranges and provides
 basic utility methods such as finding intersecting ranges to support
-the functioning of the BasicTable class.
+the functioning of the `BasicTable` class.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{parentTable}}{Owning table.}
-
-\item{\code{ranges}}{A list of cell ranges.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new object to manage cell ranges.}
-
-  \item{\code{addRange(rFrom, cFrom, rSpan=NULL, cSpan=NULL, rTo=NULL,
-  cTo=NULL)}}{Add a cell range to the list of cell ranges.}
-  \item{\code{findIntersectingRange(rFrom, cFrom, rSpan=NULL, cSpan=NULL,
-  rTo=NULL, cTo=NULL)}}{Find a cell range that intersects with the
-  specified cell range.}
-  \item{\code{deleteRange(r, c)}}{Delete the cell range covering the
-  specified cell.}
-  \item{\code{asList()}}{Get a list representation of this style.}
-  \item{\code{asJSON()}}{Get a JSON representation of this style.}
-}
-}
-
 \examples{
 # TableCellRanges objects are never created outside of the BasicTable class.
 # For examples of working with merged cells, see the Introduction vignette.
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{ranges}}{A list of cell ranges - where each element in the list is
+another list containing the range extent.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableCellRanges$new()}}
+\item \href{#method-addRange}{\code{TableCellRanges$addRange()}}
+\item \href{#method-findIntersectingRange}{\code{TableCellRanges$findIntersectingRange()}}
+\item \href{#method-deleteRange}{\code{TableCellRanges$deleteRange()}}
+\item \href{#method-clear}{\code{TableCellRanges$clear()}}
+\item \href{#method-updateAfterRowInsert}{\code{TableCellRanges$updateAfterRowInsert()}}
+\item \href{#method-updateAfterRowDelete}{\code{TableCellRanges$updateAfterRowDelete()}}
+\item \href{#method-updateAfterColumnInsert}{\code{TableCellRanges$updateAfterColumnInsert()}}
+\item \href{#method-updateAfterColumnDelete}{\code{TableCellRanges$updateAfterColumnDelete()}}
+\item \href{#method-asList}{\code{TableCellRanges$asList()}}
+\item \href{#method-asJSON}{\code{TableCellRanges$asJSON()}}
+\item \href{#method-clone}{\code{TableCellRanges$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableCellRanges` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$new(parentTable)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parentTable}}{Owning table.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-addRange"></a>}}
+\if{latex}{\out{\hypertarget{method-addRange}{}}}
+\subsection{Method \code{addRange()}}{
+Add a cell range to the list of cell ranges.  It is not
+necessary to specify all parameters. rFrom and cFrom must be specified.
+Only one of rSpan and rTo needs to be specified. Only one of cSpan and
+cTo needs to be specified.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$addRange(
+  rFrom = NULL,
+  cFrom = NULL,
+  rSpan = NULL,
+  cSpan = NULL,
+  rTo = NULL,
+  cTo = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rFrom}}{Row number of the top-left cell in the cell range.}
+
+\item{\code{cFrom}}{Column number of the top-left cell in the cell range.}
+
+\item{\code{rSpan}}{Number of rows spanned by the cell range.}
+
+\item{\code{cSpan}}{Number of columns spanned by the cell range.}
+
+\item{\code{rTo}}{Row number of the bottom-right cell in the cell range.}
+
+\item{\code{cTo}}{Column number of the bottom-right cell in the cell range.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-findIntersectingRange"></a>}}
+\if{latex}{\out{\hypertarget{method-findIntersectingRange}{}}}
+\subsection{Method \code{findIntersectingRange()}}{
+Find a cell range in the list of cell ranges that intersects with the
+specified cell range. It is not necessary to specify all parameters.
+rFrom and cFrom must be specified. Only one of rSpan and rTo needs to be
+specified. Only one of cSpan and cTo needs to be specified.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$findIntersectingRange(
+  rFrom = NULL,
+  cFrom = NULL,
+  rSpan = NULL,
+  cSpan = NULL,
+  rTo = NULL,
+  cTo = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rFrom}}{Row number of the top-left cell in the cell range.}
+
+\item{\code{cFrom}}{Column number of the top-left cell in the cell range.}
+
+\item{\code{rSpan}}{Number of rows spanned by the cell range.}
+
+\item{\code{cSpan}}{Number of columns spanned by the cell range.}
+
+\item{\code{rTo}}{Row number of the bottom-right cell in the cell range.}
+
+\item{\code{cTo}}{Column number of the bottom-right cell in the cell range.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-deleteRange"></a>}}
+\if{latex}{\out{\hypertarget{method-deleteRange}{}}}
+\subsection{Method \code{deleteRange()}}{
+Delete the cell range from the list that contains the specified cell.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$deleteRange(r = NULL, c = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{Row number of a cell in the cell range to be deleted.}
+
+\item{\code{c}}{Column number of a cell in the cell range to be deleted.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clear"></a>}}
+\if{latex}{\out{\hypertarget{method-clear}{}}}
+\subsection{Method \code{clear()}}{
+Clear the list of cell ranges.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$clear()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateAfterRowInsert"></a>}}
+\if{latex}{\out{\hypertarget{method-updateAfterRowInsert}{}}}
+\subsection{Method \code{updateAfterRowInsert()}}{
+Internal use only.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$updateAfterRowInsert(r = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{Row number.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateAfterRowDelete"></a>}}
+\if{latex}{\out{\hypertarget{method-updateAfterRowDelete}{}}}
+\subsection{Method \code{updateAfterRowDelete()}}{
+Internal use only.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$updateAfterRowDelete(r = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{Row number.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateAfterColumnInsert"></a>}}
+\if{latex}{\out{\hypertarget{method-updateAfterColumnInsert}{}}}
+\subsection{Method \code{updateAfterColumnInsert()}}{
+Internal use only.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$updateAfterColumnInsert(c = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{c}}{Column number.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateAfterColumnDelete"></a>}}
+\if{latex}{\out{\hypertarget{method-updateAfterColumnDelete}{}}}
+\subsection{Method \code{updateAfterColumnDelete()}}{
+Internal use only.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$updateAfterColumnDelete(c = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{c}}{Column number.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-asList}{}}}
+\subsection{Method \code{asList()}}{
+Return the contents of this object as a list for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$asList()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\subsection{Method \code{asJSON()}}{
+Return the contents of this object as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$asJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A JSON representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCellRanges$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

@@ -7,7 +7,6 @@
 #'
 #' @docType class
 #' @importFrom R6 R6Class
-#' @import openxlsx
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # This class is for internal use only.  It is

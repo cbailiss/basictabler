@@ -3,69 +3,15 @@
 \docType{class}
 \name{TableStyles}
 \alias{TableStyles}
-\title{A class that defines a collection of styles.}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that
-  define styles/a theme for a table.
+\title{R6 class that defines a collection of styles.}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableStyles class defines all of the base styles needed to style/theme a
-table.  It also defines the names of the styles that are used for
+The `TableStyles` class defines all of the base styles needed to style/theme a
+table.  It defines the names of the styles that are used for
 styling the different parts of the table.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{parentTable}}{Owning table.}
-
-\item{\code{themeName}}{The name of the theme.}
-
-\item{\code{allowExternalStyles}}{Enables integration scenarios where an external
-system is supplying the CSS definitions.}
-
-\item{\code{tableStyle}}{The name of the style for the HTML table element.}
-
-\item{\code{rootStyle}}{The name of the style for the HTML cell at the top left of
-the table (when both row and column headers are displayed).}
-
-\item{\code{rowHeaderStyle}}{The name of the style for the row headers in the table.}
-
-\item{\code{colHeaderStyle}}{The name of the style for the column headers in the
-table.}
-
-\item{\code{cellStyle}}{The name of the cell style for the non-total cells in the
-body of the table.}
-
-\item{\code{totalStyle}}{The name of the cell style for the total cells in the
-table.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new set of styles, specifying the field
-  values documented above.}
-
-  \item{\code{isExistingStyle(styleName)}}{Check whether the specified style
-  exists.}
-  \item{\code{getStyle(styleName)}}{Get the specified style.}
-  \item{\code{addStyle(styleName, declarations)}}{Add a new style to the
-  collection of styles.}
-  \item{\code{copyStyle(styleName, newStyleName)}}{Create a copy of a style
-  with the specified name.}
-  \item{\code{asCSSRule(styleName, selector)}}{Get a style definition in the
-  form of a CSS rule.}
-  \item{\code{asNamedCSSStyle(styleName, styleNamePrefix)}}{Get a style
-  definition in the form of a named CSS style.}
-  \item{\code{asList()}}{Get a list representation of the styles.}
-  \item{\code{asJSON()}}{Get a JSON representation of the styles.}
-  \item{\code{asString()}}{Get a text representation of the styles.}
-}
-}
-
 \examples{
 # Creating styles is part of defining a theme for a table.
 # Multiple styles must be created for each theme.
@@ -84,4 +30,269 @@ TableStyles$addStyle(styleName="MyNewStyle", list(
     "font-weight"="bold",
     "background-color"="#F2F2F2"
   ))
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{count}}{The number of styles in this styles collection.}
+
+\item{\code{theme}}{The name of the theme.}
+
+\item{\code{styles}}{The collection of `TableStyle` objects in this styles collection.}
+
+\item{\code{allowExternalStyles}}{Enable integration scenarios where an external
+system is supplying the CSS definitions.}
+
+\item{\code{tableStyle}}{The name of the style for the HTML table element.}
+
+\item{\code{rootStyle}}{The name of the style for the HTML cell at the top left of
+the table (when both row and column headers are displayed).}
+
+\item{\code{rowHeaderStyle}}{The name of the style for the row headers in the table.}
+
+\item{\code{colHeaderStyle}}{The name of the style for the column headers in the
+table.}
+
+\item{\code{cellStyle}}{The name of the cell style for the non-total cells in the
+body of the table.}
+
+\item{\code{totalStyle}}{The name of the cell style for the total cells in the
+table.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableStyles$new()}}
+\item \href{#method-isExistingStyle}{\code{TableStyles$isExistingStyle()}}
+\item \href{#method-getStyle}{\code{TableStyles$getStyle()}}
+\item \href{#method-addStyle}{\code{TableStyles$addStyle()}}
+\item \href{#method-copyStyle}{\code{TableStyles$copyStyle()}}
+\item \href{#method-asCSSRule}{\code{TableStyles$asCSSRule()}}
+\item \href{#method-asNamedCSSStyle}{\code{TableStyles$asNamedCSSStyle()}}
+\item \href{#method-asList}{\code{TableStyles$asList()}}
+\item \href{#method-asJSON}{\code{TableStyles$asJSON()}}
+\item \href{#method-asString}{\code{TableStyles$asString()}}
+\item \href{#method-clone}{\code{TableStyles$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableStyles` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$new(parentTable, themeName = NULL, allowExternalStyles = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parentTable}}{Owning table.}
+
+\item{\code{themeName}}{The name of the theme.}
+
+\item{\code{allowExternalStyles}}{Enable integration scenarios where an external
+system is supplying the CSS definitions.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-isExistingStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-isExistingStyle}{}}}
+\subsection{Method \code{isExistingStyle()}}{
+Check whether a style with the specified name exists in the collection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$isExistingStyle(styleName = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleName}}{The style name.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+`TRUE` if a style with the specified name exists, `FALSE` otherwise.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-getStyle}{}}}
+\subsection{Method \code{getStyle()}}{
+Retrieve a style with the specified name from the collection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$getStyle(styleName = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleName}}{The style name.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A `TableStyle` object if a style with the specified name exists in the collection, an error is raised otherwise.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-addStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-addStyle}{}}}
+\subsection{Method \code{addStyle()}}{
+Add a new style to the collection of styles.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$addStyle(styleName = NULL, declarations = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleName}}{The style name of the new style.}
+
+\item{\code{declarations}}{A list containing CSS style declarations.
+Example: `declarations = list(font="...", color="...")`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The newly created `TableStyle` object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-copyStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-copyStyle}{}}}
+\subsection{Method \code{copyStyle()}}{
+Create a copy of an exist style.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$copyStyle(styleName = NULL, newStyleName = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleName}}{The style name of the style to copy.}
+
+\item{\code{newStyleName}}{The name of the new style.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The newly created `TableStyle` object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asCSSRule"></a>}}
+\if{latex}{\out{\hypertarget{method-asCSSRule}{}}}
+\subsection{Method \code{asCSSRule()}}{
+Generate a CSS style rule from the specified table style.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$asCSSRule(styleName = NULL, selector = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleName}}{The style name.}
+
+\item{\code{selector}}{The CSS selector name.  Default value `NULL`.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The CSS style rule, e.g. { text-align: center; color: red; }
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asNamedCSSStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-asNamedCSSStyle}{}}}
+\subsection{Method \code{asNamedCSSStyle()}}{
+Generate a named CSS style from the specified table style.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$asNamedCSSStyle(styleName = NULL, styleNamePrefix = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleName}}{The style name.}
+
+\item{\code{styleNamePrefix}}{A character variable specifying a prefix for all named
+CSS styles, to avoid style name collisions where multiple tables exist.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The CSS style rule, e.g. cell { text-align: center; color: red; }
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-asList}{}}}
+\subsection{Method \code{asList()}}{
+Return the contents of this object as a list for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$asList()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\subsection{Method \code{asJSON()}}{
+Return the contents of this object as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$asJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A JSON representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asString"></a>}}
+\if{latex}{\out{\hypertarget{method-asString}{}}}
+\subsection{Method \code{asString()}}{
+Return the contents of this object as a string for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$asString(seperator = ", ")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{seperator}}{Delimiter used to combine multiple values into a string.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A character representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyles$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

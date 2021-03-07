@@ -3,54 +3,236 @@
 \docType{class}
 \name{TableStyle}
 \alias{TableStyle}
-\title{A class that specifies styling.}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that help
-  define styles.
+\title{R6 class that specifies styling.}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableStyle class specifies the styling for headers and cells in a
+The `TableStyle` class specifies the styling for headers and cells in a
 table.  Styles are specified in the form of Cascading Style Sheet (CSS)
 name-value pairs.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{parentTable}}{Owning table.}
-
-\item{\code{styleName}}{Style unique name.}
-
-\item{\code{declarations}}{CSS style declarations.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new style declaration, specifying the field
-  values documented above.}
-
-  \item{\code{setPropertyValue(property, value)}}{Set a single style
-  property.}
-  \item{\code{setPropertyValues(declarations)}}{Set multiple style
-  properties, where declarations is a list similar to the code example
-  below.}
-  \item{\code{getPropertyValue(property)}}{Get the style declarations for a
-  single property.}
-  \item{\code{asCSSRule(selector)}}{Get this style definition in the form of
-  a CSS rule.}
-  \item{\code{asNamedCSSStyle(styleNamePrefix)}}{Get this style definition in
-  the form of a named CSS style.}
-  \item{\code{getCopy(newStyleName)}}{Get a copy of this style.}
-  \item{\code{asList()}}{Get a list representation of this style.}
-  \item{\code{asJSON()}}{Get a JSON representation of this style.}
-}
-}
-
 \examples{
 # TableStyle objects are normally created indirectly via one of the helper
 # methods.
-# For an example, see the TableStyles class.
+# For an example, see the `TableStyles` class.
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{name}}{The unique name of the style (must be unique among the style
+names in the table theme).}
+
+\item{\code{declarations}}{A list containing CSS style declarations.
+Example: `declarations = list(font="...", color="...")`}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableStyle$new()}}
+\item \href{#method-setPropertyValue}{\code{TableStyle$setPropertyValue()}}
+\item \href{#method-setPropertyValues}{\code{TableStyle$setPropertyValues()}}
+\item \href{#method-getPropertyValue}{\code{TableStyle$getPropertyValue()}}
+\item \href{#method-asCSSRule}{\code{TableStyle$asCSSRule()}}
+\item \href{#method-asNamedCSSStyle}{\code{TableStyle$asNamedCSSStyle()}}
+\item \href{#method-getCopy}{\code{TableStyle$getCopy()}}
+\item \href{#method-asList}{\code{TableStyle$asList()}}
+\item \href{#method-asJSON}{\code{TableStyle$asJSON()}}
+\item \href{#method-clone}{\code{TableStyle$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableStyle` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$new(parentTable, styleName = NULL, declarations = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parentTable}}{Owning table.}
+
+\item{\code{styleName}}{A unique name for the style.}
+
+\item{\code{declarations}}{A list containing CSS style declarations.
+Example: `declarations = list(font="...", color="...")`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setPropertyValue"></a>}}
+\if{latex}{\out{\hypertarget{method-setPropertyValue}{}}}
+\subsection{Method \code{setPropertyValue()}}{
+Set the value of a single style property.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$setPropertyValue(property = NULL, value = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{property}}{The CSS style property name, e.g. color.}
+
+\item{\code{value}}{The value of the style property, e.g. red.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setPropertyValues"></a>}}
+\if{latex}{\out{\hypertarget{method-setPropertyValues}{}}}
+\subsection{Method \code{setPropertyValues()}}{
+Set the values of multiple style properties.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$setPropertyValues(declarations = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{declarations}}{A list containing CSS style declarations.
+Example: `declarations = list(font="...", color="...")`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getPropertyValue"></a>}}
+\if{latex}{\out{\hypertarget{method-getPropertyValue}{}}}
+\subsection{Method \code{getPropertyValue()}}{
+Get the value of a single style property.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$getPropertyValue(property = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{property}}{The CSS style property name, e.g. color.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asCSSRule"></a>}}
+\if{latex}{\out{\hypertarget{method-asCSSRule}{}}}
+\subsection{Method \code{asCSSRule()}}{
+Generate a CSS style rule from this table style.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$asCSSRule(selector = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{The CSS selector name.  Default value `NULL`.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The CSS style rule, e.g. { text-align: center; color: red; }
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asNamedCSSStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-asNamedCSSStyle}{}}}
+\subsection{Method \code{asNamedCSSStyle()}}{
+Generate a named CSS style from this table style.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$asNamedCSSStyle(styleNamePrefix = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleNamePrefix}}{A character variable specifying a prefix for all named
+CSS styles, to avoid style name collisions where multiple tables exist.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The CSS style rule, e.g. cell { text-align: center; color: red; }
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getCopy"></a>}}
+\if{latex}{\out{\hypertarget{method-getCopy}{}}}
+\subsection{Method \code{getCopy()}}{
+Create a copy of this `TableStyle` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$getCopy(newStyleName = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{newStyleName}}{The name of the new style.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The new `TableStyle` object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-asList}{}}}
+\subsection{Method \code{asList()}}{
+Return the contents of this object as a list for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$asList()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\subsection{Method \code{asJSON()}}{
+Return the contents of this object as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$asJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A JSON representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableStyle$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

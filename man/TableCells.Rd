@@ -3,87 +3,14 @@
 \docType{class}
 \name{TableCells}
 \alias{TableCells}
-\title{A class that contains the cells from a table.}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods relating
-  to the cells of a table.
+\title{R6 class that manages cells in a table.}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableCells class contains all of the TableCell objects that comprise a
-table.
+The `TableCells` manages the `TableCell` objects that comprise a
+`BasicTable` object.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{parentTable}}{Owning table.}
-
-\item{\code{rows}}{The rows of cells in the table.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new set of table cells, specifying
-  the field values documented above.}
-  \item{\code{reset())}}{Clears and removes all of the cells.}
-  \item{\code{getCell(r, c))}}{Get the TableCell at the specified row and
-  column coordinates in the table.}
-  \item{\code{getValue(r, c))}}{Get the value at the specified row and
-  column coordinates in the table.}
-  \item{\code{getRowValues(rowNumber=NULL, columnNumbers=NULL,
-  formattedValue=FALSE, asList=FALSE, rebase=TRUE)}}{Get a vector or list of
-  the values in a row.}
-  \item{\code{getColumnValues(columnNumber=NULL, rowNumbers=NULL,
-  formattedValue=FALSE, asList=FALSE, rebase=TRUE)}}{Get a vector or list of
-  the values in a column.}
-  \item{\code{setCell(r, c, cellType="cell", rawValue=NULL,
-  formattedValue=NULL, visible=TRUE, baseStyleName=NULL,
-  styleDeclarations=NULL, rowSpan=NULL, colSpan=NULL)}}{Set the details of a
-  cell in the table.}
-  \item{\code{setBlankCell(r, c, cellType="cell", visible=TRUE,
-  baseStyleName=NULL, styleDeclarations=NULL, rowSpan=NULL,
-  colSpan=NULL)}}{Set a cell to be empty in the table.}
-  \item{\code{deleteCell(r, c)}}{Remove a cell from the table (replacing it
-  with a blank one).}
-  \item{\code{setValue(r, c, rawValue=NULL, formattedValue=NULL)}}{Set the
-  value of a cell.}
-  \item{\code{setRow(rowNumber=NULL, startAtColumnNumber=1, cellTypes=NULL,
-  rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE,
-  baseStyleNames=NULL)}}{Set multiple cells across a row at once.}
-  \item{\code{setColumn(columnNumber=NULL, startAtRowNumber=1,
-  cellTypes=NULL, rawValues=NULL, formattedValues=NULL, formats=NULL,
-  visiblity=TRUE, baseStyleNames=NULL)}}{Set multiple cells down a column at
-  once.}
-  \item{\code{extendCells(rowCount=NULL, columnCount=NULL)}}{.}
-  \item{\code{moveCell(r, c, cell))}}{Move the cell to the specified row
-  and column coordinates in the table.}
-  \item{\code{insertRow(rowNumber, insertBlankCells=TRUE, headerCells=1,
-  totalCells=0)}}{Insert a new row (moving the rows underneath down), where
-  headerCells and totalCells control default styling.}
-  \item{\code{deleteRow(rowNumber=NULL)}}{Delete a row (moving the rows
-  underneath up.}
-  \item{\code{insertColumn(columnNumber, insertBlankCells=TRUE,
-  headerCells=1, totalCells=0)}}{Insert a new column (moving other columns
-  rightwards, where headerCells and totalCells control default styling.}
-  \item{\code{deleteColumn(columnNumber=NULL)}}{Delete a column (moving other
-  columns leftwards.}
-  \item{\code{getCells(specifyCellsAsList=FALSE, rowNumbers=NULL,
-  columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
-  of row and/or column numbers.}
-  \item{\code{findCells(rowNumbers=NULL, columnNumbers=NULL, minValue=NULL,
-  maxValue=NULL, exactValues=NULL, includeNull=TRUE, includeNA=TRUE)}}{Find
-  cells matching the specified criteria.}
-  \item{\code{getColumnWidths())}}{Retrieve the width of the longest value
-  (in characters) in each column.}
-  \item{\code{asList())}}{Get a list representation of the table
-  cells.}
-  \item{\code{asJSON()}}{Get a JSON representation of the table cells.}
-}
-}
-
 \examples{
 # This class should only be created by the table.
 # It is not intended to be created outside of the table.
@@ -93,4 +20,835 @@ cells <- tbl$cells
 cells$setCell(r=4, c=1, cellType="cell", rawValue=5)
 cells$setCell(r=4, c=2, cellType="cell", rawValue=6)
 tbl$renderTable()
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{rowCount}}{The number of rows in the table.}
+
+\item{\code{columnCount}}{The number of columns in the table.}
+
+\item{\code{rows}}{The rows of cells in the table - represented as a list, each
+element of which is a list of `TableCell` objects.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableCells$new()}}
+\item \href{#method-reset}{\code{TableCells$reset()}}
+\item \href{#method-getCell}{\code{TableCells$getCell()}}
+\item \href{#method-getValue}{\code{TableCells$getValue()}}
+\item \href{#method-getRowValues}{\code{TableCells$getRowValues()}}
+\item \href{#method-getColumnValues}{\code{TableCells$getColumnValues()}}
+\item \href{#method-setCell}{\code{TableCells$setCell()}}
+\item \href{#method-setBlankCell}{\code{TableCells$setBlankCell()}}
+\item \href{#method-deleteCell}{\code{TableCells$deleteCell()}}
+\item \href{#method-setValue}{\code{TableCells$setValue()}}
+\item \href{#method-setRow}{\code{TableCells$setRow()}}
+\item \href{#method-setColumn}{\code{TableCells$setColumn()}}
+\item \href{#method-extendCells}{\code{TableCells$extendCells()}}
+\item \href{#method-moveCell}{\code{TableCells$moveCell()}}
+\item \href{#method-insertRow}{\code{TableCells$insertRow()}}
+\item \href{#method-deleteRow}{\code{TableCells$deleteRow()}}
+\item \href{#method-insertColumn}{\code{TableCells$insertColumn()}}
+\item \href{#method-deleteColumn}{\code{TableCells$deleteColumn()}}
+\item \href{#method-getCells}{\code{TableCells$getCells()}}
+\item \href{#method-findCells}{\code{TableCells$findCells()}}
+\item \href{#method-getColumnWidths}{\code{TableCells$getColumnWidths()}}
+\item \href{#method-asList}{\code{TableCells$asList()}}
+\item \href{#method-asJSON}{\code{TableCells$asJSON()}}
+\item \href{#method-clone}{\code{TableCells$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableCells` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$new(parentTable = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parentTable}}{Owning table.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-reset"></a>}}
+\if{latex}{\out{\hypertarget{method-reset}{}}}
+\subsection{Method \code{reset()}}{
+Clear all cells from the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$reset()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getCell"></a>}}
+\if{latex}{\out{\hypertarget{method-getCell}{}}}
+\subsection{Method \code{getCell()}}{
+Retrieve a specific `TableCell` object at the specified location in the
+table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$getCell(r = NULL, c = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{The row number of the cell to retrieve.}
+
+\item{\code{c}}{The column number of the cell to retrieve.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A `TableCell` object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getValue"></a>}}
+\if{latex}{\out{\hypertarget{method-getValue}{}}}
+\subsection{Method \code{getValue()}}{
+Retrieve the value of a specific `TableCell` object at the specified
+location in the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$getValue(r = NULL, c = NULL, formattedValue = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{The row number of the cell value to retrieve.}
+
+\item{\code{c}}{The column number of the cell value to retrieve.}
+
+\item{\code{formattedValue}}{`TRUE` to retrieve the formatted (character) cell
+value, `FALSE` (default) to retrieve the raw cell value (typically
+numeric).}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The value of the cell.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getRowValues"></a>}}
+\if{latex}{\out{\hypertarget{method-getRowValues}{}}}
+\subsection{Method \code{getRowValues()}}{
+Get a vector or list of the values in a row for the entire row or a subset
+of columns.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$getRowValues(
+  rowNumber = NULL,
+  columnNumbers = NULL,
+  formattedValue = FALSE,
+  asList = FALSE,
+  rebase = TRUE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rowNumber}}{The row number to retrieve the values for (a single row
+number).}
+
+\item{\code{columnNumbers}}{The column numbers of the cell value to retrieve (can
+be a vector of column numbers).}
+
+\item{\code{formattedValue}}{`TRUE` to retrieve the formatted (character) cell
+value, `FALSE` (default) to retrieve the raw cell value (typically
+numeric).}
+
+\item{\code{asList}}{`TRUE` to retrieve the values as a list, `FALSE` (default)
+to retrieve the values as a vector.}
+
+\item{\code{rebase}}{`TRUE` to rebase the list/vector so that the first element
+is at index 1, `FALSE` to retain the original column numbers.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A vector or list of the cell values.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getColumnValues"></a>}}
+\if{latex}{\out{\hypertarget{method-getColumnValues}{}}}
+\subsection{Method \code{getColumnValues()}}{
+Get a vector or list of the values in a column for the entire column or a
+subset of rows.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$getColumnValues(
+  columnNumber = NULL,
+  rowNumbers = NULL,
+  formattedValue = FALSE,
+  asList = FALSE,
+  rebase = TRUE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{columnNumber}}{The column number to retrieve the values for (a single
+column number).}
+
+\item{\code{rowNumbers}}{The row numbers of the cell value to retrieve (can be a
+vector of row numbers).}
+
+\item{\code{formattedValue}}{`TRUE` to retrieve the formatted (character) cell
+value, `FALSE` (default) to retrieve the raw cell value (typically
+numeric).}
+
+\item{\code{asList}}{`TRUE` to retrieve the values as a list, `FALSE` (default)
+to retrieve the values as a vector.}
+
+\item{\code{rebase}}{`TRUE` to rebase the list/vector so that the first element
+is at index 1, `FALSE` to retain the original row numbers.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A vector or list of the cell values.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setCell"></a>}}
+\if{latex}{\out{\hypertarget{method-setCell}{}}}
+\subsection{Method \code{setCell()}}{
+Create a cell in the table and set the details of the cell.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$setCell(
+  r = NULL,
+  c = NULL,
+  cellType = "cell",
+  rawValue = NULL,
+  formattedValue = NULL,
+  visible = TRUE,
+  baseStyleName = NULL,
+  styleDeclarations = NULL,
+  rowSpan = NULL,
+  colSpan = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{The row number of the cell.}
+
+\item{\code{c}}{The column number of the cell.}
+
+\item{\code{cellType}}{The type of the cell - must be one of the following
+values:  root, rowHeader, columnHeader, cell, total.}
+
+\item{\code{rawValue}}{The raw value of the cell - typically a numeric value.}
+
+\item{\code{formattedValue}}{The formatted value of the cell - typically a
+character value.}
+
+\item{\code{visible}}{`TRUE` (default) to specify that the cell is visible,
+`FALSE` to specify that the cell will be invisible.}
+
+\item{\code{baseStyleName}}{The name of a style from the table theme that will be
+used to style this cell.}
+
+\item{\code{styleDeclarations}}{A list of CSS style definitions.}
+
+\item{\code{rowSpan}}{A number greater than 1 to indicate that this cell is
+merged with cells below. `NULL` (default) or 1 means the cell is not
+merged across rows.}
+
+\item{\code{colSpan}}{A number greater than 1 to indicate that this cell is
+merged with cells to the right. `NULL` (default) or 1 means the cell is
+not merged across columns.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A vector or list of the cell values.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setBlankCell"></a>}}
+\if{latex}{\out{\hypertarget{method-setBlankCell}{}}}
+\subsection{Method \code{setBlankCell()}}{
+Create an empty cell in the table and set the details of the cell.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$setBlankCell(
+  r = NULL,
+  c = NULL,
+  cellType = "cell",
+  visible = TRUE,
+  baseStyleName = NULL,
+  styleDeclarations = NULL,
+  rowSpan = NULL,
+  colSpan = NULL,
+  asNBSP = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{The row number of the cell.}
+
+\item{\code{c}}{The column number of the cell.}
+
+\item{\code{cellType}}{The type of the cell - must be one of the following
+values:  root, rowHeader, columnHeader, cell, total.}
+
+\item{\code{visible}}{`TRUE` (default) to specify that the cell is visible,
+`FALSE` to specify that the cell will be invisible.}
+
+\item{\code{baseStyleName}}{The name of a style from the table theme that will be
+used to style this cell.}
+
+\item{\code{styleDeclarations}}{A list of CSS style definitions.}
+
+\item{\code{rowSpan}}{A number greater than 1 to indicate that this cell is
+merged with cells below. `NULL` (default) or 1 means the cell is not
+merged across rows.}
+
+\item{\code{colSpan}}{A number greater than 1 to indicate that this cell is
+merged with cells to the right. `NULL` (default) or 1 means the cell is
+not merged across columns.}
+
+\item{\code{asNBSP}}{`TRUE` if the cell should be rendered as &nbsp; in HTML,
+`FALSE` (default) otherwise.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A vector or list of the cell values.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-deleteCell"></a>}}
+\if{latex}{\out{\hypertarget{method-deleteCell}{}}}
+\subsection{Method \code{deleteCell()}}{
+Replace the `TableCell` object at the specified
+location in the table with a blank cell.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$deleteCell(r = NULL, c = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{The row number of the cell value to delete}
+
+\item{\code{c}}{The column number of the cell value to delete}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The `TableCell` object that is the new blank cell.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setValue"></a>}}
+\if{latex}{\out{\hypertarget{method-setValue}{}}}
+\subsection{Method \code{setValue()}}{
+Update the value of a cell in the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$setValue(r = NULL, c = NULL, rawValue = NULL, formattedValue = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{The row number of the cell.}
+
+\item{\code{c}}{The column number of the cell.}
+
+\item{\code{rawValue}}{The raw value of the cell - typically a numeric value.}
+
+\item{\code{formattedValue}}{The formatted value of the cell - typically a
+character value.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setRow"></a>}}
+\if{latex}{\out{\hypertarget{method-setRow}{}}}
+\subsection{Method \code{setRow()}}{
+Create multiple cells in one row of a table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$setRow(
+  rowNumber = NULL,
+  startAtColumnNumber = 1,
+  cellTypes = "cell",
+  rawValues = NULL,
+  formattedValues = NULL,
+  formats = NULL,
+  visiblity = TRUE,
+  baseStyleNames = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rowNumber}}{The row number where the cells will be created.}
+
+\item{\code{startAtColumnNumber}}{The column number to start generating cells at.
+Default value 1.}
+
+\item{\code{cellTypes}}{The types of the cells - either a single value or a
+vector of the same length as rawValues.  Each cellType must be one of
+the following values:  root, rowHeader, columnHeader, cell, total.}
+
+\item{\code{rawValues}}{A vector or list of values.  A cell will be generated in
+the table for each element in the vector/list.}
+
+\item{\code{formattedValues}}{A vector or list of formatted values.  Must be
+either `NULL`, a single value or a vector of the same length as
+rawValues.}
+
+\item{\code{formats}}{A vector or list of formats.  Must be either `NULL`, a
+single value or a vector of the same length as rawValues.}
+
+\item{\code{visiblity}}{A logical vector.  Must be either a single logical value
+or a vector of the same length as rawValues.}
+
+\item{\code{baseStyleNames}}{A character vector.  Must be either a single style
+name (from the table theme) or a vector of style names of the same
+length as rawValues.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setColumn"></a>}}
+\if{latex}{\out{\hypertarget{method-setColumn}{}}}
+\subsection{Method \code{setColumn()}}{
+Create multiple cells in one column of a table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$setColumn(
+  columnNumber = NULL,
+  startAtRowNumber = 2,
+  cellTypes = "cell",
+  rawValues = NULL,
+  formattedValues = NULL,
+  formats = NULL,
+  visiblity = TRUE,
+  baseStyleNames = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{columnNumber}}{The column number where the cells will be created.}
+
+\item{\code{startAtRowNumber}}{The row number to start generating cells at.
+Default value 2.}
+
+\item{\code{cellTypes}}{The types of the cells - either a single value or a
+vector of the same length as rawValues.  Each cellType must be one of
+the following values:  root, rowHeader, columnHeader, cell, total.}
+
+\item{\code{rawValues}}{A vector or list of values.  A cell will be generated in
+the table for each element in the vector/list.}
+
+\item{\code{formattedValues}}{A vector or list of formatted values.  Must be
+either `NULL`, a single value or a vector of the same length as
+rawValues.}
+
+\item{\code{formats}}{A vector or list of formats.  Must be either `NULL`, a
+single value or a vector of the same length as rawValues.}
+
+\item{\code{visiblity}}{A logical vector.  Must be either a single logical value
+or a vector of the same length as rawValues.}
+
+\item{\code{baseStyleNames}}{A character vector.  Must be either a single style
+name (from the table theme) or a vector of style names of the same
+length as rawValues.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-extendCells"></a>}}
+\if{latex}{\out{\hypertarget{method-extendCells}{}}}
+\subsection{Method \code{extendCells()}}{
+Enlarge a table to the specified size.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$extendCells(rowCount = NULL, columnCount = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rowCount}}{The number of rows in the enlarged table.}
+
+\item{\code{columnCount}}{The number of columns in the enlarged table.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-moveCell"></a>}}
+\if{latex}{\out{\hypertarget{method-moveCell}{}}}
+\subsection{Method \code{moveCell()}}{
+Move a table cell to a different location in the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$moveCell(r = NULL, c = NULL, cell = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{The new row number to move the cell to.}
+
+\item{\code{c}}{The new column number to move the cell to.}
+
+\item{\code{cell}}{The `TableCell` object to move.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-insertRow"></a>}}
+\if{latex}{\out{\hypertarget{method-insertRow}{}}}
+\subsection{Method \code{insertRow()}}{
+Insert a new row in the table at the specified row number and shift existing cells on/below this row down by one row.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$insertRow(
+  rowNumber = NULL,
+  insertBlankCells = TRUE,
+  headerCells = 1,
+  totalCells = 0
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rowNumber}}{The row number where the new row is to be inserted.}
+
+\item{\code{insertBlankCells}}{`TRUE` (default) to insert blank cells in the new row, `FALSE` to create no cells in the new row.}
+
+\item{\code{headerCells}}{The number of header cells to create at the start of the row.  Default value 1.}
+
+\item{\code{totalCells}}{The number of total cells to create at the end of the row.  Default value 0.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-deleteRow"></a>}}
+\if{latex}{\out{\hypertarget{method-deleteRow}{}}}
+\subsection{Method \code{deleteRow()}}{
+Delete the row in the table at the specified row number and shift existing cells below this row up by one row.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$deleteRow(rowNumber = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rowNumber}}{The row number of the row to be deleted.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-insertColumn"></a>}}
+\if{latex}{\out{\hypertarget{method-insertColumn}{}}}
+\subsection{Method \code{insertColumn()}}{
+Insert a new column in the table at the specified column number and shift existing cells in/to the right of this column across by one row.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$insertColumn(
+  columnNumber = NULL,
+  insertBlankCells = TRUE,
+  headerCells = 1,
+  totalCells = 0
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{columnNumber}}{The column number where the new column is to be inserted.}
+
+\item{\code{insertBlankCells}}{`TRUE` (default) to insert blank cells in the new column, `FALSE` to create no cells in the new column}
+
+\item{\code{headerCells}}{The number of header cells to create at the top of the column.  Default value 1.}
+
+\item{\code{totalCells}}{The number of total cells to create at the bottom of the column.  Default value 0.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-deleteColumn"></a>}}
+\if{latex}{\out{\hypertarget{method-deleteColumn}{}}}
+\subsection{Method \code{deleteColumn()}}{
+Delete the column in the table at the specified column number and shift existing cells to the right of this column to the left by one column.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$deleteColumn(columnNumber = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{columnNumber}}{The column number of the column to be deleted.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getCells"></a>}}
+\if{latex}{\out{\hypertarget{method-getCells}{}}}
+\subsection{Method \code{getCells()}}{
+Retrieve cells by a combination of row and/or column numbers.
+See the "Finding and Formatting" vignette for graphical examples.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$getCells(
+  specifyCellsAsList = TRUE,
+  rowNumbers = NULL,
+  columnNumbers = NULL,
+  cellCoordinates = NULL,
+  excludeEmptyCells = FALSE,
+  matchMode = "simple"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{specifyCellsAsList}}{`TRUE`/`FALSE` to specify how cells are retrieved.
+Default `TRUE`. More information is provided in the details section.}
+
+\item{\code{rowNumbers}}{A vector of row numbers that specify the rows or
+cells to retrieve.}
+
+\item{\code{columnNumbers}}{A vector of row numbers that specify the columns
+or cells to retrieve.}
+
+\item{\code{cellCoordinates}}{A list of two-element vectors that specify the
+coordinates of cells to retrieve.  Ignored when `specifyCellsAsList=FALSE`.}
+
+\item{\code{excludeEmptyCells}}{Default `FALSE`.  Specify `TRUE` to exclude empty
+cells.}
+
+\item{\code{matchMode}}{Either "simple" (default) or "combinations"\cr
+"simple" specifies that row and column arguments are considered separately
+(logical OR), e.g. rowNumbers=1 and columnNumbers=2 will match all cells in
+row 1 and all cells in column 2.\cr
+"combinations" specifies that row and column arguments are considered together
+(logical AND), e.g. rowNumbers=1 and columnNumbers=2 will match only the
+cell single at location (1, 2).\cr
+Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are
+affected by the match mode.  All other arguments are not.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+When `specifyCellsAsList=TRUE` (the default):\cr
+Get one or more rows by specifying the row numbers as a vector as
+the rowNumbers argument and leaving the columnNumbers argument set
+to the default value of `NULL`, or\cr
+Get one or more columns by specifying the column numbers as a vector
+as the columnNumbers argument and leaving the rowNumbers argument
+set to the default value of `NULL`, or\cr
+Get one or more individual cells by specifying the cellCoordinates
+argument as a list of vectors of length 2, where each element in the
+list is the row and column number of one cell,\cr
+e.g. `list(c(1, 2), c(3, 4))` specifies two cells, the first located
+at row 1, column 2 and the second located at row 3, column 4.\cr
+When `specifyCellsAsList=FALSE`:\cr
+Get one or more rows by specifying the row numbers as a vector as the
+rowNumbers argument and leaving the columnNumbers argument set to the
+default value of `NULL`, or\cr
+Get one or more columns by specifying the column numbers as a vector
+as the columnNumbers argument and leaving the rowNumbers argument set
+to the default value of `NULL`, or\cr
+Get one or more cells by specifying the row and column numbers as vectors
+for the rowNumbers and columnNumbers arguments, or\cr
+a mixture of the above, where for entire rows/columns the element in the
+other vector is set to `NA`, e.g. to retrieve whole rows, specify the row
+numbers as the rowNumbers but set the corresponding elements in the
+columnNumbers vector to `NA`.
+}
+
+\subsection{Returns}{
+A list of `TableCell` objects.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-findCells"></a>}}
+\if{latex}{\out{\hypertarget{method-findCells}{}}}
+\subsection{Method \code{findCells()}}{
+Find cells matching specified criteria.
+See the "Finding and Formatting" vignette for graphical examples.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$findCells(
+  minValue = NULL,
+  maxValue = NULL,
+  exactValues = NULL,
+  valueRanges = NULL,
+  includeNull = TRUE,
+  includeNA = TRUE,
+  emptyCells = "include",
+  rowNumbers = NULL,
+  columnNumbers = NULL,
+  cellCoordinates = NULL,
+  cells = NULL,
+  rowColumnMatchMode = "simple"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{minValue}}{A numerical value specifying a minimum value threshold.}
+
+\item{\code{maxValue}}{A numerical value specifying a maximum value threshold.}
+
+\item{\code{exactValues}}{A vector or list specifying a set of allowed values.}
+
+\item{\code{valueRanges}}{A vector specifying one or more value range expressions which
+the cell values must match.  If multiple value range expressions are specified,
+then the cell value must match any of one the specified expressions.}
+
+\item{\code{includeNull}}{Specify TRUE to include `NULL` in the matched cells,
+FALSE to exclude `NULL` values.}
+
+\item{\code{includeNA}}{Specify TRUE to include `NA` in the matched cells,
+FALSE to exclude `NA` values.}
+
+\item{\code{emptyCells}}{A word that specifies how empty cells are matched -
+must be one of "include" (default), "exclude" or "only".}
+
+\item{\code{rowNumbers}}{A vector of row numbers that specify the rows or
+cells to constrain the search.}
+
+\item{\code{columnNumbers}}{A vector of column numbers that specify the columns
+or cells to constrain the search.}
+
+\item{\code{cellCoordinates}}{A list of two-element vectors that specify the
+coordinates of cells to constrain the search.}
+
+\item{\code{cells}}{A `TableCell` object or a list of `TableCell`
+objects to constrain the scope of the search.}
+
+\item{\code{rowColumnMatchMode}}{Either "simple" (default) or "combinations":\cr
+"simple" specifies that row and column arguments are considered separately
+(logical OR), e.g. rowNumbers=1 and columnNumbers=2 will match all cells in
+row 1 and all cells in column 2.\cr
+"combinations" specifies that row and column arguments are considered together
+(logical AND), e.g. rowNumbers=1 and columnNumbers=2 will match only the
+cell single at location (1, 2).\cr
+Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are
+affected by the match mode.  All other arguments are not.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A list of `TableCell` objects.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getColumnWidths"></a>}}
+\if{latex}{\out{\hypertarget{method-getColumnWidths}{}}}
+\subsection{Method \code{getColumnWidths()}}{
+Retrieve the width of the longest value
+  (in characters) in each column.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$getColumnWidths()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+The width of the column in characters.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-asList}{}}}
+\subsection{Method \code{asList()}}{
+Return the contents of this object as a list for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$asList()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\subsection{Method \code{asJSON()}}{
+Return the contents of this object as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$asJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A JSON representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCells$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

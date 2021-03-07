@@ -48,7 +48,7 @@ TableOpenXlsxStyle <- R6::R6Class("TableOpenXlsxStyle",
     #' @param wrapText `TRUE` if the text is allowed to wrap onto multiple lines.
     #' @param textRotation The rotation angle of the text or 255 for vertical.
     #' @param indent The text indentation.
-    #' @param border A list (with elements style and color) specifying the border
+    #' @param borderAll A list (with elements style and color) specifying the border
     #'   settings for all four sides of each cell at once.
     #' @param borderLeft A list (with elements style and color) specifying the
     #'   border settings for the left border of each cell.
@@ -484,7 +484,7 @@ TableOpenXlsxStyle <- R6::R6Class("TableOpenXlsxStyle",
     #' @field fontSize The size of the font (units: point).
     fontSize = function(value) { return(invisible(private$p_fontSize)) },
 
-    #' @field bold ``TRUE`` if text is bold.
+    #' @field bold TRUE` if text is bold.
     bold = function(value) { return(invisible(private$p_bold)) },
 
     #' @field italic `TRUE` if text is italic.
@@ -524,7 +524,7 @@ TableOpenXlsxStyle <- R6::R6Class("TableOpenXlsxStyle",
     #' @field indent The text indentation.
     indent = function(value) { return(invisible(private$p_indent)) },
 
-    #' @field border A list (with elements style and color) specifying the border
+    #' @field borderAll A list (with elements style and color) specifying the border
     #'   settings for all four sides of each cell at once.
     borderAll = function(value) { return(invisible(private$p_borderAll)) },
 

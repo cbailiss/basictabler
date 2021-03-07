@@ -4,7 +4,8 @@
 \name{bhmsummary}
 \alias{bhmsummary}
 \title{A Summary of Birmingham Trains, Dec 2016-Feb 2017.}
-\format{A data frame with 4839 rows and 14 variables:
+\format{
+A data frame with 4839 rows and 14 variables:
 \describe{
   \item{Status}{Train status: A=Active, C=Cancelled, R=Reinstated}
   \item{TOC}{Train operating company}
@@ -21,7 +22,8 @@
   \item{OnTimeDepartures}{The number of trains that departed Birmingham on time}
   \item{TotalArrivalDelayMinutes}{The total number of delay minutes for arrivals}
   \item{TotalDepartureDelayMinutes}{The total number of delay minutes for departures}
-}}
+}
+}
 \source{
 \url{http://www.recenttraintimes.co.uk/}
 }

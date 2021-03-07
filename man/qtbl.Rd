@@ -70,7 +70,6 @@ A basic table.
 The \code{qtbl} function builds a basic table with one line of R.
 }
 \examples{
-qtbl(head(bhmsummary))
 qtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount",
   "OnTimeArrivals")])
 qtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount",

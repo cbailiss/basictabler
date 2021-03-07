@@ -7,6 +7,7 @@
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
+#' @export
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # This class should only be created by using the functions in the table.

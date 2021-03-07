@@ -33,7 +33,6 @@
 #'   argumentCheckMode.
 #' @return A basic table.
 #' @examples
-#' qtbl(head(bhmsummary))
 #' qtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount",
 #'   "OnTimeArrivals")])
 #' qtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount",
@@ -111,7 +110,6 @@ qtbl <- function(dataFrameOrMatrix, columnNamesAsColumnHeaders=TRUE, explicitCol
 #'   and/or styleNamePrefix.
 #' @return A basic table.
 #' @examples
-#' qhtbl(head(bhmsummary))
 #' qhtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount",
 #'   "OnTimeArrivals")])
 #' qhtbl(bhmsummary[1:5, c("GbttWeekDate", "Origin", "Destination", "TrainCount",

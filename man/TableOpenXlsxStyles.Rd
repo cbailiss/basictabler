@@ -3,45 +3,15 @@
 \docType{class}
 \name{TableOpenXlsxStyles}
 \alias{TableOpenXlsxStyles}
-\title{A class that defines a collection of Excel styles as used by the openxlsx
+\title{R6 class that defines a collection of Excel styles as used by the `openxlsx`
 package.}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that
-  define styles/a theme for a table.
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableOpenXlsxStyles class stores a collection of TableTableOpenXlsx style
-objects.
+The `TableOpenXlsxStyles` class stores a collection of `TableTableOpenXlsx`
+style objects.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{parentTable}}{Owning table.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new set of styles, specifying the field
-  values documented above.}
-
-  \item{\code{findNamedStyle(baseStyleName)}}{Find an existing openxlsx style
-  matching the name of a base style.}
-  \item{\code{findOrAddStyle(action="findOrAdd", baseStyleName=NULL,
-  isBaseStyle=NULL, style=NULL, mapFromCss=TRUE)}}{Find an existing openxlsx
-  style and/or add a new openxlsx style matching a base style and/or
-  TableStyle object.}
-  \item{\code{addNamedStyles(mapFromCss=TRUE)}}{Populate the OpenXlsx styles
-  based on the styles defined in the table.}
-  \item{\code{asList()}}{Get a list representation of the styles.}
-  \item{\code{asJSON()}}{Get a JSON representation of the styles.}
-  \item{\code{asString()}}{Get a text representation of the styles.}
-}
-}
-
 \examples{
 # This class should not be used by end users.  It is an internal class
 # created only by the BasicTable class.  It is used when rendering to Excel.
@@ -54,4 +24,208 @@ tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
                          topRowNumber=1, leftMostColumnNumber=1,
                          applyStyles=TRUE, mapStylesFromCSS=TRUE)
 # Use saveWorkbook() to save the Excel file.
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{count}}{The number of styles in the collection.}
+
+\item{\code{styles}}{A list of `TableOpenXlsxStyle` objects that comprise the collection.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableOpenXlsxStyles$new()}}
+\item \href{#method-clearStyles}{\code{TableOpenXlsxStyles$clearStyles()}}
+\item \href{#method-findNamedStyle}{\code{TableOpenXlsxStyles$findNamedStyle()}}
+\item \href{#method-findOrAddStyle}{\code{TableOpenXlsxStyles$findOrAddStyle()}}
+\item \href{#method-addNamedStyles}{\code{TableOpenXlsxStyles$addNamedStyles()}}
+\item \href{#method-asList}{\code{TableOpenXlsxStyles$asList()}}
+\item \href{#method-asJSON}{\code{TableOpenXlsxStyles$asJSON()}}
+\item \href{#method-asString}{\code{TableOpenXlsxStyles$asString()}}
+\item \href{#method-clone}{\code{TableOpenXlsxStyles$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableOpenXlsxStyles` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$new(parentTable)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parentTable}}{Owning table.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clearStyles"></a>}}
+\if{latex}{\out{\hypertarget{method-clearStyles}{}}}
+\subsection{Method \code{clearStyles()}}{
+Clear the collection removing all styles.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$clearStyles()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-findNamedStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-findNamedStyle}{}}}
+\subsection{Method \code{findNamedStyle()}}{
+Find a style in the collection matching the specified base style name.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$findNamedStyle(baseStyleName)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{baseStyleName}}{The style name to find.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A `TableTableOpenXlsx` object that is the style matching the
+  specified base style name or `NULL` otherwise.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-findOrAddStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-findOrAddStyle}{}}}
+\subsection{Method \code{findOrAddStyle()}}{
+Find a style in the collection matching the specified base style name and
+style properties.  If there is no matching style, then optionally add a
+new style.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$findOrAddStyle(
+  action = "findOrAdd",
+  baseStyleName = NULL,
+  isBaseStyle = NULL,
+  style = NULL,
+  mapFromCss = TRUE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{action}}{The action to carry out.  Must be one of "find", "add" or
+"findOrAdd" (default).}
+
+\item{\code{baseStyleName}}{The style name to find/add.}
+
+\item{\code{isBaseStyle}}{Is the style to be found/added a base style?}
+
+\item{\code{style}}{A `TableStyle` object specifying style properties to be found/added.}
+
+\item{\code{mapFromCss}}{`TRUE` (default) to map the basictabler CSS styles to
+corresponding Excel styles, `FALSE` to apply only the specified xl
+styles.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A `TableTableOpenXlsx` object that is the style matching the
+  specified base style name or `NULL` otherwise.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-addNamedStyles"></a>}}
+\if{latex}{\out{\hypertarget{method-addNamedStyles}{}}}
+\subsection{Method \code{addNamedStyles()}}{
+Populate the OpenXlsx styles
+  based on the styles defined in the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$addNamedStyles(mapFromCss = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{mapFromCss}}{`TRUE` (default) to map the basictabler CSS styles to
+corresponding Excel styles, `FALSE` to apply only the specified xl
+styles.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-asList}{}}}
+\subsection{Method \code{asList()}}{
+Return the contents of this object as a list for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$asList()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\subsection{Method \code{asJSON()}}{
+Return the contents of this object as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$asJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A JSON representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asString"></a>}}
+\if{latex}{\out{\hypertarget{method-asString}{}}}
+\subsection{Method \code{asString()}}{
+Return the contents of this object as a string for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$asString(seperator = ", ")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{seperator}}{Delimiter used to combine multiple values into a string.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A character representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyles$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

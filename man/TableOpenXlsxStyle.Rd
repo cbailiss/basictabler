@@ -3,25 +3,34 @@
 \docType{class}
 \name{TableOpenXlsxStyle}
 \alias{TableOpenXlsxStyle}
-\title{A class that specifies Excel styling as used by the openxlsx package.}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that help
-  define styles.
+\title{R6 class that specifies Excel styling as used by the openxlsx package.}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableOpenXlsxStyle class specifies the styling for cells in an
+The `TableOpenXlsxStyle` class specifies the styling for cells in an
 Excel worksheet.
 }
-\section{Fields}{
-
+\examples{
+# This class should only be created by using the functions in the table.
+# It is not intended to be created by users outside of the table.
+library(basictabler)
+tbl <- qtbl(data.frame(a=1:2, b=3:4))
+library(openxlsx)
+wb <- createWorkbook(creator = Sys.getenv("USERNAME"))
+addWorksheet(wb, "Data")
+tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
+                         topRowNumber=1, leftMostColumnNumber=1,
+                         applyStyles=TRUE, mapStylesFromCSS=TRUE)
+# Use saveWorkbook() to save the Excel file.
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{parentTable}}{Owning table.}
-
 \item{\code{baseStyleName}}{The name of the base style in the table.}
 
-\item{\code{isBaseStyle}}{TRUE when this style is the equivalent of a named style in
-the table, FALSE if this style has additional settings over and above
+\item{\code{isBaseStyle}}{`TRUE` when this style is the equivalent of a named style in
+the table, `FALSE` if this style has additional settings over and above
 the base style of the same name.}
 
 \item{\code{fontName}}{The name of the font (single font name, not a CSS style
@@ -29,17 +38,17 @@ list).}
 
 \item{\code{fontSize}}{The size of the font (units: point).}
 
-\item{\code{bold}}{TRUE if text is bold.}
+\item{\code{bold}}{TRUE` if text is bold.}
 
-\item{\code{italic}}{TRUE if text is italic.}
+\item{\code{italic}}{`TRUE` if text is italic.}
 
-\item{\code{underline}}{TRUE if text is underlined.}
+\item{\code{underline}}{`TRUE` if text is underlined.}
 
-\item{\code{strikethrough}}{TRUE if text has a line through it.}
+\item{\code{strikethrough}}{`TRUE` if text has a line through it.}
 
-\item{\code{superscript}}{TRUE if text is small and raised.}
+\item{\code{superscript}}{`TRUE` if text is small and raised.}
 
-\item{\code{subscript}}{TRUE if text is small and lowered.}
+\item{\code{subscript}}{`TRUE` if text is small and lowered.}
 
 \item{\code{fillColor}}{The background colour for the cell (as a hex value, e.g.
 #00FF00).}
@@ -54,7 +63,9 @@ list).}
 
 \item{\code{textRotation}}{The rotation angle of the text or 255 for vertical.}
 
-\item{\code{border}}{A list (with elements style and color) specifying the border
+\item{\code{indent}}{The text indentation.}
+
+\item{\code{borderAll}}{A list (with elements style and color) specifying the border
 settings for all four sides of each cell at once.}
 
 \item{\code{borderLeft}}{A list (with elements style and color) specifying the
@@ -69,52 +80,324 @@ settings for the top border of each cell.}
 \item{\code{borderBottom}}{A list (with elements style and color) specifying the
 border settings for the bottom border of each cell.}
 
-\item{\code{valueFormat}}{The Excel formatting applied to the field value.  One of
-the following values: GENERAL, NUMBER, CURRENCY, ACCOUNTING, DATE,
-LONGDATE, TIME, PERCENTAGE, FRACTION, SCIENTIFIC, TEXT, COMMA. Or for
-dates/datetimes, a combination of d, m, y. Or for numeric values, use 0.00
-etc.}
+\item{\code{valueFormat}}{The Excel formatting applied to the field value.  One
+of the following values: "GENERAL", "NUMBER", "CURRENCY", "ACCOUNTING",
+"DATE", "LONGDATE", TIME, "PERCENTAGE", "FRACTION", "SCIENTIFIC",
+"TEXT", "COMMA". Or for dates/datetimes, a combination of d, m, y. Or
+for numeric values, use 0.00 etc.}
 
 \item{\code{minColumnWidth}}{The minimum width of this column.}
 
 \item{\code{minRowHeight}}{The minimum height of this row.}
-}}
 
+\item{\code{openxlsxStyle}}{The return value from openxlsx::createStyle().}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableOpenXlsxStyle$new()}}
+\item \href{#method-isBasicStyleNameMatch}{\code{TableOpenXlsxStyle$isBasicStyleNameMatch()}}
+\item \href{#method-isFullStyleDetailMatch}{\code{TableOpenXlsxStyle$isFullStyleDetailMatch()}}
+\item \href{#method-createOpenXslxStyle}{\code{TableOpenXlsxStyle$createOpenXslxStyle()}}
+\item \href{#method-asList}{\code{TableOpenXlsxStyle$asList()}}
+\item \href{#method-asJSON}{\code{TableOpenXlsxStyle$asJSON()}}
+\item \href{#method-asString}{\code{TableOpenXlsxStyle$asString()}}
+\item \href{#method-clone}{\code{TableOpenXlsxStyle$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableOpenXlsxStyle` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyle$new(
+  parentTable,
+  baseStyleName = NULL,
+  isBaseStyle = NULL,
+  fontName = NULL,
+  fontSize = NULL,
+  bold = NULL,
+  italic = NULL,
+  underline = NULL,
+  strikethrough = NULL,
+  superscript = NULL,
+  subscript = NULL,
+  fillColor = NULL,
+  textColor = NULL,
+  hAlign = NULL,
+  vAlign = NULL,
+  wrapText = NULL,
+  textRotation = NULL,
+  indent = NULL,
+  borderAll = NULL,
+  borderLeft = NULL,
+  borderRight = NULL,
+  borderTop = NULL,
+  borderBottom = NULL,
+  valueFormat = NULL,
+  minColumnWidth = NULL,
+  minRowHeight = NULL
+)}\if{html}{\out{</div>}}
+}
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
 \describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new Excel style, specifying the field
-  values documented above.}
+\item{\code{parentTable}}{Owning table.}
 
-  \item{\code{isBasicStyleNameMatch(baseStyleName=NULL)}}{Find a matching
-  base style by name.}
-  \item{\code{isFullStyleDetailMatch = function(baseStyleName=NULL,
-  isBaseStyle=NULL, fontName=NULL, fontSize=NULL, bold=NULL, italic=NULL,
-  underline=NULL, strikethrough=NULL, superscript=NULL, subscript=NULL,
-  fillColor=NULL, textColor=NULL, hAlign=NULL, vAlign=NULL, wrapText=NULL,
-  textRotation=NULL, indent=NULL, borderAll=NULL, borderLeft=NULL,
-  borderRight=NULL, borderTop=NULL, borderBottom=NULL, valueFormat=NULL,
-  minColumnWidth=NULL, minRowHeight=NULL}}{Find a matching style matching on
-  all the attributes of the style.}
-  \item{\code{createOpenXslxStyle()}}{Create the openxlsx style.}
-  \item{\code{asList()}}{Get a list representation of this style.}
-  \item{\code{asJSON()}}{Get a JSON representation of this style.}
-  \item{\code{asString()}}{Get a text representation of this style.}
+\item{\code{baseStyleName}}{The name of the base style in the table.}
+
+\item{\code{isBaseStyle}}{`TRUE` when this style is the equivalent of a named style in
+the table, `FALSE` if this style has additional settings over and above
+the base style of the same name.}
+
+\item{\code{fontName}}{The name of the font (single font name, not a CSS style
+list).}
+
+\item{\code{fontSize}}{The size of the font (units: point).}
+
+\item{\code{bold}}{`TRUE` if text is bold.}
+
+\item{\code{italic}}{`TRUE` if text is italic.}
+
+\item{\code{underline}}{`TRUE` if text is underlined.}
+
+\item{\code{strikethrough}}{`TRUE` if text has a line through it.}
+
+\item{\code{superscript}}{`TRUE` if text is small and raised.}
+
+\item{\code{subscript}}{`TRUE` if text is small and lowered.}
+
+\item{\code{fillColor}}{The background colour for the cell (as a hex value, e.g.
+#00FF00).}
+
+\item{\code{textColor}}{The color of the text (as a hex value).}
+
+\item{\code{hAlign}}{The horizontal alignment of the text:  left, center or right.}
+
+\item{\code{vAlign}}{The vertical alignment of the text:  top, middle or bottom.}
+
+\item{\code{wrapText}}{`TRUE` if the text is allowed to wrap onto multiple lines.}
+
+\item{\code{textRotation}}{The rotation angle of the text or 255 for vertical.}
+
+\item{\code{indent}}{The text indentation.}
+
+\item{\code{borderAll}}{A list (with elements style and color) specifying the border
+settings for all four sides of each cell at once.}
+
+\item{\code{borderLeft}}{A list (with elements style and color) specifying the
+border settings for the left border of each cell.}
+
+\item{\code{borderRight}}{A list (with elements style and color) specifying the
+border settings for the right border of each cell.}
+
+\item{\code{borderTop}}{A list (with elements style and color) specifying the border
+settings for the top border of each cell.}
+
+\item{\code{borderBottom}}{A list (with elements style and color) specifying the
+border settings for the bottom border of each cell.}
+
+\item{\code{valueFormat}}{The Excel formatting applied to the field value.  One
+of the following values: "GENERAL", "NUMBER", "CURRENCY", "ACCOUNTING",
+"DATE", "LONGDATE", TIME, "PERCENTAGE", "FRACTION", "SCIENTIFIC",
+"TEXT", "COMMA". Or for dates/datetimes, a combination of d, m, y. Or
+for numeric values, use 0.00 etc.}
+
+\item{\code{minColumnWidth}}{The minimum width of this column.}
+
+\item{\code{minRowHeight}}{The minimum height of this row.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
 }
 }
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-isBasicStyleNameMatch"></a>}}
+\if{latex}{\out{\hypertarget{method-isBasicStyleNameMatch}{}}}
+\subsection{Method \code{isBasicStyleNameMatch()}}{
+Check if this style matches the specified base style name.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyle$isBasicStyleNameMatch(baseStyleName = NULL)}\if{html}{\out{</div>}}
+}
 
-\examples{
-# This class should not be used by end users.  It is an internal class
-# created only by the BasicTable class.  It is used when rendering to Excel.
-library(basictabler)
-tbl <- qtbl(data.frame(a=1:2, b=3:4))
-library(openxlsx)
-wb <- createWorkbook(creator = Sys.getenv("USERNAME"))
-addWorksheet(wb, "Data")
-tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
-                         topRowNumber=1, leftMostColumnNumber=1,
-                         applyStyles=TRUE, mapStylesFromCSS=TRUE)
-# Use saveWorkbook() to save the Excel file.
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{baseStyleName}}{The style name to compare to.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+`TRUE` if the style name matches, `FALSE` otherwise.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-isFullStyleDetailMatch"></a>}}
+\if{latex}{\out{\hypertarget{method-isFullStyleDetailMatch}{}}}
+\subsection{Method \code{isFullStyleDetailMatch()}}{
+Check if this style matches the specified style properties.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyle$isFullStyleDetailMatch(
+  baseStyleName = NULL,
+  isBaseStyle = NULL,
+  fontName = NULL,
+  fontSize = NULL,
+  bold = NULL,
+  italic = NULL,
+  underline = NULL,
+  strikethrough = NULL,
+  superscript = NULL,
+  subscript = NULL,
+  fillColor = NULL,
+  textColor = NULL,
+  hAlign = NULL,
+  vAlign = NULL,
+  wrapText = NULL,
+  textRotation = NULL,
+  indent = NULL,
+  borderAll = NULL,
+  borderLeft = NULL,
+  borderRight = NULL,
+  borderTop = NULL,
+  borderBottom = NULL,
+  valueFormat = NULL,
+  minColumnWidth = NULL,
+  minRowHeight = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{baseStyleName}}{The style name to compare to.}
+
+\item{\code{isBaseStyle}}{Whether the style being compared to is a base style.}
+
+\item{\code{fontName}}{The font name to compare to.}
+
+\item{\code{fontSize}}{The font size to compare to.}
+
+\item{\code{bold}}{The style property bold to compare to.}
+
+\item{\code{italic}}{The style property italic to compare to.}
+
+\item{\code{underline}}{The style property underline to compare to.}
+
+\item{\code{strikethrough}}{The style property strikethrough to compare to.}
+
+\item{\code{superscript}}{The style property superscript to compare to.}
+
+\item{\code{subscript}}{The style property subscript to compare to.}
+
+\item{\code{fillColor}}{The style property fillColor to compare to.}
+
+\item{\code{textColor}}{The style property textColor to compare to.}
+
+\item{\code{hAlign}}{The style property hAlign to compare to.}
+
+\item{\code{vAlign}}{The style property vAlign to compare to.}
+
+\item{\code{wrapText}}{The style property wrapText to compare to.}
+
+\item{\code{textRotation}}{The style property textRotation to compare to.}
+
+\item{\code{indent}}{The style property indent to compare to.}
+
+\item{\code{borderAll}}{The style property borderAll to compare to.}
+
+\item{\code{borderLeft}}{The style property borderLeft to compare to.}
+
+\item{\code{borderRight}}{The style property borderRight to compare to.}
+
+\item{\code{borderTop}}{The style property borderTop to compare to.}
+
+\item{\code{borderBottom}}{The style property borderBottom to compare to.}
+
+\item{\code{valueFormat}}{The style value format to compare to.}
+
+\item{\code{minColumnWidth}}{The style property minColumnWidth to compare to.}
+
+\item{\code{minRowHeight}}{The style property minRowHeight to compare to.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+`TRUE` if the style matches, `FALSE` otherwise.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-createOpenXslxStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-createOpenXslxStyle}{}}}
+\subsection{Method \code{createOpenXslxStyle()}}{
+Create the `openxlsx` style based on the specified style properties.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyle$createOpenXslxStyle()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-asList}{}}}
+\subsection{Method \code{asList()}}{
+Return the contents of this object as a list for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyle$asList()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\subsection{Method \code{asJSON()}}{
+Return the contents of this object as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyle$asJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A JSON representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asString"></a>}}
+\if{latex}{\out{\hypertarget{method-asString}{}}}
+\subsection{Method \code{asString()}}{
+Return the contents of this object as a string for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyle$asString()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A character representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxStyle$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

@@ -3,120 +3,14 @@
 \docType{class}
 \name{BasicTable}
 \alias{BasicTable}
-\title{A class that defines a basic table.}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that
-  define a basic table.
+\title{R6 class that defines a basic table.}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The BasicTable class represents a table with styling and formatting that can
+The `BasicTable` class represents a table with styling and formatting that can
 be rendered to multiple output formats.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{argumentCheckMode}}{A number (0-4 meaning none, minimal, basic,
-balanced, full) indicating the argument checking level.}
-
-\item{\code{traceEnabled}}{A logical value indicating whether actions are logged to
-a trace file.}
-
-\item{\code{rowCount}}{The number of rows in the table.}
-
-\item{\code{columnCount}}{The number of columns in the table.}
-
-\item{\code{cells}}{A TableCells object containing all of the cells in the body of
-the table.}
-
-\item{\code{theme}}{The name of the theme currently applied to the table.}
-
-\item{\code{styles}}{A TableStyles object containing the styles used to theme the
-table.}
-
-\item{\code{allowExternalStyles}}{Enable support for external styles, when producing
-content for external systems.}
-
-\item{\code{allTimings}}{The time taken for various activities related to
-constructing the table.}
-
-\item{\code{significantTimings}}{The time taken for various activities related to
-constructing the table, where the elapsed time > 0.1 seconds.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(argumentCheckMode="auto", theme=NULL,
-  replaceExistingStyles=FALSE, tableStyle=NULL, headingStyle=NULL,
-  cellStyle=NULL, totalStyle=NULL, compatibility=NULL, traceEnabled=FALSE,
-  traceFile=NULL)}}{Create a new table, optionally specifying the name of a
-  built in theme or CSS style declarations for the different cells within the
-  table.}
-  \item{\code{addData(dataFrame=NULL, columnNamesAsColumnHeaders=TRUE,
-  explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
-  firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL,
-  baseStyleNames=NULL)}}{Generate the table from a data frame, specifying
-  headers and value formatting.}
-  \item{\code{addMatrix(matrix=NULL, columnNamesAsColumnHeaders=TRUE,
-  explicitColumnHeaders=NULL, rowNamesAsRowHeaders=FALSE,
-  explicitRowHeaders=NULL, columnFormats=NULL,
-  baseStyleNames=NULL)}}{Generate the table from a matrix, specifying headers
-  and value formatting.l}
-  \item{\code{mergeCells(rFrom, cFrom, rSpan=NULL, cSpan=NULL,
-  rTo=NULL, cTo=NULL)}}{Merge cells in the table.  This does not delete
-  the other cells covered by the merged cell.  When the table is output, the
-  top-left most cell in the merged cell range is rendered over the other
-  cells (which are effectively hidden).}
-  \item{\code{unmergeCells(r, c, errorIfNotFound=TRUE)}}{Delete a merged cell
-  range by specifying any of the cells covered by the merged cell.}
-  \item{\code{applyCellMerges()}}{Updates the isMerged, isMergeRoot and
-  mergeIndex properties of the cells.}
-  \item{\code{formatValue(value=NULL, format=NULL)}}{Format a value for
-  display, using either sprintf(), format() or a custom formatting function.}
-  \item{\code{addStyle(styleName, declarations)}}{Define a new TableStyle and
-  add it to the TableStyles collection.}
-  \item{\code{createInlineStyle(baseStyleName, declarations)}}{Create a
-  TableStyle object that can be used to style individual cells in the table.}
-  \item{\code{setStyling(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL,
-  cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL)}}{Set the
-  style settings across a range of cells.}
-  \item{\code{resetCells()}}{Clear the cells of the table.}
-  \item{\code{getCells(specifyCellsAsList=TRUE, rowNumbers=NULL,
-  columnNumbers=NULL, cellCoordinates=NULL)}}{Retrieve cells by a combination
-  of row and/or column numbers.}
-  \item{\code{findCells(rowNumbers=NULL, columnNumbers=NULL,
-  minValue=NULL, maxValue=NULL, exactValues=NULL, includeNull=TRUE,
-  includeNA=TRUE)}}{Find cells in the body of the table matching
-  the specified criteria.}
-  \item{\code{print(asCharacter=FALSE)}}{Either print the table to the
-  console or retrieve it as a character value.}
-  \item{\code{asMatrix(firstRowAsColumnNames=FALSE,
-  firstColumnAsRowNames=FALSE, rawValue=FALSE)}}{Gets the table as
-  a matrix, with or without headings.}
-  \item{\code{asDataFrame(firstRowAsColumnNames=FALSE,
-  firstColumnAsRowNames=FALSE, rawValue=FALSE, stringsAsFactors)}}{
-  Gets the table as a data frame, with or without headings.}
-  \item{\code{getCss(styleNamePrefix)}}{Get the CSS declarations for the
-  entire table.}
-  \item{\code{getHtml(styleNamePrefix)}}{Get the HTML representation of the
-  table, specifying the CSS style name prefix to use.}
-  \item{\code{saveHtml(filePath, fullPageHTML=TRUE, styleNamePrefix)}}{Save
-  the HTML representation of the table to a file.}
-  \item{\code{renderTable(width, height, styleNamePrefix)}}{Render the table
-  as a htmlwidget.}
-  \item{\code{writeToExcelWorksheet(wb=NULL, wsName=NULL, topRowNumber=NULL,
-  leftMostColumnNumber=NULL, mapStylesFromCSS=TRUE)}}{Output the table
-  into the specified workbook and worksheet at the specified row-column
-  location.}
-  \item{\code{asList()}}{Get a list representation of the table.}
-  \item{\code{asJSON()}}{Get a JSON representation of the table.}
-  \item{\code{viewJSON()}}{View the JSON representation of the table.}
-}
-}
-
 \examples{
 # The package vignettes have many more examples of working with the
 # BasicTable class.
@@ -149,4 +43,1057 @@ tbl$addData(tocsummary, columnNamesAsColumnHeaders=FALSE,
   firstColumnAsRowHeaders=TRUE,
   explicitColumnHeaders=columnHeaders, columnFormats=columnFormats)
 tbl$renderTable()
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{argumentCheckMode}}{The level of argument checking to perform.
+One of "auto", "none", "minimal", "basic", "balanced" (default)
+or "full".}
+
+\item{\code{compatibility}}{A list containing compatibility options to force
+legacy behaviours.  See the NEWS file for details.}
+
+\item{\code{traceEnabled}}{A logical value indicating whether actions are logged to
+a trace file.}
+
+\item{\code{cells}}{A `TableCells` object containing all of the cells in the body of
+the table.}
+
+\item{\code{mergedCells}}{A `TableCellRanges` object describing the merged cells.}
+
+\item{\code{rowCount}}{The number of rows in the table.}
+
+\item{\code{columnCount}}{The number of columns in the table.}
+
+\item{\code{asCharacter}}{The plain-text representation of the table.}
+
+\item{\code{theme}}{The name of the theme used to style the table.
+If setting this property, either a theme name can be used, or
+a list can be used (which specifies a simple theme) or a
+`TableStyles` object can be used.
+See the "Styling" vignette for details and examples.}
+
+\item{\code{styles}}{A `TableStyles` object containing the styles used to theme the
+table.}
+
+\item{\code{allowExternalStyles}}{Default `FALSE`, which means the `TableStyles`
+object checks that style names specified for styling the different
+parts of the table must exist in the styles collection.  If they do
+not an error will occur.  Specify `TRUE` to disable this check, e.g. if
+the style definitions are not managed by `basictabler` but instead
+in an external system.}
+
+\item{\code{allTimings}}{The time taken for various activities related to
+constructing the table.}
+
+\item{\code{significantTimings}}{The time taken for various activities related to
+constructing the table, where the elapsed time > 0.1 seconds.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{BasicTable$new()}}
+\item \href{#method-getNextInstanceId}{\code{BasicTable$getNextInstanceId()}}
+\item \href{#method-addData}{\code{BasicTable$addData()}}
+\item \href{#method-addMatrix}{\code{BasicTable$addMatrix()}}
+\item \href{#method-mergeCells}{\code{BasicTable$mergeCells()}}
+\item \href{#method-unmergeCells}{\code{BasicTable$unmergeCells()}}
+\item \href{#method-applyCellMerges}{\code{BasicTable$applyCellMerges()}}
+\item \href{#method-formatValue}{\code{BasicTable$formatValue()}}
+\item \href{#method-addStyle}{\code{BasicTable$addStyle()}}
+\item \href{#method-createInlineStyle}{\code{BasicTable$createInlineStyle()}}
+\item \href{#method-setStyling}{\code{BasicTable$setStyling()}}
+\item \href{#method-resetCells}{\code{BasicTable$resetCells()}}
+\item \href{#method-getCells}{\code{BasicTable$getCells()}}
+\item \href{#method-findCells}{\code{BasicTable$findCells()}}
+\item \href{#method-print}{\code{BasicTable$print()}}
+\item \href{#method-asMatrix}{\code{BasicTable$asMatrix()}}
+\item \href{#method-asDataFrame}{\code{BasicTable$asDataFrame()}}
+\item \href{#method-getCss}{\code{BasicTable$getCss()}}
+\item \href{#method-getHtml}{\code{BasicTable$getHtml()}}
+\item \href{#method-saveHtml}{\code{BasicTable$saveHtml()}}
+\item \href{#method-renderTable}{\code{BasicTable$renderTable()}}
+\item \href{#method-writeToExcelWorksheet}{\code{BasicTable$writeToExcelWorksheet()}}
+\item \href{#method-trace}{\code{BasicTable$trace()}}
+\item \href{#method-asList}{\code{BasicTable$asList()}}
+\item \href{#method-asJSON}{\code{BasicTable$asJSON()}}
+\item \href{#method-viewJSON}{\code{BasicTable$viewJSON()}}
+\item \href{#method-finalize}{\code{BasicTable$finalize()}}
+\item \href{#method-clone}{\code{BasicTable$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `BasicTable` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$new(
+  argumentCheckMode = "auto",
+  theme = NULL,
+  replaceExistingStyles = FALSE,
+  tableStyle = NULL,
+  headingStyle = NULL,
+  cellStyle = NULL,
+  totalStyle = NULL,
+  compatibility = NULL,
+  traceEnabled = FALSE,
+  traceFile = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{argumentCheckMode}}{The level of argument checking to perform.
+Must be one of "auto", "none", "minimal", "basic", "balanced" (default)
+or "full".}
+
+\item{\code{theme}}{A theme to use to style the table. Either:\cr
+(1) The name of a built in theme, or\cr
+(2) A list of simple style settings, or\cr
+(3) A `TableStyles` object containing a full set of styles.\cr
+See the "Styling" vignette for many examples.}
+
+\item{\code{replaceExistingStyles}}{Default `FALSE` to retain existing styles in
+the styles collection and add specified styles as new custom styles.
+Specify `TRUE` to update the definitions of existing styles.}
+
+\item{\code{tableStyle}}{Styling to apply to the table.  Either:\cr
+(1) The name of a built in style, or\cr
+(2) A list of CSS style declarations, e.g.\cr
+`list("font-weight"="bold", "color"="#0000FF")`, or\cr
+(3) A `TableStyle` object.}
+
+\item{\code{headingStyle}}{Styling to apply to the headings.
+See the `tableStyle` argument for details.}
+
+\item{\code{cellStyle}}{Styling to apply to the normal cells.
+See the `tableStyle` argument for details.}
+
+\item{\code{totalStyle}}{Styling to apply to the total cells.
+See the `tableStyle` argument for details.}
+
+\item{\code{compatibility}}{A list containing compatibility options to force
+legacy behaviours.  See the NEWS file for details.}
+
+\item{\code{traceEnabled}}{Default `FALSE`.  Specify `TRUE` to generate a trace
+for debugging purposes.}
+
+\item{\code{traceFile}}{If tracing is enabled, the location to generate the trace file.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getNextInstanceId"></a>}}
+\if{latex}{\out{\hypertarget{method-getNextInstanceId}{}}}
+\subsection{Method \code{getNextInstanceId()}}{
+Get the next unique object instance identifier.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$getNextInstanceId()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+R6 classes cannot be easily compared to check if two variables are both
+referring to the same object instance.  Instance ids are a mechanism to
+work around this problem.  Each cell is assigned an
+instance id during object creation, which enables reliable reference
+comparisons.
+}
+
+\subsection{Returns}{
+An integer instance id.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-addData"></a>}}
+\if{latex}{\out{\hypertarget{method-addData}{}}}
+\subsection{Method \code{addData()}}{
+Populate the table from a data frame, specifying headers and value
+  formatting.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$addData(
+  dataFrame = NULL,
+  columnNamesAsColumnHeaders = TRUE,
+  explicitColumnHeaders = NULL,
+  rowNamesAsRowHeaders = FALSE,
+  firstColumnAsRowHeaders = FALSE,
+  explicitRowHeaders = NULL,
+  columnFormats = NULL,
+  baseStyleNames = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataFrame}}{The data frame to generate the table from.}
+
+\item{\code{columnNamesAsColumnHeaders}}{`TRUE` to use the data frame column names
+as column headings in the table.  Default value `TRUE.`}
+
+\item{\code{explicitColumnHeaders}}{A character vector of column names to use as
+column headings in the table.}
+
+\item{\code{rowNamesAsRowHeaders}}{`TRUE` to use the data frame row names as row
+headings in the table.  Default value `FALSE.`}
+
+\item{\code{firstColumnAsRowHeaders}}{`TRUE` to use the first column in the data
+frame as row headings in the table.  Default value `FALSE.`}
+
+\item{\code{explicitRowHeaders}}{A character vector of row names to use as row
+headings in the table.}
+
+\item{\code{columnFormats}}{A character, list or custom function to format the
+calculation values.}
+
+\item{\code{baseStyleNames}}{A character vector of style names (from the table
+theme) used to style the column values.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-addMatrix"></a>}}
+\if{latex}{\out{\hypertarget{method-addMatrix}{}}}
+\subsection{Method \code{addMatrix()}}{
+Populate the table from a matrix, specifying headers and value
+  formatting.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$addMatrix(
+  matrix = NULL,
+  columnNamesAsColumnHeaders = TRUE,
+  explicitColumnHeaders = NULL,
+  rowNamesAsRowHeaders = FALSE,
+  explicitRowHeaders = NULL,
+  columnFormats = NULL,
+  baseStyleNames = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{matrix}}{The matrix to generate the table from.}
+
+\item{\code{columnNamesAsColumnHeaders}}{`TRUE` to use the matrix column names
+as column headings in the table.  Default value `TRUE.`}
+
+\item{\code{explicitColumnHeaders}}{A character vector of column names to use as
+column headings in the table.}
+
+\item{\code{rowNamesAsRowHeaders}}{`TRUE` to use the matrix row names as row
+headings in the table.  Default value `FALSE.`}
+
+\item{\code{explicitRowHeaders}}{A character vector of row names to use as row
+headings in the table.}
+
+\item{\code{columnFormats}}{A character, list or custom function to format the
+calculation values.}
+
+\item{\code{baseStyleNames}}{A character vector of style names (from the table
+theme) used to style the column values.}
+
+\item{\code{firstColumnAsRowHeaders}}{`TRUE` to use the first column in the matrix
+as row headings in the table.  Default value `FALSE.`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-mergeCells"></a>}}
+\if{latex}{\out{\hypertarget{method-mergeCells}{}}}
+\subsection{Method \code{mergeCells()}}{
+Merge table cells by specifying either:\cr
+The top left cell (rFrom, cFrom) and the merged cell size (rSpan, cSpan) or,
+The top left cell (rFrom, cFrom) and bottom-right cell (rTo, cTo), or
+The ranges of rows/columns as vectors using rowNumbers and columnNumbers.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$mergeCells(
+  rFrom = NULL,
+  cFrom = NULL,
+  rSpan = NULL,
+  cSpan = NULL,
+  rTo = NULL,
+  cTo = NULL,
+  rowNumbers = NULL,
+  columnNumbers = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rFrom}}{The row-number of the top-left cell being merged.}
+
+\item{\code{cFrom}}{The column number of the top-left cell being merged.}
+
+\item{\code{rSpan}}{The number of rows that the merged cell spans.}
+
+\item{\code{cSpan}}{The number of columns that the merged cell spans.}
+
+\item{\code{rTo}}{The row-number of the bottom-right cell being merged.}
+
+\item{\code{cTo}}{The column-number of the bottom-right cell being merged.}
+
+\item{\code{rowNumbers}}{A vector specifying the row numbers of the cells to be merged.}
+
+\item{\code{columnNumbers}}{A vector specifying the columns numbers of the cells to be merged.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-unmergeCells"></a>}}
+\if{latex}{\out{\hypertarget{method-unmergeCells}{}}}
+\subsection{Method \code{unmergeCells()}}{
+Unmerge a set of merged cells by specifying any cell within the set of
+merged cells.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$unmergeCells(r = NULL, c = NULL, errorIfNotFound = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{r}}{The row number of any cell within the merged cell.}
+
+\item{\code{c}}{The column number of any cell within the merged cell.}
+
+\item{\code{errorIfNotFound}}{`TRUE` to ignore any attempt to unmerge a cell that
+is not merged.  Default value `TRUE.`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `TableCell` object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-applyCellMerges"></a>}}
+\if{latex}{\out{\hypertarget{method-applyCellMerges}{}}}
+\subsection{Method \code{applyCellMerges()}}{
+Internal method that sets the `isMerged` and `mergeIndex` properties on
+each cell based on the cell merges that have been specified.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$applyCellMerges()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-formatValue"></a>}}
+\if{latex}{\out{\hypertarget{method-formatValue}{}}}
+\subsection{Method \code{formatValue()}}{
+Format a value using a variety of different methods.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$formatValue(value = NULL, format = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{value}}{The value to format.}
+
+\item{\code{format}}{Either a character format string to be used with `sprintf()`,
+a list of arguments to be used with `base::format()` or a custom R function
+which will be invoked once per value to be formatted.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The formatted value if `format` is specified, otherwise the `value`
+converted to a character value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-addStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-addStyle}{}}}
+\subsection{Method \code{addStyle()}}{
+Add a new named style to the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$addStyle(styleName = NULL, declarations = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleName}}{The name of the new style.}
+
+\item{\code{declarations}}{CSS style declarations in the form of a list, e.g.
+`list("font-weight"="bold", "color"="#0000FF")`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The newly created `TableStyle` object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-createInlineStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-createInlineStyle}{}}}
+\subsection{Method \code{createInlineStyle()}}{
+Create an inline style that can be used to override a base style.
+For general use cases, the `setStyling()` method provides a simpler
+and more direct way of styling specific parts of a table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$createInlineStyle(baseStyleName = NULL, declarations = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{baseStyleName}}{The name of an existing style to base the new style on.}
+
+\item{\code{declarations}}{CSS style declarations in the form of a list, e.g.
+`list("font-weight"="bold", "color"="#0000FF")`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Inline styles are typically used to override the style of some specific
+cells in a table.  Inline styles have no name.
+In HTML, they are rendered as 'style' attributes on specific table cells,
+where as named styles are linked to cells using the 'class' attribute.
+}
+
+\subsection{Returns}{
+The newly created `TableStyle` object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setStyling"></a>}}
+\if{latex}{\out{\hypertarget{method-setStyling}{}}}
+\subsection{Method \code{setStyling()}}{
+Apply styling to a set of cells in the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$setStyling(
+  rFrom = NULL,
+  cFrom = NULL,
+  rTo = NULL,
+  cTo = NULL,
+  rowNumbers = NULL,
+  columnNumbers = NULL,
+  cells = NULL,
+  baseStyleName = NULL,
+  style = NULL,
+  declarations = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rFrom}}{An integer row number that specifies the start row for the
+styling changes.}
+
+\item{\code{cFrom}}{An integer column number that specifies the start column for the
+styling changes.}
+
+\item{\code{rTo}}{An integer row number that specifies the end row for the styling
+changes.}
+
+\item{\code{cTo}}{An integer column number that specifies the end column for the
+styling changes.}
+
+\item{\code{rowNumbers}}{An integer vector that specifies the row numbers for the
+styling changes.}
+
+\item{\code{columnNumbers}}{An integer vector that specifies the column numbers for
+the styling changes.}
+
+\item{\code{cells}}{A list containing `TableCell` objects.}
+
+\item{\code{baseStyleName}}{The name of a style to apply.}
+
+\item{\code{style}}{A `TableStyle` object to apply.}
+
+\item{\code{declarations}}{CSS style declarations to apply in the form of a list,
+e.g. `list("font-weight"="bold", "color"="#0000FF")`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+There are five ways to specify the part(s) of a table to apply
+styling to:\cr
+(1) By specifying a list of data groups using the `groups` argument.\cr
+(2) By specifying a list of cells using the `cells` argument.\cr
+(3) By specifying a single cell using the `rFrom` and `cFrom` arguments.\cr
+(4) By specifying a rectangular cell range using the `rFrom`, `cFrom`,
+`rTo` and `cTo` arguments.\cr
+(5) By specifying a vector of rowNumbers and/or columnNumbers.  If both
+rowNumbers and columnNumbers are specified, then the cells at the
+intersection of the specified row numbers and column numbers are styled.\cr
+If both rFrom/rTo and rowNumbers are specified, then rFrom/rTo constrain
+the row numbers specified in rowNumbers.\cr
+If both cFrom/cTo and columnNumbers are specified, then cFrom/cTo constrain
+the column numbers specified in columnNumbers.\cr
+See the "Styling" and "Finding and Formatting" vignettes for more
+information and many examples.
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-resetCells"></a>}}
+\if{latex}{\out{\hypertarget{method-resetCells}{}}}
+\subsection{Method \code{resetCells()}}{
+Clear the cells of the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$resetCells()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+The cells are reset automatically when structural changes are made to the
+table, so this method often doesn't needs to be called explicitly.
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getCells"></a>}}
+\if{latex}{\out{\hypertarget{method-getCells}{}}}
+\subsection{Method \code{getCells()}}{
+Retrieve cells by a combination of row and/or column numbers.
+See the "Finding and Formatting" vignette for graphical examples.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$getCells(
+  specifyCellsAsList = TRUE,
+  rowNumbers = NULL,
+  columnNumbers = NULL,
+  cellCoordinates = NULL,
+  excludeEmptyCells = FALSE,
+  matchMode = "simple"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{specifyCellsAsList}}{Specify how cells are retrieved.
+Default `TRUE`. More information is provided in the details section.}
+
+\item{\code{rowNumbers}}{A vector of row numbers that specify the rows or
+cells to retrieve.}
+
+\item{\code{columnNumbers}}{A vector of column numbers that specify the columns
+or cells to retrieve.}
+
+\item{\code{cellCoordinates}}{A list of two-element vectors that specify the
+coordinates of cells to retrieve.  Ignored when `specifyCellsAsList=FALSE`.}
+
+\item{\code{excludeEmptyCells}}{Default `FALSE`.  Specify `TRUE` to exclude empty
+cells.}
+
+\item{\code{matchMode}}{Either "simple" (default) or "combinations":\cr
+"simple" specifies that row and column arguments are considered separately
+(logical OR), e.g. rowNumbers=1 and columnNumbers=2 will match all cells in
+row 1 and all cells in column 2.\cr
+"combinations" specifies that row and column arguments are considered together
+(logical AND), e.g. rowNumbers=1 and columnNumbers=2 will match only the
+cell single at location (1, 2).\cr
+Arguments `rowNumbers` and `columnNumbers` are
+affected by the match mode.  All other arguments are not.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+When `specifyCellsAsList=TRUE` (the default):\cr
+Get one or more rows by specifying the row numbers as a vector as
+the rowNumbers argument and leaving the columnNumbers argument set
+to the default value of `NULL`, or\cr
+Get one or more columns by specifying the column numbers as a vector
+as the columnNumbers argument and leaving the rowNumbers argument
+set to the default value of `NULL`, or\cr
+Get one or more individual cells by specifying the cellCoordinates
+argument as a list of vectors of length 2, where each element in the
+list is the row and column number of one cell,\cr
+e.g. `list(c(1, 2), c(3, 4))` specifies two cells, the first located
+at row 1, column 2 and the second located at row 3, column 4.\cr
+When `specifyCellsAsList=FALSE`:\cr
+Get one or more rows by specifying the row numbers as a vector as the
+rowNumbers argument and leaving the columnNumbers argument set to the
+default value of `NULL`, or\cr
+Get one or more columns by specifying the column numbers as a vector
+as the columnNumbers argument and leaving the rowNumbers argument set
+to the default value of `NULL`, or\cr
+Get one or more cells by specifying the row and column numbers as vectors
+for the rowNumbers and columnNumbers arguments, or\cr
+a mixture of the above, where for entire rows/columns the element in the
+other vector is set to `NA`, e.g. to retrieve whole rows, specify the row
+numbers as the rowNumbers but set the corresponding elements in the
+columnNumbers vector to `NA`.
+}
+
+\subsection{Returns}{
+A list of `TableCell` objects.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-findCells"></a>}}
+\if{latex}{\out{\hypertarget{method-findCells}{}}}
+\subsection{Method \code{findCells()}}{
+Find cells matching specified criteria.
+See the "Finding and Formatting" vignette for graphical examples.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$findCells(
+  minValue = NULL,
+  maxValue = NULL,
+  exactValues = NULL,
+  valueRanges = NULL,
+  includeNull = TRUE,
+  includeNA = TRUE,
+  emptyCells = "include",
+  rowNumbers = NULL,
+  columnNumbers = NULL,
+  cellCoordinates = NULL,
+  cells = NULL,
+  rowColumnMatchMode = "simple"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{minValue}}{A numerical value specifying a minimum value threshold.}
+
+\item{\code{maxValue}}{A numerical value specifying a maximum value threshold.}
+
+\item{\code{exactValues}}{A vector or list specifying a set of allowed values.}
+
+\item{\code{valueRanges}}{A vector specifying one or more value range expressions which
+the cell values must match.  If multiple value range expressions are specified,
+then the cell value must match any of one the specified expressions.  See details.}
+
+\item{\code{includeNull}}{specify TRUE to include `NULL` in the matched cells,
+FALSE to exclude `NULL` values.}
+
+\item{\code{includeNA}}{specify TRUE to include `NA` in the matched cells,
+FALSE to exclude `NA` values.}
+
+\item{\code{emptyCells}}{A word that specifies how empty cells are matched -
+must be one of "include" (default), "exclude" or "only".}
+
+\item{\code{rowNumbers}}{A vector of row numbers that specify the rows or
+cells to constrain the search.}
+
+\item{\code{columnNumbers}}{A vector of column numbers that specify the columns
+or cells to constrain the search.}
+
+\item{\code{cellCoordinates}}{A list of two-element vectors that specify the
+coordinates of cells to constrain the search.}
+
+\item{\code{cells}}{A `TableCell` object or a list of `TableCell`
+objects to constrain the scope of the search.}
+
+\item{\code{rowColumnMatchMode}}{Either "simple" (default) or "combinations":\cr
+"simple" specifies that row and column arguments are considered separately
+(logical OR), e.g. rowNumbers=1 and columnNumbers=2 will match all cells in
+row 1 and all cells in column 2.\cr
+"combinations" specifies that row and column arguments are considered together
+(logical AND), e.g. rowNumbers=1 and columnNumbers=2 will match only the
+cell single at location (1, 2).\cr
+Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are
+affected by the match mode.  All other arguments are not.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+The valueRanges parameter can be any of the following
+forms:\cr
+(1) a specific value, e.g. 12.\cr
+(2) a specific value equality condition, e.g. "v==12", where v
+represents the cell value.\cr
+(3) a value range expression using the following abbreviated form:
+"value1<=v<value2", e.g. "10<=v<15".  Only "<" or "<=" can be used
+in these value range expressions.\cr
+(4) a standard R logical expression, e.g.
+"10<=v && v<15".\cr
+Basic R functions that test the value can also be
+used, e.g. is.na(v).\cr
+}
+
+\subsection{Returns}{
+A list of `TableCell` objects.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+Outputs a plain text representation of the table to the console or
+returns a character representation of the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$print(asCharacter = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{asCharacter}}{`FALSE` (default) outputs to the console, specify `TRUE`
+to instead return a character value (does not output to console).}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Plain text representation of the table.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asMatrix"></a>}}
+\if{latex}{\out{\hypertarget{method-asMatrix}{}}}
+\subsection{Method \code{asMatrix()}}{
+Convert the table to a matrix, with or without headings.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$asMatrix(
+  firstRowAsColumnNames = FALSE,
+  firstColumnAsRowNames = FALSE,
+  rawValue = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{firstRowAsColumnNames}}{`TRUE` to use the first row of the table as
+the column names in the matrix.  Default value `FALSE`.}
+
+\item{\code{firstColumnAsRowNames}}{`TRUE` to use the first column of the table
+as the row names in the matrix.  Default value `FALSE`.}
+
+\item{\code{rawValue}}{`FALSE` (default) outputs the formatted (character) values.
+Specify `TRUE` to output the raw cell values.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+See the "Outputs" vignette for a comparison of outputs.
+}
+
+\subsection{Returns}{
+A matrix.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asDataFrame"></a>}}
+\if{latex}{\out{\hypertarget{method-asDataFrame}{}}}
+\subsection{Method \code{asDataFrame()}}{
+Convert the table to a data frame, with or without headings.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$asDataFrame(
+  firstRowAsColumnNames = FALSE,
+  firstColumnAsRowNames = FALSE,
+  rawValue = FALSE,
+  stringsAsFactors = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{firstRowAsColumnNames}}{`TRUE` to use the first row of the table as
+the column names in the data frame  Default value `FALSE`.}
+
+\item{\code{firstColumnAsRowNames}}{`TRUE` to use the first column of the table
+as the row names in the data frame.  Default value `FALSE`.}
+
+\item{\code{rawValue}}{`FALSE` (default) outputs the formatted (character) values.
+Specify `TRUE` to output the raw cell values.}
+
+\item{\code{stringsAsFactors}}{Specify `TRUE` to convert strings to factors,
+default is `default.stringsAsFactors()` for R < 4.1.0 and `FALSE`
+for R >= 4.1.0.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+See the "Outputs" vignette for a comparison of outputs.
+}
+
+\subsection{Returns}{
+A matrix.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getCss"></a>}}
+\if{latex}{\out{\hypertarget{method-getCss}{}}}
+\subsection{Method \code{getCss()}}{
+Get the CSS declarations for the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$getCss(styleNamePrefix = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleNamePrefix}}{A character variable specifying a prefix for all named
+CSS styles, to avoid style name collisions where multiple tables exist.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+See the "Outputs" vignette for more details and examples.
+}
+
+\subsection{Returns}{
+A character value containing the CSS style declaration.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getHtml"></a>}}
+\if{latex}{\out{\hypertarget{method-getHtml}{}}}
+\subsection{Method \code{getHtml()}}{
+Generate a HTML representation of the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$getHtml(styleNamePrefix = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleNamePrefix}}{A character variable specifying a prefix for all named
+CSS styles, to avoid style name collisions where multiple tables exist.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+See the "Outputs" vignette for more details and examples.
+}
+
+\subsection{Returns}{
+A list containing HTML tags from the `htmltools` package.
+Convert this to a character variable using `as.character()`.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-saveHtml"></a>}}
+\if{latex}{\out{\hypertarget{method-saveHtml}{}}}
+\subsection{Method \code{saveHtml()}}{
+Save a HTML representation of the table to file.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$saveHtml(
+  filePath = NULL,
+  fullPageHTML = TRUE,
+  styleNamePrefix = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{filePath}}{The file to save the HTML to.}
+
+\item{\code{fullPageHTML}}{`TRUE` (default) includes basic HTML around the
+table HTML so that the result file is a valid HTML file.}
+
+\item{\code{styleNamePrefix}}{A character variable specifying a prefix for all named
+CSS styles, to avoid style name collisions where multiple tables exist.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+See the "Outputs" vignette for more details and examples.
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-renderTable"></a>}}
+\if{latex}{\out{\hypertarget{method-renderTable}{}}}
+\subsection{Method \code{renderTable()}}{
+Render a HTML representation of the table as an HTML widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$renderTable(width = NULL, height = NULL, styleNamePrefix = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{width}}{The width of the widget.}
+
+\item{\code{height}}{The height of the widget.}
+
+\item{\code{styleNamePrefix}}{A character variable specifying a prefix for all named
+CSS styles, to avoid style name collisions where multiple tables exist.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+See the "Outputs" vignette for more details and examples.
+}
+
+\subsection{Returns}{
+A HTML widget from the `htmlwidgets` package.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-writeToExcelWorksheet"></a>}}
+\if{latex}{\out{\hypertarget{method-writeToExcelWorksheet}{}}}
+\subsection{Method \code{writeToExcelWorksheet()}}{
+Write the table into the specified workbook and worksheet at
+the specified row-column location.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$writeToExcelWorksheet(
+  wb = NULL,
+  wsName = NULL,
+  topRowNumber = NULL,
+  leftMostColumnNumber = NULL,
+  outputValuesAs = "rawValue",
+  applyStyles = TRUE,
+  mapStylesFromCSS = TRUE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{wb}}{A `Workbook` object representing the Excel file being written
+to.}
+
+\item{\code{wsName}}{A character value specifying the name of the worksheet to
+write to.}
+
+\item{\code{topRowNumber}}{An integer value specifying the row number in the
+Excel worksheet to write the table.}
+
+\item{\code{leftMostColumnNumber}}{An integer value specifying the column number
+in the Excel worksheet to write the table.}
+
+\item{\code{outputValuesAs}}{Must be one of "rawValue" (default),
+"formattedValueAsText" or "formattedValueAsNumber" to specify
+how cell values are written into the Excel sheet.}
+
+\item{\code{applyStyles}}{Default `TRUE` to write styling information to the cell.}
+
+\item{\code{mapStylesFromCSS}}{Default `TRUE` to automatically convert CSS style
+declarations to their Excel equivalents.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+See the Excel Output vignette for more details.
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-trace"></a>}}
+\if{latex}{\out{\hypertarget{method-trace}{}}}
+\subsection{Method \code{trace()}}{
+Capture a call for tracing purposes.
+This is an internal method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$trace(methodName, desc, detailList = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{methodName}}{The name of the method being invoked.}
+
+\item{\code{desc}}{Short description of method call.}
+
+\item{\code{detailList}}{A list containing detail such as parameter values.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-asList}{}}}
+\subsection{Method \code{asList()}}{
+Return the contents of the table as a list for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$asList()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of various object properties..
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\subsection{Method \code{asJSON()}}{
+Return the contents of the table as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$asJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A JSON representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-viewJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-viewJSON}{}}}
+\subsection{Method \code{viewJSON()}}{
+Use the `listviewer` package to view the table as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$viewJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-finalize"></a>}}
+\if{latex}{\out{\hypertarget{method-finalize}{}}}
+\subsection{Method \code{finalize()}}{
+Clean-up the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$finalize()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

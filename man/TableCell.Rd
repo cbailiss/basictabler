@@ -3,18 +3,101 @@
 \docType{class}
 \name{TableCell}
 \alias{TableCell}
-\title{A class that represents a cell in a table}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that
-  define a single table cell
+\title{R6 class that represents a cell in a table.}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableCell class represents a cell in a table.  Both header cells and body
+The `TableCell` class represents a cell in a table.  Both header cells and body
 cells are represented by this class.
 }
-\section{Fields}{
+\examples{
+# This class should only be created by using the functions in the table.
+# It is not intended to be created by users outside of the table.
+library(basictabler)
+tbl <- qtbl(data.frame(a=1:2, b=3:4))
+cell1 <- tbl$cells$setCell(r=4, c=1, cellType="cell", rawValue=5)
+cell2 <- tbl$cells$setCell(r=4, c=2, cellType="cell", rawValue=6)
+tbl$renderTable()
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{instanceId}}{An integer value that uniquely identifies this cell.
+NB:  This number is guaranteed to be unique within the table,
+but the method of generation of the values may change in future, so
+you are advised not to base any logic on specific values.}
 
+\item{\code{cellType}}{One of the following values that specifies the type of cell:
+root, rowHeader, columnHeader, cell, total.  The cellType controls the
+default styling that is applied to the cell.}
+
+\item{\code{rowNumber}}{The row number of the cell.  1 = the first (i.e. top) data
+row.}
+
+\item{\code{columnNumber}}{The column number of the cell.  1 = the first (i.e.
+leftmost) data column.}
+
+\item{\code{visible}}{TRUE or FALSE to specify whether the cell is rendered.}
+
+\item{\code{rawValue}}{The original unformatted value.}
+
+\item{\code{formattedValue}}{The formatted value (i.e. normally of character data
+type).}
+
+\item{\code{asNBSP}}{TRUE or FALSE to specify whether cells with no formatted
+value be output as html nbsp.}
+
+\item{\code{fValueOrNBSP}}{For internal use by the renderers only.}
+
+\item{\code{isMerged}}{For internal use by the renderers only.}
+
+\item{\code{isMergeRoot}}{For internal use by the renderers only.}
+
+\item{\code{mergeIndex}}{For internal use by the renderers only.}
+
+\item{\code{baseStyleName}}{The name of the style applied to this cell (a character
+value).  The style must exist in the TableStyles object associated with the
+table.}
+
+\item{\code{style}}{A TableStyle object that can apply overrides to the base style
+for this cell.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableCell$new()}}
+\item \href{#method-updatePosition}{\code{TableCell$updatePosition()}}
+\item \href{#method-getCopy}{\code{TableCell$getCopy()}}
+\item \href{#method-asList}{\code{TableCell$asList()}}
+\item \href{#method-asJSON}{\code{TableCell$asJSON()}}
+\item \href{#method-clone}{\code{TableCell$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableCell` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCell$new(
+  parentTable,
+  rowNumber = NULL,
+  columnNumber = NULL,
+  cellType = "cell",
+  visible = TRUE,
+  rawValue = NULL,
+  formattedValue = NULL,
+  baseStyleName = NULL,
+  styleDeclarations = NULL,
+  asNBSP = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{parentTable}}{Owning table.}
 
@@ -28,44 +111,108 @@ leftmost) data column.}
 root, rowHeader, columnHeader, cell, total.  The cellType controls the
 default styling that is applied to the cell.}
 
-\item{\code{visible}}{TRUE or FALSE to specify whether the cell is rendered.}
+\item{\code{visible}}{`TRUE` or `FALSE` to specify whether the cell is rendered.}
 
 \item{\code{rawValue}}{The original unformatted value.}
 
 \item{\code{formattedValue}}{The formatted value (i.e. normally of character data
 type).}
 
-\item{\code{asNBSP}}{TRUE or FALSE to specify whether cells with no formatted
-value be output as html nbsp.}
-
 \item{\code{baseStyleName}}{The name of the style applied to this cell (a character
 value).  The style must exist in the TableStyles object associated with the
 table.}
 
-\item{\code{style}}{A TableStyle object that can apply overrides to the base style
-for this cell.}
-}}
+\item{\code{styleDeclarations}}{A list containing CSS style declarations.}
 
-\section{Methods}{
+\item{\code{asNBSP}}{`TRUE` or `FALSE` to specify whether cells with no formatted
+value be output as html nbsp.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updatePosition"></a>}}
+\if{latex}{\out{\hypertarget{method-updatePosition}{}}}
+\subsection{Method \code{updatePosition()}}{
+Set the cell location in the table.  Mainly exists for internal use.
+Typically used after rows/columns/cells are inserted or deleted (which
+shifts other cells).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCell$updatePosition(rowNumber = NULL, columnNumber = NULL)}\if{html}{\out{</div>}}
+}
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
 \describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new table cell, specifying the field
-  values documented above.}
+\item{\code{rowNumber}}{The row number of the cell.  1 = the first (i.e. top) data
+row.}
 
-  \item{\code{getCopy())}}{Get a copy of this cell.}
-  \item{\code{asList())}}{Get a list representation of this cell}
-  \item{\code{asJSON()}}{Get a JSON representation of this cell}
+\item{\code{columnNumber}}{The column number of the cell.  1 = the first (i.e.
+leftmost) data column.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
 }
 }
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getCopy"></a>}}
+\if{latex}{\out{\hypertarget{method-getCopy}{}}}
+\subsection{Method \code{getCopy()}}{
+Stub only (ignore).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCell$getCopy()}\if{html}{\out{</div>}}
+}
 
-\examples{
-# This class should only be created by using the functions in the table.
-# It is not intended to be created by users outside of the table.
-library(basictabler)
-tbl <- qtbl(data.frame(a=1:2, b=3:4))
-cell1 <- tbl$cells$setCell(r=4, c=1, cellType="cell", rawValue=5)
-cell2 <- tbl$cells$setCell(r=4, c=2, cellType="cell", rawValue=6)
-tbl$renderTable()
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-asList}{}}}
+\subsection{Method \code{asList()}}{
+Return the contents of this object as a list for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCell$asList()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\subsection{Method \code{asJSON()}}{
+Return the contents of this object as JSON for debugging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCell$asJSON()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A JSON representation of various object properties.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCell$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

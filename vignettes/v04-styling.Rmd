@@ -626,6 +626,7 @@ Since a theme is a collection of styles, creating themes is relatively straightf
 E.g. creating a custom theme that displays a mixture of bright colours (a rather ugly bubble-gum theme):
 
 ```{r, message=FALSE, warning=FALSE}
+library(basictabler)
 # define the theme and styles
 createCustomTheme <- function(parentTable=NULL, themeName="myCustomTheme") {
   tableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)

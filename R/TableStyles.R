@@ -8,6 +8,7 @@
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
+#' @export
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # Creating styles is part of defining a theme for a table.
@@ -179,6 +180,7 @@ TableStyles <- R6::R6Class("TableStyles",
 
    #' @description
    #' Return the contents of this object as a string for debugging.
+   #' @param seperator Delimiter used to combine multiple values into a string.
    #' @return A character representation of various object properties.
     asString = function(seperator=", ") {
       if(private$p_parentTable$argumentCheckMode > 0) {

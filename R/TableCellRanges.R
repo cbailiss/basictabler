@@ -103,7 +103,7 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
     #' @description
     #' Delete the cell range from the list that contains the specified cell.
     #' @param r Row number of a cell in the cell range to be deleted.
-    #' @param cFrom Column number of a cell in the cell range to be deleted.
+    #' @param c Column number of a cell in the cell range to be deleted.
     #' @return No return value.
     deleteRange = function(r=NULL, c=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$deleteRange", "Deleting range...", list(r=r, c=c))
@@ -126,6 +126,7 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
 
     #' @description
     #' Internal use only.
+    #' @param r Row number.
     #' @return No return value.
     updateAfterRowInsert = function(r=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowInsert", "Updating...", list(r=r))
@@ -148,6 +149,7 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
 
     #' @description
     #' Internal use only.
+    #' @param r Row number.
     #' @return No return value.
     updateAfterRowDelete = function(r=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterRowDelete", "Updating...", list(r=r))
@@ -178,6 +180,7 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
 
     #' @description
     #' Internal use only.
+    #' @param c Column number.
     #' @return No return value.
     updateAfterColumnInsert = function(c=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnInsert", "Updating...", list(c=c))
@@ -200,6 +203,7 @@ TableCellRanges <- R6::R6Class("TableCellRanges",
 
     #' @description
     #' Internal use only.
+    #' @param c Column number.
     #' @return No return value.
     updateAfterColumnDelete = function(c=NULL) {
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableCellRanges$updateAfterColumnDelete", "Updating...", list(c=c))

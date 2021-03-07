@@ -3,39 +3,86 @@
 \docType{class}
 \name{TableHtmlRenderer}
 \alias{TableHtmlRenderer}
-\title{A class that renders a table in HTML.}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that
-  render to HTML.
+\title{R6 class that renders a table in HTML.}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableHtmlRenderer class creates a HTML representation of a table.
+The `TableHtmlRenderer` class creates a HTML representation of a table.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{parentTable}}{Owning table.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new table renderer, specifying the
-  field value documented above.}
-
-  \item{\code{getTableHtml(styleNamePrefix=NULL)}}{Get a HTML representation
-  of the table.}
-}
-}
-
 \examples{
-# This class should not be used by end users.  It is an internal class
-# created only by the BasicTable class.  It is used when rendering to HTML.
+# This class is for internal use only.  It is
+# created only by the BasicTable class when rendering to HTML.
 # See the package vignettes for more information about outputs.
 library(basictabler)
 tbl <- qtbl(data.frame(a=1:2, b=3:4))
 tbl$renderTable()
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableHtmlRenderer$new()}}
+\item \href{#method-getTableHtml}{\code{TableHtmlRenderer$getTableHtml()}}
+\item \href{#method-clone}{\code{TableHtmlRenderer$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableHtmlRenderer` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableHtmlRenderer$new(parentTable)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parentTable}}{Owning table.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getTableHtml"></a>}}
+\if{latex}{\out{\hypertarget{method-getTableHtml}{}}}
+\subsection{Method \code{getTableHtml()}}{
+Generate a HTML representation of the table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableHtmlRenderer$getTableHtml(styleNamePrefix = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleNamePrefix}}{A character variable specifying a prefix for all named
+CSS styles, to avoid style name collisions where multiple tables exist.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A list containing HTML tags from the `htmltools` package.
+Convert this to a character variable using `as.character()`.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableHtmlRenderer$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

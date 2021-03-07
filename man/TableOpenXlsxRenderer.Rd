@@ -3,43 +3,18 @@
 \docType{class}
 \name{TableOpenXlsxRenderer}
 \alias{TableOpenXlsxRenderer}
-\title{A class that renders a table into an Excel worksheet.}
-\format{\code{\link{R6Class}} object.}
-\value{
-Object of \code{\link{R6Class}} with properties and methods that
-  render to Excel via the openxlsx package
+\title{R6 class that renders a table into an Excel worksheet.}
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
-The TableOpenXlsxRenderer class creates a representation of a table in an Excel file using the openxlsx package.
+The `TableOpenXlsxRenderer` class creates a representation of a table in an
+Excel file using the `openxlsx` package.  See the Excel Output vignette for
+more details.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{parentTable}}{Owning table.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For more complete explanations and examples please see
-  the extensive vignettes supplied with this package.}
-  \item{\code{new(...)}}{Create a new table renderer, specifying the
-  field value documented above.}
-
-  \item{\code{writeToCell(wb=NULL, wsName=NULL, rowNumber=NULL,
-  columnNumber=NULL, value=NULL, applyStyles=TRUE, baseStyleName=NULL,
-  style=NULL, mapFromCss=TRUE)}}{Writes a value to a cell and applies styling
-  as needed.}
-  \item{\code{writeToWorksheet(wb=NULL, wsName=NULL, topRowNumber=NULL,
-  leftMostColumnNumber=NULL, outputValuesAs="value", applyStyles=TRUE,
-  mapStylesFromCSS=TRUE)}}{Output the table into the specified workbook
-  and worksheet at the specified row-column location.}
-}
-}
-
 \examples{
-# This class should not be used by end users.  It is an internal class
-# created only by the BasicTable class.  It is used when rendering to Excel.
+# This class is for internal use only.  It is
+# created only by the BasicTable class when rendering to Excel.
 library(basictabler)
 tbl <- qtbl(data.frame(a=1:2, b=3:4))
 library(openxlsx)
@@ -49,4 +24,161 @@ tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
                          topRowNumber=1, leftMostColumnNumber=1,
                          applyStyles=TRUE, mapStylesFromCSS=TRUE)
 # Use saveWorkbook() to save the Excel file.
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{TableOpenXlsxRenderer$new()}}
+\item \href{#method-writeToCell}{\code{TableOpenXlsxRenderer$writeToCell()}}
+\item \href{#method-writeToWorksheet}{\code{TableOpenXlsxRenderer$writeToWorksheet()}}
+\item \href{#method-clone}{\code{TableOpenXlsxRenderer$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new `TableOpenXlsxRenderer` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxRenderer$new(parentTable)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parentTable}}{Owning table.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-writeToCell"></a>}}
+\if{latex}{\out{\hypertarget{method-writeToCell}{}}}
+\subsection{Method \code{writeToCell()}}{
+Write a value to a cell, optionally with styling and cell merging.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxRenderer$writeToCell(
+  wb = NULL,
+  wsName = NULL,
+  rowNumber = NULL,
+  columnNumber = NULL,
+  value = NULL,
+  applyStyles = TRUE,
+  baseStyleName = NULL,
+  style = NULL,
+  mapFromCss = TRUE,
+  mergeRows = NULL,
+  mergeColumns = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{wb}}{A workbook object from the openxlsx package.}
+
+\item{\code{wsName}}{The name of the worksheet where the value is to be written.}
+
+\item{\code{rowNumber}}{The row number of the cell where the value is to be
+written.}
+
+\item{\code{columnNumber}}{The column number of the cell where the value is to be
+written.}
+
+\item{\code{value}}{The value to be written.}
+
+\item{\code{applyStyles}}{`TRUE` (default) to also set the styling of the cell,
+`FALSE` to only write the value.}
+
+\item{\code{baseStyleName}}{The name of the style from the table theme to apply
+to the cell.}
+
+\item{\code{style}}{A `TableStyle` object that contains additional styling to
+apply to the cell.}
+
+\item{\code{mapFromCss}}{`TRUE` (default) to map the basictabler CSS styles to
+corresponding Excel styles, `FALSE` to apply only the specified xl
+styles.}
+
+\item{\code{mergeRows}}{If the cell is to be merged with adjacent cells, then an
+integer or numeric vector specifying the row numbers of the merged
+cell.  NULL (default) to not merge cells.}
+
+\item{\code{mergeColumns}}{If the cell is to be merged with adjacent cells, then
+an integer or numeric vector specifying the column numbers of the
+merged cell.  NULL (default) to not merge cells.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-writeToWorksheet"></a>}}
+\if{latex}{\out{\hypertarget{method-writeToWorksheet}{}}}
+\subsection{Method \code{writeToWorksheet()}}{
+Write a table to an Excel worksheet.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxRenderer$writeToWorksheet(
+  wb = NULL,
+  wsName = NULL,
+  topRowNumber = NULL,
+  leftMostColumnNumber = NULL,
+  outputValuesAs = "rawValue",
+  applyStyles = TRUE,
+  mapStylesFromCSS = TRUE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{wb}}{A workbook object from the openxlsx package.}
+
+\item{\code{wsName}}{The name of the worksheet where the value is to be written.}
+
+\item{\code{topRowNumber}}{The row number of the top-left cell where the table
+is to be written.}
+
+\item{\code{leftMostColumnNumber}}{The column number of the top-left cell where
+the table is to be written.}
+
+\item{\code{outputValuesAs}}{Specify whether the raw or formatted values should
+be written to the worksheet.  Value must be one of "rawValue",
+"formattedValueAsText", "formattedValueAsNumber".}
+
+\item{\code{applyStyles}}{`TRUE` (default) to also set the styling of the cells,
+`FALSE` to only write the value.}
+
+\item{\code{mapStylesFromCSS}}{`TRUE` (default) to map the basictabler CSS styles to
+corresponding Excel styles, `FALSE` to apply only the specified xl
+styles.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableOpenXlsxRenderer$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

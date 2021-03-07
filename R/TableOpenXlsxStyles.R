@@ -428,6 +428,7 @@ TableOpenXlsxStyles <- R6::R6Class("TableOpenXlsxStyles",
 
     #' @description
     #' Return the contents of this object as a string for debugging.
+    #' @param seperator Delimiter used to combine multiple values into a string.
     #' @return A character representation of various object properties.
     asString = function(seperator=", ") {
       if(private$p_parentTable$argumentCheckMode > 0) {

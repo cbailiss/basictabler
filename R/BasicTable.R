@@ -629,7 +629,6 @@ BasicTable <- R6::R6Class("BasicTable",
     #' which will be invoked once per value to be formatted.
     #' @return The formatted value if `format` is specified, otherwise the `value`
     #' converted to a character value.
-    #' @return No return value.
     formatValue = function(value=NULL, format=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "formatValue", value, missing(value), allowMissing=FALSE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "complex", "character", "factor", "Date", "POSIXct", "POSIXlt"))
@@ -1518,7 +1517,7 @@ BasicTable <- R6::R6Class("BasicTable",
     #'   the table.
     cells = function(value) { return(invisible(private$p_cells)) },
 
-    #' @field cells A `TableCellRanges` object describing the merged cells.
+    #' @field mergedCells A `TableCellRanges` object describing the merged cells.
     mergedCells = function(value) { return(invisible(private$p_mergedCells)) },
 
     #' @field rowCount The number of rows in the table.

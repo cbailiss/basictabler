@@ -8,6 +8,7 @@
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
+#' @export
 #' @format \code{\link{R6Class}} object.
 #' @examples
 #' # TableStyle objects are normally created indirectly via one of the helper
