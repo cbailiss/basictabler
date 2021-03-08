@@ -60,6 +60,9 @@ a trace file.}
 \item{\code{cells}}{A `TableCells` object containing all of the cells in the body of
 the table.}
 
+\item{\code{allCells}}{A list of all of the cells in the table, where each element
+in the list is a 'TableCell' object.}
+
 \item{\code{mergedCells}}{A `TableCellRanges` object describing the merged cells.}
 
 \item{\code{rowCount}}{The number of rows in the table.}

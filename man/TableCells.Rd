@@ -30,6 +30,9 @@ tbl$renderTable()
 
 \item{\code{rows}}{The rows of cells in the table - represented as a list, each
 element of which is a list of `TableCell` objects.}
+
+\item{\code{all}}{A list of the cells in the table.  Each element in this list is
+a `TableCell` object.}
 }
 \if{html}{\out{</div>}}
 }

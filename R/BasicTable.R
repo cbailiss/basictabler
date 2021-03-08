@@ -8,7 +8,6 @@
 #' @importFrom R6 R6Class
 #' @import htmlwidgets
 #' @import htmltools
-#' @import jsonlite
 #' @export
 #' @format \code{\link{R6Class}} object.
 #' @examples
@@ -1472,7 +1471,16 @@ BasicTable <- R6::R6Class("BasicTable",
     #' @description
     #' Return the contents of the table as JSON for debugging.
     #' @return A JSON representation of various object properties.
-    asJSON = function() { return(jsonlite::toJSON(self$asList())) },
+    asJSON = function() {
+      if (!requireNamespace("jsonlite", quietly = TRUE)) {
+        stop("The jsonlite package is needed to convert to JSON.  Please install the jsonlite package.", call. = FALSE)
+      }
+      jsonliteversion <- utils::packageDescription("jsonlite")$Version
+      if(numeric_version(jsonliteversion) < numeric_version("1.1")) {
+        stop("Version 1.1 or above of the jsonlite package is needed to convert to JSON.  Please install an updated version of the jsonlite package.", call. = FALSE)
+      }
+      return(jsonlite::toJSON(self$asList()))
+    },
 
     #' @description
     #' Use the `listviewer` package to view the table as JSON for debugging.
