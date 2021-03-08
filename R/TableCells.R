@@ -969,7 +969,11 @@ TableCells <- R6::R6Class("TableCells",
 
    #' @field rows The rows of cells in the table - represented as a list, each
    #'   element of which is a list of `TableCell` objects.
-   rows = function(value) { return(invisible(private$p_rows)) }
+   rows = function(value) { return(invisible(private$p_rows)) },
+
+   #' @field all A list of the cells in the table.  Each element in this list is
+   #' a `TableCell` object.
+   all = function(value) { return(self$getCells(rowNumbers=1:self$rowCount)) }
   ),
   private = list(
     p_parentTable = NULL,

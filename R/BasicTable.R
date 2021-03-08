@@ -1517,6 +1517,13 @@ BasicTable <- R6::R6Class("BasicTable",
     #'   the table.
     cells = function(value) { return(invisible(private$p_cells)) },
 
+    #' @field allCells A list of all of the cells in the table, where each element
+    #' in the list is a 'TableCell' object.
+    allCells = function(value) {
+      if(is.null(private$p_cells)) stop("BasicTable$allCells:  No cells exist.", call. = FALSE)
+      return(invisible(private$p_cells$all))
+    },
+
     #' @field mergedCells A `TableCellRanges` object describing the merged cells.
     mergedCells = function(value) { return(invisible(private$p_mergedCells)) },
 
