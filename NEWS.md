@@ -20,6 +20,7 @@ Improvements
 
 * The `tbl$mergecells()` method gains new parameters `rowNumbers` and `columnNumbers` to allow vectors to be used to specify the range of cells to be merged.
 * `pt$setStyling()` gains new integer/numeric vector arguments `rowNumbers` and/or `columnNumbers`.  It is now also possible to specify only a set of row numbers and then all cells in those rows will be styled (and similarly for column numbers).  Previously, if only row numbers or only column numbers were specified, then no cells would be styled.  Users who require the old logic can specify the argument `compatibility=list(legacySetStylingRowColumnNumbers=TRUE)` when calling `PivotTable$new()`.
+* New method `pt$mapStyling()` simplifies applying styling to cells based on cell value, e.g. banding by value into different colours or colour gradients.  See the "Styling" vignette for details plus the "Finding and Formatting" vignette for an example.
 * `tbl$getCells()` gains a new `excludeEmptyCells` argument making it easier to exclude cells containing no values.  See the "Finding and Formatting" vignette for details.
 * `tbl$getCells()` also gains a new `matchMode` argument making it easier to retrieve cells based on combinations of row and column criteria.  See the "Finding and Formatting" vignette for details.
 * `pt$findCells()` gain new arguments `rowNumbers`, `columnNumbers`, `cellCoordinates`, `cells` and `rowColumnMatchMode` to restrict the cell search based on combinations of row, column and cell criteria.  See the "Finding and Formatting" vignette for details.

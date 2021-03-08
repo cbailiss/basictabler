@@ -754,8 +754,8 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cFrom, missing(cFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rTo, missing(rTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cTo, missing(cTo), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, TRUE, "PivotTable", "setStyling", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_argumentCheckMode, TRUE, "PivotTable", "setStyling", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cells, missing(cells), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("list", "TableCell"), allowedListElementClasses="TableCell")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
@@ -848,6 +848,369 @@ BasicTable <- R6::R6Class("BasicTable",
       }
 
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Set styling.")
+    },
+
+    # mapType=value only allows fixed "from" values (either just a number or v==number): it maps discrete "from" values to discrete "to" values
+    # mapType=range allows "from" as a number or as a range specified with "v": it matches values into "from" ranges, the "to" values are discrete
+    # mapType=continuous only allows fixed "from" values (just a number or v==number): it rescales "from" numbers into continuous "to" values
+    # allowed usage:
+    # valueType=text, mapType=value:        0, "normal", 1, "bold", etc.
+    # valueType=text, mapType=logic:        v==0, "normal", 1<v<=2, "bold", etc.
+    # valueType=text, mapType=range:        0, "normal", 1, "bold", etc                styleLowerValues=FALSE, styleHigherValues=TRUE
+    # valueType=number: supports the above, plus:
+    # valueType=number, mapType=continuous: 0, 10, 1, 20, etc                          styleLowerValues=FALSE, styleHigherValues=TRUE
+    # valueType=color:  supports the above, but the continuous option looks like:
+    # valueType=color, mapType=continuous:  0, red, 1, yellow, etc                     styleLowerValues=FALSE, styleHigherValues=TRUE
+    # Note in documentation that these methods are primarily for numerical data.  Parts may work for dates (e.g. mapType=value and range) ...
+    # ... but other bits won't, e.g. v>=as.Date("2020-05-22"), or variables, e.g. v>=x where x is a local variable outside of the table (but the name could collide with a local variable inside the table function).
+
+    #' @description
+    #' Apply styling to table cells based on the value of each cell.
+    #' @details
+    #' `mapStyling()` is typically used to conditionally apply styling to cells
+    #' based on the value of each individual cell, e.g. cells with values less
+    #' than a specified number could be coloured red.\cr
+    #' mapType="logic" maps values matching specified logical criteria to
+    #' specific "to" values.  The logical criteria can be any of the following
+    #' forms (the first matching mapping is used):\cr
+    #' (1) a specific value, e.g. 12.\cr
+    #' (2) a specific value equality condition, e.g. "v==12", where v
+    #' represents the cell value.\cr
+    #' (3) a value range expression using the following abbreviated form:
+    #' "value1<=v<value2", e.g. "10<=v<15".  Only "<" or "<=" can be used
+    #' in these value range expressions.\cr
+    #' (4) a standard R logical expression, e.g.
+    #' "10<=v && v<15".\cr
+    #' Basic R functions that test the value can also be
+    #' used, e.g. is.na(v).\cr
+    #' See the "Styling" and Finding and Formatting" vignettes for more
+    #' information and many examples.
+    #' @param styleProperty The name of the style property to set on the specified
+    #' cells, e.g. background-color.
+    #' @param cells A list containing `TableCell` objects.
+    #' @param valueType The type of style value to be set.  Must be one of:
+    #' "text", "character", "number", "numeric", "color" or "colour".\cr
+    #' "text" and "character" are equivalent.  "number" and "numeric" are equivalent.
+    #' "color" and "colour" are equivalent.
+    #' @param mapType The type of mapping to be performed.  The following mapping
+    #' types are supported:\cr
+    #' (1) "value" = a 1:1 mapping which maps each specified "from" value to the
+    #' corresponding "to" value, e.g. 100 -> "green".\cr
+    #' (2) "logic" = each from value is logical criteria.  See details.\cr
+    #' (3) "range" = values between each pair of "from" values are mapped to the
+    #' corresponding "to" value, e.g. values in the range 80-100 -> "green" (more
+    #' specifically values greater than or equal to 80 and less than 100).\cr
+    #' (4) "continuous" = rescales values between each pair of "from" values into
+    #' the range of the corresponding pair of "to" values, e.g. if the "from" range
+    #' is 80-100 and the corresponding "to" range is 0.8-1, then 90 -> 0.9.\cr
+    #' "continuous" cannot be used with valueType="text"/"character".
+    #' @param mappings The mappings to be applied, specified in one of the following
+    #' three forms:\cr
+    #' (1) a list containing pairs of values, e.g.
+    #' `list(0, "red", 0.4, "yellow", 0.8, "green")`.\cr
+    #' (2) a list containing "from" and "to" vectors/lists, e.g.
+    #' `list(from=c(0, 0.4, 0.8), to=c("red", "yellow", "green"))`.\cr
+    #' (3) a custom mapping function that will be invoked once per cell, e.g.
+    #' `function(v, cell) { if(isTRUE(v>0.8)) return("green") }`.\cr
+    #' Mappings must be specified in ascending order when valueType="range" or
+    #' valueType="continuous".\cr
+    #' If a custom mapping function is specified, then the valueType and mapType
+    #' parameters are ignored.
+    #' @param styleLowerValues A logical value, default `FALSE`, that specifies
+    #' whether values less than the lowest specified "from" value should be styled
+    #' using the style specified for the lowest "from" value.  Only applies when
+    #' valueType="range" or valueType="continuous".
+    #' @param styleHigherValues A logical value, default `TRUE`, that specifies
+    #' whether values greater than the highest specified "from" value should be styled
+    #' using the style specified for the highest "from" value.  Only applies when
+    #' valueType="range" or valueType="continuous".
+    #' @return No return value.
+    mapStyling = function(styleProperty=NULL, cells=NULL, valueType="text", mapType="range", mappings=NULL, styleLowerValues=FALSE, styleHigherValues=TRUE) {
+      if(private$p_argumentCheckMode > 0) {
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "mapStyling", styleProperty, missing(styleProperty), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "mapStyling", cells, missing(cells), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("TableCell", "list"), allowedListElementClasses="TableCell")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "mapStyling", valueType, missing(valueType), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("character", "text", "numeric", "number", "color", "colour"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "mapStyling", mapType, missing(mapType), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("value", "range", "logic", "continuous"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "mapStyling", mappings, missing(mappings), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("character", "list", "function"), allowedListElementClasses=c("character", "integer", "numeric"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "mapStyling", styleLowerValues, missing(styleLowerValues), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "mapStyling", styleHigherValues, missing(styleHigherValues), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mapStyling", "Mapping styling...")
+      # prep parameters
+      if("TableCell" %in% class(cells)) cells <- list(cells)
+      if(mapType=="numeric") mapType <- "number"
+      if(mapType=="character") mapType <- "text"
+      if("character" %in% class(mappings)) mappings <- as.list(mappings)
+      if(valueType=="colour") valueType <- "color"
+      # special case of a mapping function - this ignores the valueType and mapType arguments
+      if("function" %in% class(mappings)) {
+        for(cell in cells) {
+          value <- cell$rawValue
+          mappedValue <- mappings(value, cell)
+          if((length(mappedValue)>0)&&(!is.na(mappedValue))) {
+            declarations <- list()
+            declarations[[styleProperty]] <- mappedValue
+            self$setStyling(cells=cell, declarations=declarations)
+          }
+        }
+        if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mapStyling", "Mapped styling.")
+        return(invisible())
+      }
+      # general or special case?
+      if((length(mappings)==2)&&(length(intersect(names(mappings), c("from", "to")))==2)) {
+        # special case of a two element list (from, to)
+        if(length(intersect(class(mappings$from), c("character", "integer", "numeric", "list")))==0) {
+          stop("BasicTable$mapStyling():  The 'from' values must be either character, integer, numeric or a list.", call. = FALSE)
+        }
+        # build the maps list
+        maps <- list()
+        mapCount <- min(length(mappings$from), length(mappings$to))
+        m <- 1
+        mMax <- mapCount
+        for(m in 1:mMax) {
+          if("list" %in% class(mappings$from)) vre <- mappings$from[[m]]
+          else vre <- mappings$from[m]
+          if("list" %in% class(mappings$to)) value <- mappings$to[[m]]
+          else value <- mappings$to[m]
+          nextVre <- NULL
+          nextValue <- NULL
+          if((m+1)<=mMax){
+            if("list" %in% class(mappings$from)) nextVre <- mappings$from[[m+1]]
+            else nextVre <- mappings$from[m+1]
+            if("list" %in% class(mappings$to)) nextValue <- mappings$to[[m+1]]
+            else nextValue <- mappings$to[m+1]
+          }
+          maps[[length(maps)+1]] <- list(vre=vre, value=value, nextVre=nextVre, nextValue=nextValue)
+        }
+      }
+      else {
+        # general case of a longer list of mappings
+        # check some mappings, return if none
+        if(length(mappings)<2) {
+          if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mapStyling", "Mapped styling.")
+          return(invisible())
+        }
+        # process the mappings into value pairs
+        # every map has two values: vre (value range expression) = the "from" value, value = the "to" value
+        # "from" here means the raw value (or range of raw values) that we are mapping from, i.e. the input of the mapping
+        # "to" here means the result value, i.e. the output of the mapping
+        # mapType=range and mapType=continuous also have: rangeStart, rangeEnd, where vre->rangeStart and nextVre->rangeEnd
+        # valueType=color with mapType=continuous also has:
+        maps <- list()
+        mapCount <- length(mappings)
+        m <- 1
+        mMax <- mapCount
+        while(m<mMax) {
+          vre <- mappings[[m]]
+          value <- NULL
+          if((m+1)<=length(mappings)) value <- mappings[[m+1]]
+          nextVre <- NULL
+          if((m+2)<=length(mappings)) nextVre <- mappings[[m+2]]
+          nextValue <- NULL
+          if((m+3)<=length(mappings)) nextValue <- mappings[[m+3]]
+          maps[[length(maps)+1]] <- list(vre=vre, value=value, nextVre=nextVre, nextValue=nextValue)
+          # message("vre=", vre, " value=", value, " nextVre=", nextVre, " nextValue=", nextValue)
+          m <- m+2
+        }
+      }
+      # check/prepare maps
+      if(mapType=="value") {
+        for(m in 1:length(maps)) {
+          map <- maps[[m]]
+          if((is.null(map$vre))||(length(map$vre)==0)) stop("BasicTable$mapStyling():  The 'from' value for a mapping cannot be null or blank.", call. = FALSE)
+          if(vreIsSingleValue(map$vre)) {
+            # write the single value back into the mapping to minimise repeated parsing
+            maps[[m]]$vre <- vreGetSingleValue(map$vre)
+          }
+          else {
+            stop(paste0("BasicTable$mapStyling():  The 'from' value for a mapping must be a single numerical value - invalid value ", map$vre), call. = FALSE)
+          }
+          if((is.null(map$value))||(length(map$value)==0)) stop("BasicTable$mapStyling():  The 'to' value for a mapping cannot be null or blank.", call. = FALSE)
+        }
+      }
+      else if(mapType=="logic") {
+        for(m in 1:length(maps)) {
+          map <- maps[[m]]
+          if((is.null(map$vre))||(length(map$vre)==0)) stop("BasicTable$mapStyling():  The 'from' criteria for a mapping cannot be null or blank.", call. = FALSE)
+          if((is.null(map$value))||(length(map$value)==0)) stop("BasicTable$mapStyling():  The 'to' value for a mapping cannot be null or blank.", call. = FALSE)
+          testResult <- vreIsMatch(map$vre, 0, testOnly=TRUE)
+        }
+      }
+      else if(mapType=="range") {
+        for(m in 1:length(maps)) {
+          map <- maps[[m]]
+          # basic map checks
+          if((is.null(map$vre))||(length(map$vre)==0)) stop("BasicTable$mapStyling():  The 'from' value for a mapping cannot be null or blank.", call. = FALSE)
+          if(!vreIsSingleValue(map$vre)) stop("BasicTable$mapStyling():  Only single-value 'from' values can be be used with a range mapping.", call. = FALSE)
+          if(((is.null(map$value))||(length(map$value)==0))&&(m<length(maps))) {
+            # the last value of a range mapping can be null, e.g. mappings=list(0, "red", 1000, "orange", 15000), note there is no colour for 15000
+            stop("BasicTable$mapStyling():  The 'to' value for a mapping cannot be null or blank (except for the last specified 'from' value).", call. = FALSE)
+          }
+          # store the numerical range as part of the mapping so they don't need to be parsed repeatedly
+          map$rangeStart <- vreGetSingleValue(map$vre)
+          if((!is.null(map$nextVre))&&(vreIsSingleValue(map$nextVre))) map$rangeEnd <- vreGetSingleValue(map$nextVre)
+          # check the "to" values
+          if(valueType=="number") {
+            if(!is.numeric(map$value)) stop(paste0("BasicTable$mapStyling():  The 'to' value '", map$value, "' must be numeric since valueType=number/numeric has been specified."), call. = FALSE)
+          }
+          else if(valueType=="color") {
+            testColor <- parseColor(map$value)
+            if(is.null(testColor)) stop(paste0("BasicTable$mapStyling():  The 'to' value '", map$value, "' must be a valid color/colour since valueType=color has been specified."), call. = FALSE)
+          }
+          # message(paste0("vre=", map$vre, " nextVre=", map$nextVre, " rangeStart=", map$rangeStart, " rangeEnd=", map$rangeEnd, " value=", map$value, " nextValue=", map$nextValue))
+          maps[[m]] <- map
+        }
+        # check the order of the mappings
+        fx <- function(x) { x$rangeStart }
+        if(!isTRUE(all.equal(1:length(maps),order(sapply(maps, fx))))) {
+          stop("BasicTable$mapStyling(): The 'from' values for range mappings must be specified in ascending order (lowest to highest).", call. = FALSE)
+        }
+      }
+      else if(mapType=="continuous") {
+        if(valueType=="text") stop("BasicTable$mapStyling():  Continuous mappings are not supported with text values.", call. = FALSE)
+        for(m in 1:length(maps)) {
+          map <- maps[[m]]
+          # basic map checks
+          if((is.null(map$vre))||(length(map$vre)==0)) stop("BasicTable$mapStyling():  The 'from' value for a mapping cannot be null or blank.", call. = FALSE)
+          if(!vreIsSingleValue(map$vre)) stop("BasicTable$mapStyling():  Only single-value 'from' values can be be used with a continuous mapping.", call. = FALSE)
+          if((is.null(map$value))||(length(map$value)==0)) stop("BasicTable$mapStyling():  The 'to' value for a mapping cannot be null or blank.", call. = FALSE)
+          # store the numerical range as part of the mapping so they don't need to be parsed repeatedly
+          map$rangeStart <- vreGetSingleValue(map$vre)
+          if((!is.null(map$nextVre))&&(vreIsSingleValue(map$nextVre))) map$rangeEnd <- vreGetSingleValue(map$nextVre)
+          # check the "to" values
+          if(valueType=="number") {
+            if(!is.numeric(map$value)) stop(paste0("BasicTable$mapStyling():  The 'to' value '", map$value, "' must be numeric since valueType=number/numeric has been specified."), call. = FALSE)
+          }
+          else if(valueType=="color") {
+            map$startColorHex <- parseColor(map$value)
+            if(is.null(map$startColorHex)) stop(paste0("BasicTable$mapStyling():  The 'to' value '", map$value, "' must be a valid color/colour since valueType=color/colour has been specified."), call. = FALSE)
+            map$startColorList <- vreHexToClr(map$startColorHex)
+            if(length(map$nextValue)>0) {
+              map$endColorHex <- parseColor(map$nextValue)
+              if(is.null(map$endColorHex)) stop(paste0("BasicTable$mapStyling():  The 'to' value '", map$nextValue, "' must be a valid color/colour since valueType=color/colour has been specified."), call. = FALSE)
+              map$endColorList <- vreHexToClr(map$endColorHex)
+            }
+          }
+          # message(paste0("vre=", map$vre, " nextVre=", map$nextVre, " rangeStart=", map$rangeStart, " rangeEnd=", map$rangeEnd, " value=", map$value, " nextValue=", map$nextValue))
+          maps[[m]] <- map
+        }
+        # check the order of the mappings
+        fx <- function(x) { x$rangeStart }
+        if(!isTRUE(all.equal(1:length(maps),order(sapply(maps, fx))))) {
+          stop("BasicTable$mapStyling(): The 'from' values for continuous mappings must be specified in ascending order (lowest to highest).", call. = FALSE)
+        }
+      }
+      # map values
+      mMax <- length(maps)
+      if(mapType=="value") {
+        for(cell in cells) {
+          value <- cell$rawValue
+          for(map in maps) {
+            if(vreIsEqual(map$vre, value)) {
+              declarations <- list()
+              declarations[[styleProperty]] <- map$value
+              self$setStyling(cells=cell, declarations=declarations)
+              break # jump to next cell
+            }
+          }
+        }
+      }
+      else if(mapType=="logic") {
+        for(cell in cells) {
+          value <- cell$rawValue
+          for(map in maps) {
+            if(vreIsMatch(map$vre, value)) {
+              declarations <- list()
+              declarations[[styleProperty]] <- map$value
+              self$setStyling(cells=cell, declarations=declarations)
+              break # jump to next cell
+            }
+          }
+        }
+      }
+      else if(mapType=="range") {
+        for(cell in cells) {
+          cellStyleSet <- FALSE
+          value <- cell$rawValue
+          for(map in maps) {
+            if(length(map$rangeStart)==0) next
+            if(length(map$rangeEnd)==0) next
+            if(length(map$value)==0) next
+            if(isTRUE(map$rangeStart <= value && value < map$rangeEnd)) {
+              declarations <- list()
+              declarations[[styleProperty]] <- map$value
+              self$setStyling(cells=cell, declarations=declarations)
+              cellStyleSet <- TRUE
+              break # jump to next cell
+            }
+          }
+          # if this cell has been processed, jump to the next cell
+          if(cellStyleSet==TRUE) next
+          # none of the mappings have matched...
+          # ...style the same as the first mapping?
+          map <- maps[[1]]
+          if(styleLowerValues && (length(map$rangeStart)>0) && isTRUE(value < map$rangeStart) && (length(map$value)>0)) {
+            declarations <- list()
+            declarations[[styleProperty]] <- map$value
+            self$setStyling(cells=cell, declarations=declarations)
+          }
+          # ...style the same as the last mapping?
+          map <- maps[[mMax]]
+          if(styleHigherValues && (length(map$rangeStart)>0) && isTRUE(value > map$rangeStart) && (length(map$value)>0)) {
+            declarations <- list()
+            declarations[[styleProperty]] <- map$value
+            self$setStyling(cells=cell, declarations=declarations)
+          }
+        }
+      }
+      else if(mapType=="continuous") {
+        for(cell in cells) {
+          cellStyleSet <- FALSE
+          value <- cell$rawValue
+          for(map in maps) {
+            if(length(map$rangeStart)==0) next
+            if(length(map$rangeEnd)==0) next
+            if(length(map$value)==0) next
+            if(length(map$nextValue)==0) next
+            if(isTRUE(map$rangeStart <= value && value < map$rangeEnd)) {
+              if(valueType=="number") {
+                value <- vreScaleNumber(map$value, map$nextValue, map$rangeStart, map$rangeEnd, value)
+                cellStyleSet <- TRUE
+              }
+              else if(valueType=="color") {
+                # message(paste0("startColorHex=", map$startColorHex, " endColorHex=", map$endColorHex, " rangeStart=", map$rangeStart, " rangeEnd=", map$rangeEnd, " value=", value))
+                value <- vreScale2Colours(map$startColorList, map$endColorList, map$rangeStart, map$rangeEnd, value)
+                cellStyleSet <- TRUE
+              }
+              if((length(value)>0)&&(!is.na(value))) {
+                declarations <- list()
+                declarations[[styleProperty]] <- value
+                self$setStyling(cells=cell, declarations=declarations)
+                break # jump to next cell
+              }
+            }
+          }
+          # if this cell has been processed, jump to the next cell
+          if(cellStyleSet==TRUE) next
+          # none of the mappings have matched...
+          # ...style the same as the first mapping?
+          map <- maps[[1]]
+          if(styleLowerValues && (length(map$rangeStart)>0) && isTRUE(value < map$rangeStart) && (length(map$value)>0)) {
+            declarations <- list()
+            declarations[[styleProperty]] <- map$startColorHex
+            self$setStyling(cells=cell, declarations=declarations)
+          }
+          # ...style the same as the last mapping?
+          map <- maps[[mMax]]
+          if(styleHigherValues && (length(map$rangeStart)>0) && isTRUE(value > map$rangeStart) && (length(map$value)>0)) {
+            declarations <- list()
+            declarations[[styleProperty]] <- map$startColorHex
+            self$setStyling(cells=cell, declarations=declarations)
+          }
+        }
+      }
+      if(private$p_traceEnabled==TRUE) self$trace("BasicTable$mapStyling", "Mapped styling.")
+      return(invisible())
     },
 
     #' @description
@@ -1190,7 +1553,7 @@ BasicTable <- R6::R6Class("BasicTable",
           stringsAsFactors <- default.stringsAsFactors()
           # generate a warning if the default is TRUE as this will change to FALSE in future
           if(stringsAsFactors) {
-            warning("PivotTable$asTidyDataFrame(): In a future version of R, default.stringsAsFactors() will be deprecated and removed, at which time the 'stringsAsFactors' argument will default to FALSE.  Explictly set the 'stringsAsFactors' argument to remove this warning.")
+            warning("BasicTable$asTidyDataFrame(): In a future version of R, default.stringsAsFactors() will be deprecated and removed, at which time the 'stringsAsFactors' argument will default to FALSE.  Explictly set the 'stringsAsFactors' argument to remove this warning.")
           }
         }
         else {

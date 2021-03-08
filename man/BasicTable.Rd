@@ -109,6 +109,7 @@ constructing the table, where the elapsed time > 0.1 seconds.}
 \item \href{#method-addStyle}{\code{BasicTable$addStyle()}}
 \item \href{#method-createInlineStyle}{\code{BasicTable$createInlineStyle()}}
 \item \href{#method-setStyling}{\code{BasicTable$setStyling()}}
+\item \href{#method-mapStyling}{\code{BasicTable$mapStyling()}}
 \item \href{#method-resetCells}{\code{BasicTable$resetCells()}}
 \item \href{#method-getCells}{\code{BasicTable$getCells()}}
 \item \href{#method-findCells}{\code{BasicTable$findCells()}}
@@ -550,6 +551,99 @@ the row numbers specified in rowNumbers.\cr
 If both cFrom/cTo and columnNumbers are specified, then cFrom/cTo constrain
 the column numbers specified in columnNumbers.\cr
 See the "Styling" and "Finding and Formatting" vignettes for more
+information and many examples.
+}
+
+\subsection{Returns}{
+No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-mapStyling"></a>}}
+\if{latex}{\out{\hypertarget{method-mapStyling}{}}}
+\subsection{Method \code{mapStyling()}}{
+Apply styling to table cells based on the value of each cell.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$mapStyling(
+  styleProperty = NULL,
+  cells = NULL,
+  valueType = "text",
+  mapType = "range",
+  mappings = NULL,
+  styleLowerValues = FALSE,
+  styleHigherValues = TRUE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{styleProperty}}{The name of the style property to set on the specified
+cells, e.g. background-color.}
+
+\item{\code{cells}}{A list containing `TableCell` objects.}
+
+\item{\code{valueType}}{The type of style value to be set.  Must be one of:
+"text", "character", "number", "numeric", "color" or "colour".\cr
+"text" and "character" are equivalent.  "number" and "numeric" are equivalent.
+"color" and "colour" are equivalent.}
+
+\item{\code{mapType}}{The type of mapping to be performed.  The following mapping
+types are supported:\cr
+(1) "value" = a 1:1 mapping which maps each specified "from" value to the
+corresponding "to" value, e.g. 100 -> "green".\cr
+(2) "logic" = each from value is logical criteria.  See details.\cr
+(3) "range" = values between each pair of "from" values are mapped to the
+corresponding "to" value, e.g. values in the range 80-100 -> "green" (more
+specifically values greater than or equal to 80 and less than 100).\cr
+(4) "continuous" = rescales values between each pair of "from" values into
+the range of the corresponding pair of "to" values, e.g. if the "from" range
+is 80-100 and the corresponding "to" range is 0.8-1, then 90 -> 0.9.\cr
+"continuous" cannot be used with valueType="text"/"character".}
+
+\item{\code{mappings}}{The mappings to be applied, specified in one of the following
+three forms:\cr
+(1) a list containing pairs of values, e.g.
+`list(0, "red", 0.4, "yellow", 0.8, "green")`.\cr
+(2) a list containing "from" and "to" vectors/lists, e.g.
+`list(from=c(0, 0.4, 0.8), to=c("red", "yellow", "green"))`.\cr
+(3) a custom mapping function that will be invoked once per cell, e.g.
+`function(v, cell) { if(isTRUE(v>0.8)) return("green") }`.\cr
+Mappings must be specified in ascending order when valueType="range" or
+valueType="continuous".\cr
+If a custom mapping function is specified, then the valueType and mapType
+parameters are ignored.}
+
+\item{\code{styleLowerValues}}{A logical value, default `FALSE`, that specifies
+whether values less than the lowest specified "from" value should be styled
+using the style specified for the lowest "from" value.  Only applies when
+valueType="range" or valueType="continuous".}
+
+\item{\code{styleHigherValues}}{A logical value, default `TRUE`, that specifies
+whether values greater than the highest specified "from" value should be styled
+using the style specified for the highest "from" value.  Only applies when
+valueType="range" or valueType="continuous".}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+`mapStyling()` is typically used to conditionally apply styling to cells
+based on the value of each individual cell, e.g. cells with values less
+than a specified number could be coloured red.\cr
+mapType="logic" maps values matching specified logical criteria to
+specific "to" values.  The logical criteria can be any of the following
+forms (the first matching mapping is used):\cr
+(1) a specific value, e.g. 12.\cr
+(2) a specific value equality condition, e.g. "v==12", where v
+represents the cell value.\cr
+(3) a value range expression using the following abbreviated form:
+"value1<=v<value2", e.g. "10<=v<15".  Only "<" or "<=" can be used
+in these value range expressions.\cr
+(4) a standard R logical expression, e.g.
+"10<=v && v<15".\cr
+Basic R functions that test the value can also be
+used, e.g. is.na(v).\cr
+See the "Styling" and Finding and Formatting" vignettes for more
 information and many examples.
 }
 
