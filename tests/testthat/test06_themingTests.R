@@ -69,7 +69,9 @@ test_that("alt built in theme", {
 test_that("simple theme 1", {
 
   # define the colours
-  blue1Colors <- list(
+  blue1Theme <- list(
+    fontName="Verdana, Arial",
+    fontSize="0.75em",
     headerBackgroundColor = "rgb(68, 114, 196)",
     headerColor = "rgb(255, 255, 255)",
     cellBackgroundColor = "rgb(255, 255, 255)",
@@ -94,8 +96,7 @@ test_that("simple theme 1", {
               columnFormats=list(NULL, NULL, NULL, "%.2f"))
 
   # theme the table and render
-  theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=blue1Colors, fontName="Verdana, Arial")
-  tbl$theme <- theme
+  tbl$theme <- blue1Theme
 
   # tbl$renderTable()
   # prepStr(tbl$print(asCharacter=TRUE), "str")

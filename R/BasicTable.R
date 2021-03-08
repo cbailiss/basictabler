@@ -1544,7 +1544,7 @@ BasicTable <- R6::R6Class("BasicTable",
           checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "theme", value, missing(value), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("character", "list", "TableStyles"), allowedListElementClasses="character")
         }
         if("character" %in% class(value)) private$p_styles <- getTblTheme(parentTable=self, themeName=value)
-        else if("list" %in% class(value)) private$p_styles <- getSimpleColoredTblTheme(parentTable=self, colors=value, fontName=value$fontName)
+        else if("list" %in% class(value)) private$p_styles <- getSimpleColoredTblTheme(parentTable=self, theme=value)
         else if("TableStyles" %in% class(value)) private$p_styles <- value
         return(invisible())
       }

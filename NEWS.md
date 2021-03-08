@@ -24,6 +24,7 @@ Improvements
 * `tbl$getCells()` also gains a new `matchMode` argument making it easier to retrieve cells based on combinations of row and column criteria.  See the "Finding and Formatting" vignette for details.
 * `pt$findCells()` gain new arguments `rowNumbers`, `columnNumbers`, `cellCoordinates`, `cells` and `rowColumnMatchMode` to restrict the cell search based on combinations of row, column and cell criteria.  See the "Finding and Formatting" vignette for details.
 * `pt$findCells()` also gains new argument `valueRanges` to enable more granular logic to be specified when matching cell values.  See the "Finding and Formatting" vignette for details.
+* When using a simple theme (specified as a list) to style a pivot table, it is now possible to specify a font size.  
 
 
 basictabler 0.3.1

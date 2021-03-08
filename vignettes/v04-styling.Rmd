@@ -93,6 +93,8 @@ The `basictabler` package also supports outputting to Excel files.  The Excel ou
 
 The `basictabler` package includes three basic themes:
 
+### Default Theme
+
 ```{r, message=FALSE, warning=FALSE}
 # data for the table
 saleIds <- c(5334, 5336, 5338)
@@ -113,6 +115,8 @@ tbl$theme <- "default"  # this theme is already the default, so this line isn't 
 tbl$renderTable(styleNamePrefix="t0")
 ```
 
+### Compact Theme
+
 ```{r, message=FALSE, warning=FALSE}
 # data for the table
 saleIds <- c(5334, 5336, 5338)
@@ -132,6 +136,8 @@ tbl$addData(data.frame(saleIds, items, quantities, prices),
 tbl$theme <- "compact"
 tbl$renderTable(styleNamePrefix="t1")
 ```
+
+### Large Plain Theme
 
 ```{r, message=FALSE, warning=FALSE}
 # data for the table
@@ -161,6 +167,7 @@ Simple themes can be defined using a list.  Several examples are shown below.
 # define the font and colours
 simpleBlueTheme <- list(
   fontName="Verdana, Arial",
+  fontSize="0.75em",
   headerBackgroundColor = "rgb(68, 114, 196)",
   headerColor = "rgb(255, 255, 255)",
   cellBackgroundColor = "rgb(255, 255, 255)",
@@ -193,6 +200,7 @@ tbl$renderTable(styleNamePrefix="t3")
 # define the colours
 simpleGrayTheme <- list(
   fontName="Courier New, Courier",
+  fontSize="0.75em",
   headerBackgroundColor = "rgb(128, 128, 128)",
   headerColor = "rgb(255, 255, 255)",
   cellBackgroundColor = "rgb(255, 255, 255)",
@@ -225,6 +233,7 @@ tbl$renderTable(styleNamePrefix="t4")
 # define the colours
 simpleGreenTheme <- list(
   fontName="Helvetica, arial",
+  fontSize="0.75em",
   headerBackgroundColor = "rgb(112, 173, 71)",
   headerColor = "rgb(255, 255, 255)",
   cellBackgroundColor="rgb(255, 255, 255)",
@@ -277,6 +286,7 @@ columnFormats=list(NULL, list(big.mark=","), list(big.mark=","), list(big.mark="
 # simple theme
 simpleBlueTheme <- list(
   fontName="Verdana, Arial",
+  fontSize="0.75em",
   headerBackgroundColor = "rgb(68, 114, 196)",
   headerColor = "rgb(255, 255, 255)",
   cellBackgroundColor = "rgb(255, 255, 255)",
@@ -547,7 +557,9 @@ The individual cells in the table can have their appearance changed by retrievin
 
 ```{r, message=FALSE, warning=FALSE}
 # define the colours
-orangeColors <- list(
+orangeTheme <- list(
+  fontName="Garamond, arial",
+  fontSize="0.75em",
   headerBackgroundColor = "rgb(237, 125, 49)",
   headerColor = "rgb(255, 255, 255)",
   cellBackgroundColor = "rgb(255, 255, 255)",
@@ -572,8 +584,7 @@ tbl$addData(data.frame(saleIds, items, quantities, prices),
             columnFormats=list(NULL, NULL, NULL, "%.2f"))
 
 # theme the table and render
-theme <- getSimpleColoredTblTheme(parentTable=tbl, colors=orangeColors, fontName="Garamond, arial")
-tbl$theme <- theme
+tbl$theme <- orangeTheme
 
 # apply an additional highlight to one cell (3rd row, 2nd column)
 tbl$setStyling(3, 2, declarations=list("background-color"="#FFFF00"))
@@ -720,19 +731,19 @@ tbl$renderTable(styleNamePrefix="t8")
     + Specify cell type of a new cell:  `tbl$cells$setCell(1, 2, cellType="columnHeader", rawValue="Item")`
     + Change cell type of an existing cell:  ` tbl$cells$getCell(3, 2)$cellType <- "columnHeader"`
 * The styling theme applied to a table defines a set of styles and the default style for each cell type.
-    + Create a new simple theme using:  `getSimpleColoredTblTheme()`
-    + Create a new custom theme by writing a function `createCustomTheme()`
+    + Create a new simple theme using a list and assigning this to the `tbl$theme` field.
+    + Create a new custom theme by writing a function `createCustomTheme()`.
     + Assign a theme to the table `theme` property:  `tbl$theme <- createCustomTheme(tbl)`
 * Each individual cell can also have a different style, specified by settings the `baseStyleName` for the cell.
-    + Single cell example:  `tbl$cells$getCell(3, 2)$baseStyleName <- "AltCellStyle"`
-    + Alternative single cell example:  `tbl$setStyling(3, 2, baseStyleName="AltCellStyle")`
-    + Cell range example: `tbl$setStyling(3, 2, 3, 6, baseStyleName="AltCellStyle")`
+    + Single cell example:  `tbl$cells$getCell(3, 2)$baseStyleName <- "AltCellStyle"`.
+    + Alternative single cell example:  `tbl$setStyling(3, 2, baseStyleName="AltCellStyle")`.
+    + Cell range example: `tbl$setStyling(3, 2, 3, 6, baseStyleName="AltCellStyle")`.
 * It is also possible to declare individual style overrides  (e.g. a different text colour).  These override specific style settings from the named styles.
-    + Single cell example:  `tbl$setStyling(3, 2, declarations=list("text-align"="left", "background-color"="yellow"))`
-    + Cell range example: `tbl$setStyling(3, 2, 3, 6, declarations=list("text-align"="left", "background-color"="yellow"))`
+    + Single cell example:  `tbl$setStyling(3, 2, declarations=list("text-align"="left", "background-color"="yellow"))`.
+    + Cell range example: `tbl$setStyling(3, 2, 3, 6, declarations=list("text-align"="left", "background-color"="yellow"))`.
 * It is possible to specify a new base style and overrides together.  The declarations override the settings in the base style. 
-    + Single cell example:  `tbl$setStyling(3, 2, baseStyleName="AltCellStyle", declarations=list("text-align"="left", "background-color"="yellow"))`
-    + Cell range example: `tbl$setStyling(3, 2, 3, 6, baseStyleName="AltCellStyle", declarations=list("text-align"="left", "background-color"="yellow"))`
+    + Single cell example:  `tbl$setStyling(3, 2, baseStyleName="AltCellStyle", declarations=list("text-align"="left", "background-color"="yellow"))`.
+    + Cell range example: `tbl$setStyling(3, 2, 3, 6, baseStyleName="AltCellStyle", declarations=list("text-align"="left", "background-color"="yellow"))`.
 * Instead of specifying the declarations as a list, an inline style can be declared.  This is an unnamed style object that is used for one or multiple cells and is not part of the table theme.
     + See the "Changing cell appearance after cells have been created" section in this vignette for an example.
     + See the "Finding and Formatting" vignette for more examples.

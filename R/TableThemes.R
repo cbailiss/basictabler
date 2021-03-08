@@ -229,16 +229,24 @@ getCompactTblTheme <- function(parentTable, themeName="compact") {
 
 #' Get a simple coloured theme.
 #'
-#' Get a simple coloured theme that can be used to style a table into a custom colour scheme.
+#' Get a simple coloured theme that can be used to style a table into a custom
+#' colour scheme.
 #'
 #' @export
 #' @param parentTable Owning table.
 #' @param themeName The name to use as the new theme name.
-#' @param colors The set of colours to use when generating the theme (see the Styling vignette for details).
-#' @param fontName The name of the font to use, or a comma separated list (for font-fall-back).
+#' @param colors The set of colours to use when generating the theme (see
+#' the Styling vignette for details).  This parameter exists for
+#' backward compatibility.
+#' @param fontName The name of the font to use, or a comma separated list
+#' (for font-fall-back).  This parameter exists for backward compatibility.
+#' @param theme A simple theme specified in the form of a list.  See example
+#' for supported list elements (all other elements will be ignored).
 #' @return A TableStyles object.
 #' @examples
-#' orangeColors <- list(
+#' simpleOrangeTheme <- list(
+#'   fontName="Verdana, Arial",
+#'   fontSize="0.75em",
 #'   headerBackgroundColor = "rgb(237, 125, 49)",
 #'   headerColor = "rgb(255, 255, 255)",
 #'   cellBackgroundColor = "rgb(255, 255, 255)",
@@ -249,18 +257,32 @@ getCompactTblTheme <- function(parentTable, themeName="compact") {
 #' )
 #' library(basictabler)
 #' tbl <- qtbl(data.frame(a=1:2, b=3:4))
-#' tbl$theme <- getSimpleColoredTblTheme(parentTable=tbl,
-#'     colors=orangeColors, fontName="Garamond, arial")
+#' # then
+#' tbl$theme <- simpleOrangeTheme
+#' # or
+#' theme <- getSimpleColoredTblTheme(tbl, theme=simpleOrangeTheme)
+#' # make further changes to the theme
+#' tbl$theme <- simpleOrangeTheme
+#' # theme set, now render table
 #' tbl$renderTable()
-getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colors, fontName) {
+getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colors=NULL, fontName=NULL, theme=NULL) {
   if(R6::is.R6Class(parentTable)&&(parentTable$classname=="BasicTable")) argumentCheckMode <- parentTable$argumentCheckMode
   else argumentCheckMode <- 4
   if(argumentCheckMode > 0) {
     checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
     checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", themeName, missing(themeName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
-    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", colors, missing(colors), allowMissing=FALSE, allowNull=FALSE, allowedClasses="list", allowedListElementClasses="character")
-    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", fontName, missing(fontName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", colors, missing(colors), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", fontName, missing(fontName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+    checkArgument(argumentCheckMode, TRUE, "", "getSimpleColoredTblTheme", theme, missing(theme), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses="character")
   }
+  # take values from theme argument, if they are not specified explicitly
+  if(is.null(colors)) colors <- theme
+  if(is.null(colors)) stop("getSimpleColoredTheme():  colors must be specified.", call. = FALSE)
+  if(is.null(fontName)) fontName <- theme$fontName
+  if(is.null(fontName)) fontName <- "Arial"
+  fontSize <- theme$fontSize
+  if(length(fontSize)==0) fontSize <- "0.75em"
+  # build the theme
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(
       "border-collapse"="collapse",
@@ -268,7 +290,7 @@ getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colo
     ))
   TableStyles$addStyle(styleName="ColumnHeader", list(
       "font-family"=fontName,
-      "font-size"="0.75em",
+      "font-size"=fontSize,
       padding="2px",
       "border"=paste0("1px solid ", colors$borderColor),
       "vertical-align"="middle",
@@ -280,7 +302,7 @@ getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colo
     ))
   TableStyles$addStyle(styleName="RowHeader", list(
       "font-family"=fontName,
-      "font-size"="0.75em",
+      "font-size"=fontSize,
       padding="2px 8px 2px 2px",
       "border"=paste0("1px solid ", colors$borderColor),
       "vertical-align"="middle",
@@ -292,7 +314,7 @@ getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colo
     ))
   TableStyles$addStyle(styleName="Cell", list(
       "font-family"=fontName,
-      "font-size"="0.75em",
+      "font-size"=fontSize,
       padding="2px 2px 2px 8px",
       "border"=paste0("1px solid ", colors$borderColor),
       "vertical-align"="middle",
@@ -302,7 +324,7 @@ getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colo
     ))
   TableStyles$addStyle(styleName="Total", list(
       "font-family"=fontName,
-      "font-size"="0.75em",
+      "font-size"=fontSize,
       padding="2px 2px 2px 8px",
       "border"=paste0("1px solid ", colors$borderColor),
       "vertical-align"="middle",
