@@ -721,7 +721,7 @@ tbl$renderTable()
 
 ### Style mapping example with `mapType="continuous"`
 
-An example of styling using the "continuous" map type can be found in the [Finding and Formatting](v08-findingandformatting.html) vignette.
+An example of styling using the "continuous" map type can be found in the [Finding and Formatting](v05-findingandformatting.html) vignette.
 
 ### Style mapping example with `mapType="function"`
 
