@@ -231,7 +231,8 @@ Populate the table from a data frame, specifying headers and value
   firstColumnAsRowHeaders = FALSE,
   explicitRowHeaders = NULL,
   columnFormats = NULL,
-  baseStyleNames = NULL
+  baseStyleNames = NULL,
+  fmtFuncArgs = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -255,11 +256,19 @@ frame as row headings in the table.  Default value `FALSE.`}
 \item{\code{explicitRowHeaders}}{A character vector of row names to use as row
 headings in the table.}
 
-\item{\code{columnFormats}}{A character, list or custom function to format the
-calculation values.}
+\item{\code{columnFormats}}{A list that is the same length as the number of
+columns in the data frame, where each list element specifies how to
+format the values.  Each list element can be either a
+character format string to be used with `sprintf()`, a list of
+arguments to be used with `base::format()` or a custom R function which
+will be invoked once per value to be formatted.}
 
 \item{\code{baseStyleNames}}{A character vector of style names (from the table
 theme) used to style the column values.}
+
+\item{\code{fmtFuncArgs}}{A list that is the same length as the number of
+columns in the data frame, where each list element specifies a list of
+arguments to pass to custom R format functions.}
 }
 \if{html}{\out{</div>}}
 }
@@ -281,7 +290,8 @@ Populate the table from a matrix, specifying headers and value
   rowNamesAsRowHeaders = FALSE,
   explicitRowHeaders = NULL,
   columnFormats = NULL,
-  baseStyleNames = NULL
+  baseStyleNames = NULL,
+  fmtFuncArgs = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -302,11 +312,19 @@ headings in the table.  Default value `FALSE.`}
 \item{\code{explicitRowHeaders}}{A character vector of row names to use as row
 headings in the table.}
 
-\item{\code{columnFormats}}{A character, list or custom function to format the
-calculation values.}
+\item{\code{columnFormats}}{A list that is the same length as the number of
+columns in the matrix, where each list element specifies how to
+format the values.  Each list element can be either a
+character format string to be used with `sprintf()`, a list of
+arguments to be used with `base::format()` or a custom R function which
+will be invoked once per value to be formatted.}
 
 \item{\code{baseStyleNames}}{A character vector of style names (from the table
 theme) used to style the column values.}
+
+\item{\code{fmtFuncArgs}}{A list that is the same length as the number of
+columns in the data frame, where each list element specifies a list of
+arguments to pass to custom R format functions.}
 
 \item{\code{firstColumnAsRowHeaders}}{`TRUE` to use the first column in the matrix
 as row headings in the table.  Default value `FALSE.`}
@@ -409,7 +427,7 @@ No return value.
 \subsection{Method \code{formatValue()}}{
 Format a value using a variety of different methods.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{BasicTable$formatValue(value = NULL, format = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$formatValue(value = NULL, format = NULL, fmtFuncArgs = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -420,6 +438,10 @@ Format a value using a variety of different methods.
 \item{\code{format}}{Either a character format string to be used with `sprintf()`,
 a list of arguments to be used with `base::format()` or a custom R function
 which will be invoked once per value to be formatted.}
+
+\item{\code{fmtFuncArgs}}{If `format` is a custom R function, then `fmtFuncArgs`
+specifies any additional arguments (in the form of a list) that will be
+passed to the custom function.}
 }
 \if{html}{\out{</div>}}
 }

@@ -245,15 +245,22 @@ BasicTable <- R6::R6Class("BasicTable",
     #'   frame as row headings in the table.  Default value `FALSE.`
     #' @param explicitRowHeaders A character vector of row names to use as row
     #'   headings in the table.
-    #' @param columnFormats A character, list or custom function to format the
-    #'   calculation values.
+    #' @param columnFormats A list that is the same length as the number of
+    #'   columns in the data frame, where each list element specifies how to
+    #'   format the values.  Each list element can be either a
+    #'   character format string to be used with `sprintf()`, a list of
+    #'   arguments to be used with `base::format()` or a custom R function which
+    #'   will be invoked once per value to be formatted.
     #' @param baseStyleNames A character vector of style names (from the table
     #'   theme) used to style the column values.
+    #' @param fmtFuncArgs A list that is the same length as the number of
+    #'   columns in the data frame, where each list element specifies a list of
+    #'   arguments to pass to custom R format functions.
     #' @return No return value.
     addData = function(dataFrame=NULL,
                        columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
                        rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
-                       columnFormats=NULL, baseStyleNames=NULL) {
+                       columnFormats=NULL, baseStyleNames=NULL, fmtFuncArgs=NULL) {
       timeStart <- proc.time()
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", dataFrame, missing(dataFrame), allowMissing=FALSE, allowNull=FALSE, allowedClasses="data.frame")
@@ -262,8 +269,9 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", rowNamesAsRowHeaders, missing(rowNamesAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", firstColumnAsRowHeaders, missing(firstColumnAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "list", "function"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", baseStyleNames, missing(baseStyleNames), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", fmtFuncArgs, missing(fmtFuncArgs), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addData", "Adding data to Table...")
       dfRowCount <- nrow(dataFrame)
@@ -346,7 +354,7 @@ BasicTable <- R6::R6Class("BasicTable",
             if(is.null(columnFormats)) formattedValue <- value
             else if(is.null(columnFormats[[c]])) formattedValue <- value
             else if(is.na(columnFormats[[c]])) formattedValue <- value
-            else formattedValue <- self$formatValue(value, columnFormats[[c]])
+            else formattedValue <- self$formatValue(value, columnFormats[[c]], fmtFuncArgs[[c]])
             if(firstColumnAsRowHeaders && (c==1)) cellType <- "rowHeader"
             else cellType <- "cell"
             baseStyleName <- NULL
@@ -380,14 +388,22 @@ BasicTable <- R6::R6Class("BasicTable",
     #'   as row headings in the table.  Default value `FALSE.`
     #' @param explicitRowHeaders A character vector of row names to use as row
     #'   headings in the table.
-    #' @param columnFormats A character, list or custom function to format the
-    #'   calculation values.
+    #' @param columnFormats A list that is the same length as the number of
+    #'   columns in the matrix, where each list element specifies how to
+    #'   format the values.  Each list element can be either a
+    #'   character format string to be used with `sprintf()`, a list of
+    #'   arguments to be used with `base::format()` or a custom R function which
+    #'   will be invoked once per value to be formatted.
     #' @param baseStyleNames A character vector of style names (from the table
     #'   theme) used to style the column values.
+    #' @param fmtFuncArgs A list that is the same length as the number of
+    #'   columns in the data frame, where each list element specifies a list of
+    #'   arguments to pass to custom R format functions.
     #' @return No return value.
     addMatrix = function(matrix=NULL,
                        columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
-                       rowNamesAsRowHeaders=FALSE, explicitRowHeaders=NULL, columnFormats=NULL, baseStyleNames=NULL) {
+                       rowNamesAsRowHeaders=FALSE, explicitRowHeaders=NULL,
+                       columnFormats=NULL, baseStyleNames=NULL, fmtFuncArgs=NULL) {
       timeStart <- proc.time()
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", matrix, missing(matrix), allowMissing=FALSE, allowNull=FALSE, allowedClasses="matrix")
@@ -397,6 +413,7 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", baseStyleNames, missing(baseStyleNames), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addMatrix", fmtFuncArgs, missing(fmtFuncArgs), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addMatrix", "Adding matrix to Table...")
       mRowCount <- nrow(matrix)
@@ -479,7 +496,7 @@ BasicTable <- R6::R6Class("BasicTable",
             if(is.null(columnFormats)) formattedValue <- value
             else if(is.null(columnFormats[[c]])) formattedValue <- value
             else if(is.na(columnFormats[[c]])) formattedValue <- value
-            else formattedValue <- self$formatValue(value, columnFormats[[c]])
+            else formattedValue <- self$formatValue(value, columnFormats[[c]], fmtFuncArgs[[c]])
             baseStyleName <- NULL
             if(!is.null(baseStyleNames)) {
               if(!is.null(baseStyleNames[[c]])) baseStyleName <- baseStyleNames[[c]]
@@ -626,18 +643,22 @@ BasicTable <- R6::R6Class("BasicTable",
     #' @param format Either a character format string to be used with `sprintf()`,
     #' a list of arguments to be used with `base::format()` or a custom R function
     #' which will be invoked once per value to be formatted.
+    #' @param fmtFuncArgs If `format` is a custom R function, then `fmtFuncArgs`
+    #' specifies any additional arguments (in the form of a list) that will be
+    #' passed to the custom function.
     #' @return The formatted value if `format` is specified, otherwise the `value`
     #' converted to a character value.
-    formatValue = function(value=NULL, format=NULL) {
+    formatValue = function(value=NULL, format=NULL, fmtFuncArgs=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "formatValue", value, missing(value), allowMissing=FALSE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "complex", "character", "factor", "Date", "POSIXct", "POSIXlt"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "formatValue", format, missing(format), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "formatValue", fmtFuncArgs, missing(fmtFuncArgs), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$formatValue", "Formatting value...")
       if(is.null(value)) return(invisible(NULL))
-      if(is.null(format)) return(value)
+      if(is.null(format)) return(base::as.character(value))
       clsv <- class(value)
-      if(("numeric" %in% clsv)||("integer" %in% clsv)||("complex" %in% clsv)) {
+      if(("numeric" %in% clsv)||("integer" %in% clsv)) {
         clsf <- class(format)
         if("character" %in% clsf) value <- sprintf(format, value)
         else if ("list" %in% clsf) {
@@ -645,19 +666,72 @@ BasicTable <- R6::R6Class("BasicTable",
           args$x <- value
           value <- do.call(base::format, args)
         }
-        else if ("function" %in% class(format)) value <- format(value)
+        else if ("function" %in% class(format)) {
+          if (is.null(fmtFuncArgs)) value <- format(value)
+          else {
+            args <- fmtFuncArgs
+            args$x <- value
+            value <- do.call(format, args)
+          }
+        }
+        else value <- base::as.character(value)
       }
-      else if(("Date" %in% clsv)||("POSIXct" %in% clsv)||("POSIXlt" %in% clsv)) {
+      else if("logical" %in% clsv) {
         clsf <- class(format)
-        if ("list" %in% clsf) {
+        if("character" %in% clsf) {
+          if (length(format)==2) {
+            if(value==FALSE) value <- format[1]
+            else if(value==TRUE) value <- format[2]
+            else value <- "NA"
+          }
+          else if (length(format)==3) {
+            if(value==FALSE) value <- format[1]
+            else if(value==TRUE) value <- format[2]
+            else value <- format[3]
+          }
+          else value <- sprintf(format, value)
+        }
+        else if ("list" %in% clsf) {
           args <- format
           args$x <- value
           value <- do.call(base::format, args)
         }
-        else if ("function" %in% class(format)) value <- format(value)
+        else if ("function" %in% class(format)) {
+          if (is.null(fmtFuncArgs)) value <- format(value)
+          else {
+            args <- fmtFuncArgs
+            args$x <- value
+            value <- do.call(format, args)
+          }
+        }
+        else value <- base::as.character(value)
       }
-      else if ("factor" %in% clsv) value <- as.character(value)
-      else if("logical" %in% clsv) value <- as.character(value)
+      else if(("Date" %in% clsv)||("POSIXct" %in% clsv)||("POSIXlt" %in% clsv)) {
+        clsf <- class(format)
+        if ("character" %in% clsf) {
+          if (format %in% c("%d","%i","%o","%x","%X")) value <- sprintf(format, value)
+          else {
+            args <- list(format)
+            args$x <- value
+            value <- do.call(base::format, args)
+          }
+        }
+        else if ("list" %in% clsf) {
+          args <- format
+          args$x <- value
+          value <- do.call(base::format, args)
+        }
+        else if ("function" %in% class(format)) {
+          if (is.null(fmtFuncArgs)) value <- format(value)
+          else {
+            args <- fmtFuncArgs
+            args$x <- value
+            value <- do.call(format, args)
+          }
+        }
+        else value <- base::as.character(value)
+      }
+      else value <- base::as.character(value)
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$formatValue", "Formated value.")
       return(invisible(value))
     },

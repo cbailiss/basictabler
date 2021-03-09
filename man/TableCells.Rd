@@ -405,7 +405,8 @@ Create multiple cells in one row of a table.
   formattedValues = NULL,
   formats = NULL,
   visiblity = TRUE,
-  baseStyleNames = NULL
+  baseStyleNames = NULL,
+  fmtFuncArgs = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -425,18 +426,22 @@ the following values:  root, rowHeader, columnHeader, cell, total.}
 the table for each element in the vector/list.}
 
 \item{\code{formattedValues}}{A vector or list of formatted values.  Must be
-either `NULL`, a single value or a vector of the same length as
+either `NULL`, a single value or a vector/list of the same length as
 rawValues.}
 
 \item{\code{formats}}{A vector or list of formats.  Must be either `NULL`, a
-single value or a vector of the same length as rawValues.}
+single value or a vector/list of the same length as rawValues.}
 
 \item{\code{visiblity}}{A logical vector.  Must be either a single logical value
-or a vector of the same length as rawValues.}
+or a vector/list of the same length as rawValues.}
 
 \item{\code{baseStyleNames}}{A character vector.  Must be either a single style
 name (from the table theme) or a vector of style names of the same
 length as rawValues.}
+
+\item{\code{fmtFuncArgs}}{A list that is length 1 or the same length as the
+number of columns in the row, where each list element specifies a list
+of arguments to pass to custom R format functions.}
 }
 \if{html}{\out{</div>}}
 }
@@ -458,7 +463,8 @@ Create multiple cells in one column of a table.
   formattedValues = NULL,
   formats = NULL,
   visiblity = TRUE,
-  baseStyleNames = NULL
+  baseStyleNames = NULL,
+  fmtFuncArgs = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -490,6 +496,10 @@ or a vector of the same length as rawValues.}
 \item{\code{baseStyleNames}}{A character vector.  Must be either a single style
 name (from the table theme) or a vector of style names of the same
 length as rawValues.}
+
+\item{\code{fmtFuncArgs}}{A list that is length 1 or the same length as the
+number of rows in the column, where each list element specifies a list
+of arguments to pass to custom R format functions.}
 }
 \if{html}{\out{</div>}}
 }

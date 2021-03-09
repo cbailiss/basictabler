@@ -318,17 +318,20 @@ TableCells <- R6::R6Class("TableCells",
    #' @param rawValues A vector or list of values.  A cell will be generated in
    #'   the table for each element in the vector/list.
    #' @param formattedValues A vector or list of formatted values.  Must be
-   #'   either `NULL`, a single value or a vector of the same length as
+   #'   either `NULL`, a single value or a vector/list of the same length as
    #'   rawValues.
    #' @param formats A vector or list of formats.  Must be either `NULL`, a
-   #'   single value or a vector of the same length as rawValues.
+   #'   single value or a vector/list of the same length as rawValues.
    #' @param visiblity A logical vector.  Must be either a single logical value
-   #'   or a vector of the same length as rawValues.
+   #'   or a vector/list of the same length as rawValues.
    #' @param baseStyleNames A character vector.  Must be either a single style
    #'   name (from the table theme) or a vector of style names of the same
    #'   length as rawValues.
+   #' @param fmtFuncArgs A list that is length 1 or the same length as the
+   #'   number of columns in the row, where each list element specifies a list
+   #'   of arguments to pass to custom R format functions.
    #' @return No return value.
-   setRow = function(rowNumber=NULL, startAtColumnNumber=1, cellTypes="cell", rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE, baseStyleNames=NULL) {
+   setRow = function(rowNumber=NULL, startAtColumnNumber=1, cellTypes="cell", rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE, baseStyleNames=NULL, fmtFuncArgs=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setRow", rowNumber, missing(rowNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setRow", startAtColumnNumber, missing(startAtColumnNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
@@ -338,6 +341,7 @@ TableCells <- R6::R6Class("TableCells",
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setRow", formats, missing(formats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setRow", visiblity, missing(visiblity), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setRow", baseStyleNames, missing(baseStyleNames), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setRow", fmtFuncArgs, missing(fmtFuncArgs), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
      }
      if(length(rowNumber)!=1) stop(paste0("TableCells$setRow(): rowNumber (length ", length(rowNumber), ") must be one value."), call. = FALSE)
      if(length(startAtColumnNumber)!=1) stop(paste0("TableCells$setRow(): startAtColumnNumber (length ", length(startAtColumnNumber), ") must be one value."), call. = FALSE)
@@ -357,8 +361,11 @@ TableCells <- R6::R6Class("TableCells",
        else cellType <- cellTypes[x]
        if(length(formats)==1) format=formats[[1]]
        else if(length(formats)>1) format=formats[[x]]
+       if(length(fmtFuncArgs)==1) fmtFuncArg1=fmtFuncArgs[[1]]
+       else if(length(fmtFuncArgs)>1) fmtFuncArg1=fmtFuncArgs[[x]]
+       else fmtFuncArg1 <- NULL
        if(length(formattedValues)==0) {
-         if(!is.null(format)) formattedValue <- private$p_parentTable$formatValue(value=v, format=format)
+         if(!is.null(format)) formattedValue <- private$p_parentTable$formatValue(value=v, format=format, fmtFuncArgs=fmtFuncArg1)
          else formattedValue <- v
        }
        else if(is.list(formattedValues)) {
@@ -397,8 +404,11 @@ TableCells <- R6::R6Class("TableCells",
    #' @param baseStyleNames A character vector.  Must be either a single style
    #'   name (from the table theme) or a vector of style names of the same
    #'   length as rawValues.
+   #' @param fmtFuncArgs A list that is length 1 or the same length as the
+   #'   number of rows in the column, where each list element specifies a list
+   #'   of arguments to pass to custom R format functions.
    #' @return No return value.
-   setColumn = function(columnNumber=NULL, startAtRowNumber=2, cellTypes="cell", rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE, baseStyleNames=NULL) {
+   setColumn = function(columnNumber=NULL, startAtRowNumber=2, cellTypes="cell", rawValues=NULL, formattedValues=NULL, formats=NULL, visiblity=TRUE, baseStyleNames=NULL, fmtFuncArgs=NULL) {
      if(private$p_parentTable$argumentCheckMode > 0) {
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setColumn", columnNumber, missing(columnNumber), allowMissing=FALSE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1)
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setColumn", startAtRowNumber, missing(startAtRowNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"), minValue=1, maxValue=self$columnCount)
@@ -408,6 +418,7 @@ TableCells <- R6::R6Class("TableCells",
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setColumn", formats, missing(formats), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("character", "list", "function"))
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setColumn", visiblity, missing(visiblity), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setColumn", baseStyleNames, missing(baseStyleNames), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+       checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableCells", "setColumn", fmtFuncArgs, missing(fmtFuncArgs), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
      }
      if(length(columnNumber)!=1) stop(paste0("TableCells$setColumn(): columnNumber (length ", length(columnNumber), ") must be one value."), call. = FALSE)
      if(length(startAtRowNumber)!=1) stop(paste0("TableCells$setColumn(): startAtRowNumber (length ", length(startAtRowNumber), ") must be one value."), call. = FALSE)
@@ -427,8 +438,11 @@ TableCells <- R6::R6Class("TableCells",
        else cellType <- cellTypes[x]
        if(length(formats)==1) format=formats[[1]]
        else if(length(formats)>1) format=formats[[x]]
+       if(length(fmtFuncArgs)==1) fmtFuncArg1=fmtFuncArgs[[1]]
+       else if(length(fmtFuncArgs)>1) fmtFuncArg1=fmtFuncArgs[[x]]
+       else fmtFuncArg1 <- NULL
        if(length(formattedValues)==0) {
-         if(!is.null(format)) formattedValue <- private$p_parentTable$formatValue(value=v, format=format)
+         if(!is.null(format)) formattedValue <- private$p_parentTable$formatValue(value=v, format=format, fmtFuncArgs=fmtFuncArg1)
          else formattedValue <- v
        }
        else if(is.list(formattedValues)) {

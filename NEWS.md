@@ -27,6 +27,7 @@ Improvements
 * `pt$findCells()` also gains new argument `valueRanges` to enable more granular logic to be specified when matching cell values.  See the "Finding and Formatting" vignette for details.
 * When using a simple theme (specified as a list) to style a pivot table, it is now possible to specify a font size.  
 * New property `tbl$allCells` provides a simple way to retrieve a list of all cells in the table.
+* Additional arguments can now be passed to custom calculation functions using the `calcFuncArgs` argument.  See the documentation of the `BasicTable$addData()`, `BasicTable$addMatrix()`, `TableCells$setRow()` and `TableCells$setColumn()` functions for details. 
 
 
 basictabler 0.3.1
