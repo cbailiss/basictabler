@@ -28,7 +28,7 @@ Suggests:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/cbailiss/basictabler
+URL: http://www.basictabler.org.uk/, https://github.com/cbailiss/basictabler
 BugReports: https://github.com/cbailiss/basictabler/issues
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
