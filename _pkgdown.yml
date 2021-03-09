@@ -1,0 +1,4 @@
+destination: docs
+url: http://www.basictabler.org.uk
+home:
+  title: Construct Rich Tables for Output to 'HTML'/'Excel'

@@ -8,7 +8,7 @@ Breaking Changes
 
 **Argument order changes**
 
-The arguments for functions `qtbl()`, `qhtbl()` and `tbl$addData()` have changed order slightly.  Users relying on the order of arguments may need to update their code.  All existing arguments have retained the same name so users calling these functions using the argument names will be unaffected.
+The order of the arguments for functions `qtbl()`, `qhtbl()` and `tbl$addData()` has slightly.  Users relying on the order of arguments may need to update their code.  All existing arguments have retained the same name so users calling these functions using the argument names will be unaffected.
 
 **stringsAsFactors in R 4.0.x and 4.1.x**
 
