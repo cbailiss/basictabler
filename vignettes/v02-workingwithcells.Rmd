@@ -35,14 +35,15 @@ The cells collection is accessed via `tbl$cells`.
 
 Each TableCell object has the following basic properties:
 
-- rowNumber - the number of the row where the cell exists in the table.
-- columnNumber - the number of the column where the cell exists in the table.
-- cellType - one of: root, rowHeader, columnHeader, cell, total.  Controls the type of default styling applied to the cell when the table is rendered/exported.
-- visible - TRUE/FALSE, controls whether the cell is output during rendering/exporting.
-- rawValue - the unformatted value of the cell.
-- formattedValue - the formatted value of the cell used during most rendering/exporting.
-- baseStyleName - allows a different named style to be applied to the cell when rendering/exporting (if not specified, the default style based on the cellType will be used).
-- style - a TableStyle object that contains specific style rules just for this cell (which take precedence over the baseStyleName).
+- `instanceId` - a unique identifier for the cell (useful when checking in code if two variables refer to the same cell instance).
+- `rowNumber` - the number of the row where the cell exists in the table.
+- `columnNumber` - the number of the column where the cell exists in the table.
+- `cellType` - one of: root, rowHeader, columnHeader, cell, total.  Controls the type of default styling applied to the cell when the table is rendered/exported.
+- `visible` - `TRUE`/`FALSE`, controls whether the cell is output during rendering/exporting.
+- `rawValue` - the unformatted value of the cell.
+- `formattedValue` - the formatted value of the cell used during most rendering/exporting.
+- `baseStyleName` - allows a different named style to be applied to the cell when rendering/exporting (if not specified, the default style based on the cellType will be used).
+- `style` - a `TableStyle` object that contains specific style rules just for this cell (which take precedence over the `baseStyleName`).
 
 Most the above properties are rarely accessed directly.  Instead, helper functions are used to manipulate them.  Nonetheless, understanding what each cell is composed of helps to understand tables and make working with tables easier.
 
@@ -192,7 +193,8 @@ tbl$renderTable()
 cell <- tbl$cells$getCell(2, 4)
 
 # output the cell properties
-summary <- list(rowNumber=cell$rowNumber, columnNumber=cell$columnNumber, cellType=cell$cellType,
+summary <- list(instanceId=cell$instanceId,
+                rowNumber=cell$rowNumber, columnNumber=cell$columnNumber, cellType=cell$cellType,
                 visible=cell$visible, rawValue=cell$rawValue, formattedValue=cell$formattedValue,
                 baseStyleName=ifelse(is.null(cell$baseStyleName), "", cell$baseStyleName), 
                 style=ifelse(is.null(cell$style), "", cell$style$asCSSRule()))

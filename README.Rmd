@@ -25,6 +25,8 @@ The tables can also be exported to Excel, including the styling/formatting.  The
 
 `basictabler` is a companion package to the `pivottabler` package.  `pivottabler` is focussed on generating pivot tables and can aggregate data.  `basictabler` does not aggregate data but offers more control of table structure.
 
+For more information see http://www.basictabler.org.uk/.
+
 ### Installation
 
 You can install:

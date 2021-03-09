@@ -63,7 +63,7 @@ The `getCells()` function can be used to retrieve one or more cells by row/colum
 - `columnNumbers` - an integer vector specifying column numbers.
 - `cellCoordinates` - a list of two-element vectors that specify the coordinates of cells to retrieve.  Ignored when `specifyCellsAsList=FALSE`.
 - `excludeEmptyCells` - a logical value that specifies whether cells with no value should be excluded, default `TRUE`.
-- `matchMode` - either "simple" or "combinations".
+- `matchMode` - either "simple" (default) or "combinations".
     + "simple" specifies that row and column arguments are considered separately (logical OR), e.g. `rowNumbers=1` and `columnNumbers=2` will match all cells in row 1 and all cells in column 2.
     + "combinations" specifies that row and column arguments are considered together (logical AND), e.g. `rowNumbers=1` and `columnNumbers=2` will match only the cell single at location (1, 2).
     + Arguments `rowNumbers` and `columnNumbers` are affected by the match mode.  All other arguments are not. 
@@ -466,20 +466,12 @@ In addition, the following parameters can also be used with `pt$findCells()`:
 - `columnNumbers` - an integer vector specifying column numbers.
 - `cellCoordinates` - a list of two-element vectors that specify the coordinates of cells to retrieve.  Ignored when `specifyCellsAsList=FALSE`.
 - `cells` - a `PivotCell` object or a list of `PivotCell` objects to restrict the cells that are matched. 
-- `rowColumnMatchMode` - either "simple" or "combinations".
+- `rowColumnMatchMode` - either "simple" (default) or "combinations".
     + "simple" specifies that row and column arguments are considered separately (logical OR), e.g. `rowNumbers=1` and `columnNumbers=2` will match all cells in row 1 and all cells in column 2.
     + "combinations" specifies that row and column arguments are considered together (logical AND), e.g. `rowNumbers=1` and `columnNumbers=2` will match only the cell single at location (1, 2).
     + Arguments `rowNumbers`, `columnNumbers`, `rowGroups` and `columnGroups` are affected by the match mode.  All other arguments are not.
 
 `findCells()` is typically used for conditional formatting, as illustrated in the next section.
-
-### Comparing to `getCells()`
-
-The `rowNumbers` and `columnNumbers` arguments work differently in `findCells()` and `getCells()`.  
-
-The `findCells()` function applies them independently, e.g. specifying `rowNumbers=2:3` and `columnNumbers=5:6` will match all cells in rows 2 and 3 and all cells in columns 5 and 6, i.e. cells must match either the `rowNumbers` criteria **OR** the `columnNumbers` criteria.
-
-The `getCells()` function applies them in combination, e.g. specifying `rowNumbers=2:3` and `columnNumbers=5:6` will match only those cells satisfying both the `rowNumbers` criteria **AND** the `columnNumbers` criteria, which is cells (2, 5), (2, 6), (3, 5) and (3, 6) - and not for example (2, 4).
 
 ## Conditional Formatting
 

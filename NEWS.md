@@ -1,23 +1,34 @@
 basictabler 1.0.0
 ================
 
-This release includes two potentially breaking changes and numerous small enhancements across various parts of the package.
+This release includes three breaking changes and numerous small enhancements across various parts of the package.
 
 Breaking Changes
 ----------------
 
 **Argument order changes**
 
-The order of the arguments for functions `qtbl()`, `qhtbl()` and `tbl$addData()` has slightly.  Users relying on the order of arguments may need to update their code.  All existing arguments have retained the same name so users calling these functions using the argument names will be unaffected.
+The order of the arguments for functions `qtbl()`, `qhtbl()` and `tbl$addData()` has changed.  Users relying on the order of arguments may need to update their code.  All existing arguments have retained the same name - so users calling these functions using the argument names will be unaffected.
+
+**Change of default behaviour in `tbl$findCells()`**
+
+Previously the `rowNumbers` and `columnNumbers` arguments of `tbl$findCells()` were applied in combination e.g. specifying rowNumbers=2:3 and columnNumbers=5:6 previously matched only those cells satisfying both the rowNumbers criteria **AND** the columnNumbers criteria, which is cells (2, 5), (2, 6), (3, 5) and (3, 6) - and not for example (2, 4).
+
+From v1.0.0 of the package, the `rowNumbers` and `columnNumbers` arguments are by default applied independently, e.g. specifying rowNumbers=2:3 and columnNumbers=5:6 will match all cells in rows 2 and 3 and all cells in columns 5 and 6, i.e. cells must match either the rowNumbers criteria **OR** the columnNumbers criteria.
+
+The previous behaviour can be restored using the `tbl$findCells()` argument `rowColumnMatchMode="combinations"`.
+
+This change makes the behaviour of `tbl$getCells()` and `tbl$findCells()` consistent.  It also makes the behaviour consistent with the same functions in the `pivottabler` package.
 
 **stringsAsFactors in R 4.0.x and 4.1.x**
 
-From R 4.1.0, the default value of the `stringsAsFactors` argument in `tbl$asDataFrame()` changes to FALSE due to the deprecation of `default.stringsAsFactors()`.  When the package is used on versions of R < 4.1.0, the package behaviour is unchanged.  When the package used on R 4.0.x versions, a warning message is displayed about the change in future behaviour. 
+From R 4.1.0, the default value of the `stringsAsFactors` argument in `tbl$asDataFrame()` changes to `FALSE` due to the deprecation of `default.stringsAsFactors()`.  When the package is used on versions of R < 4.1.0, the package behaviour is unchanged.  When the package used on R 4.0.x versions, a warning message is displayed about the change in future behaviour. 
 
 Documentation Changes
 ---------------------
 
 * The code documentation for `basictabler` has been re-written to use the R6 documentation capabilities in `roxygen2`.  As a result the documentation is now more detailed than in previous versions, e.g. arguments in object method calls are now properly documented.  Nonetheless, the easiest way to learn the package is using the vignettes. 
+* The package documentation is now also available at:  http://www.basictabler.org.uk/
 
 Improvements
 ----------------

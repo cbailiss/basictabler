@@ -68,7 +68,7 @@ tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
 saveWorkbook(wb, file="C:\\test.xlsx", overwrite = TRUE)
 ```
 
-![Basic Excel Export (unstyled)](excel1.png)
+![Basic Excel Export](excel1.png)
 
 
 ## Styling and Formatting
