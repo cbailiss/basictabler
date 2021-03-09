@@ -11,7 +11,9 @@ qtbl(
   rowNamesAsRowHeaders = FALSE,
   firstColumnAsRowHeaders = FALSE,
   explicitRowHeaders = NULL,
+  numberOfColumnsAsRowHeaders = 0,
   columnFormats = NULL,
+  columnCellTypes = NULL,
   theme = NULL,
   replaceExistingStyles = FALSE,
   tableStyle = NULL,
@@ -38,9 +40,19 @@ frame as row headings.}
 
 \item{explicitRowHeaders}{A character vector of row headers.}
 
+\item{numberOfColumnsAsRowHeaders}{The number of columns to be set as row
+headers.}
+
 \item{columnFormats}{A list containing format specifiers, each of which is
 either an sprintf() character value, a list of format() arguments or an
 R function that provides custom formatting logic.}
+
+\item{columnCellTypes}{A vector that is the same length as the
+number of columns in the data frame, where each element is one of
+the following values that specifies the type of cell: root, rowHeader,
+columnHeader, cell, total.  The cellType controls the default styling
+that is applied to the cell.  Typically only rowHeader, cell or total
+would be used.}
 
 \item{theme}{Either the name of a built-in theme (default, largeplain,
 compact or blank/none) or a list which specifies the default formatting for

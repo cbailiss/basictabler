@@ -230,9 +230,11 @@ Populate the table from a data frame, specifying headers and value
   rowNamesAsRowHeaders = FALSE,
   firstColumnAsRowHeaders = FALSE,
   explicitRowHeaders = NULL,
+  numberOfColumnsAsRowHeaders = 0,
   columnFormats = NULL,
-  baseStyleNames = NULL,
-  fmtFuncArgs = NULL
+  fmtFuncArgs = NULL,
+  columnCellTypes = NULL,
+  baseStyleNames = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -256,6 +258,9 @@ frame as row headings in the table.  Default value `FALSE.`}
 \item{\code{explicitRowHeaders}}{A character vector of row names to use as row
 headings in the table.}
 
+\item{\code{numberOfColumnsAsRowHeaders}}{The number of columns to be set as row
+headers.}
+
 \item{\code{columnFormats}}{A list that is the same length as the number of
 columns in the data frame, where each list element specifies how to
 format the values.  Each list element can be either a
@@ -263,12 +268,19 @@ character format string to be used with `sprintf()`, a list of
 arguments to be used with `base::format()` or a custom R function which
 will be invoked once per value to be formatted.}
 
-\item{\code{baseStyleNames}}{A character vector of style names (from the table
-theme) used to style the column values.}
-
 \item{\code{fmtFuncArgs}}{A list that is the same length as the number of
 columns in the data frame, where each list element specifies a list of
 arguments to pass to custom R format functions.}
+
+\item{\code{columnCellTypes}}{A vector that is the same length as the
+number of columns in the data frame, where each element is one of
+the following values that specifies the type of cell: root, rowHeader,
+columnHeader, cell, total.  The cellType controls the default styling
+that is applied to the cell.  Typically only rowHeader, cell or total
+would be used.}
+
+\item{\code{baseStyleNames}}{A character vector of style names (from the table
+theme) used to style the column values.}
 }
 \if{html}{\out{</div>}}
 }

@@ -1,10 +1,14 @@
 basictabler 1.0.0
 ================
 
-This release includes one potentially breaking change and some small enhancements across various parts of the package.
+This release includes two potentially breaking changes and numerous small enhancements across various parts of the package.
 
 Breaking Changes
 ----------------
+
+**Argument order changes**
+
+The arguments for functions `qtbl()`, `qhtbl()` and `tbl$addData()` have changed order slightly.  Users relying on the order of arguments may need to update their code.  All existing arguments have retained the same name so users calling these functions using the argument names will be unaffected.
 
 **stringsAsFactors in R 4.0.x and 4.1.x**
 
@@ -18,6 +22,7 @@ Documentation Changes
 Improvements
 ----------------
 
+* The `qtbl()`, `qhtbl()` and `tbl$addData()` functions gain additional parameters `numberOfColumnsAsRowHeaders` and `columnCellTypes` that provide additional options for specifying cell types when creating tables from data frames. 
 * The `tbl$mergecells()` method gains new parameters `rowNumbers` and `columnNumbers` to allow vectors to be used to specify the range of cells to be merged.
 * `pt$setStyling()` gains new integer/numeric vector arguments `rowNumbers` and/or `columnNumbers` to constrain the cells styling is applied to.  It is now also possible to specify only a set of row numbers and then all cells in those rows will be styled (and similarly for column numbers).  Previously, if only row numbers or only column numbers were specified, then no cells would be styled.  Users who require the old logic can specify the argument `compatibility=list(legacySetStylingRowColumnNumbers=TRUE)` when calling `PivotTable$new()`.
 * `pt$setStyling()` also gains new arguments `cellType` and `visible` to allow these cell properties to be easily specified for ranges of cells.  See the styling vignette for more details.  

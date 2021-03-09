@@ -245,22 +245,30 @@ BasicTable <- R6::R6Class("BasicTable",
     #'   frame as row headings in the table.  Default value `FALSE.`
     #' @param explicitRowHeaders A character vector of row names to use as row
     #'   headings in the table.
+    #' @param numberOfColumnsAsRowHeaders The number of columns to be set as row
+    #'   headers.
     #' @param columnFormats A list that is the same length as the number of
     #'   columns in the data frame, where each list element specifies how to
     #'   format the values.  Each list element can be either a
     #'   character format string to be used with `sprintf()`, a list of
     #'   arguments to be used with `base::format()` or a custom R function which
     #'   will be invoked once per value to be formatted.
-    #' @param baseStyleNames A character vector of style names (from the table
-    #'   theme) used to style the column values.
     #' @param fmtFuncArgs A list that is the same length as the number of
     #'   columns in the data frame, where each list element specifies a list of
     #'   arguments to pass to custom R format functions.
+    #' @param columnCellTypes A vector that is the same length as the
+    #'   number of columns in the data frame, where each element is one of
+    #'   the following values that specifies the type of cell: root, rowHeader,
+    #'   columnHeader, cell, total.  The cellType controls the default styling
+    #'   that is applied to the cell.  Typically only rowHeader, cell or total
+    #'   would be used.
+    #' @param baseStyleNames A character vector of style names (from the table
+    #'   theme) used to style the column values.
     #' @return No return value.
     addData = function(dataFrame=NULL,
                        columnNamesAsColumnHeaders=TRUE, explicitColumnHeaders=NULL,
-                       rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL,
-                       columnFormats=NULL, baseStyleNames=NULL, fmtFuncArgs=NULL) {
+                       rowNamesAsRowHeaders=FALSE, firstColumnAsRowHeaders=FALSE, explicitRowHeaders=NULL, numberOfColumnsAsRowHeaders=0,
+                       columnFormats=NULL, fmtFuncArgs=NULL, columnCellTypes=NULL, baseStyleNames=NULL) {
       timeStart <- proc.time()
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", dataFrame, missing(dataFrame), allowMissing=FALSE, allowNull=FALSE, allowedClasses="data.frame")
@@ -269,9 +277,11 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", rowNamesAsRowHeaders, missing(rowNamesAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", firstColumnAsRowHeaders, missing(firstColumnAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", explicitRowHeaders, missing(explicitRowHeaders), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", numberOfColumnsAsRowHeaders, missing(numberOfColumnsAsRowHeaders), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", columnFormats, missing(columnFormats), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "list", "function"))
-        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", baseStyleNames, missing(baseStyleNames), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", fmtFuncArgs, missing(fmtFuncArgs), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", columnCellTypes, missing(columnCellTypes), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", allowedValues=c("root", "rowHeader", "columnHeader", "cell", "total"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "addData", baseStyleNames, missing(baseStyleNames), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$addData", "Adding data to Table...")
       dfRowCount <- nrow(dataFrame)
@@ -284,6 +294,12 @@ BasicTable <- R6::R6Class("BasicTable",
       if(!is.null(columnFormats)) {
         if(length(columnFormats) != dfColumnCount) {
           stop("BasicTable$addData():  Length of columnFormats must match the number of columns in the data frame!", call. = FALSE)
+        }
+      }
+      # check the column cell types
+      if(!is.null(columnCellTypes)) {
+        if(length(columnCellTypes) != dfColumnCount) {
+          stop("BasicTable$addData():  Length of columnCellTypes must match the number of columns in the data frame!", call. = FALSE)
         }
       }
       # check the base style names
@@ -355,7 +371,8 @@ BasicTable <- R6::R6Class("BasicTable",
             else if(is.null(columnFormats[[c]])) formattedValue <- value
             else if(is.na(columnFormats[[c]])) formattedValue <- value
             else formattedValue <- self$formatValue(value, columnFormats[[c]], fmtFuncArgs[[c]])
-            if(firstColumnAsRowHeaders && (c==1)) cellType <- "rowHeader"
+            if(((c==1)&&firstColumnAsRowHeaders) || (c<=numberOfColumnsAsRowHeaders)) cellType <- "rowHeader"
+            else if(!is.null(columnCellTypes[[c]])) cellType <- columnCellTypes[[c]]
             else cellType <- "cell"
             baseStyleName <- NULL
             if(!is.null(baseStyleNames)) {
