@@ -816,13 +816,17 @@ BasicTable <- R6::R6Class("BasicTable",
     #' @param columnNumbers An integer vector that specifies the column numbers for
     #' the styling changes.
     #' @param cells A list containing `TableCell` objects.
+    #' @param cellType One of the following values that specifies the type of cell:
+    #' root, rowHeader, columnHeader, cell, total.  The cellType controls the
+    #' default styling that is applied to the cell.
+    #' @param visible The cell visibility to apply (`TRUE` or `FALSE`).
     #' @param baseStyleName The name of a style to apply.
     #' @param style A `TableStyle` object to apply.
     #' @param declarations CSS style declarations to apply in the form of a list,
     #' e.g. `list("font-weight"="bold", "color"="#0000FF")`
     #' @return No return value.
-    setStyling = function(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL, rowNumbers=NULL, columnNumbers=NULL,
-                          cells=NULL, baseStyleName=NULL, style=NULL, declarations=NULL) {
+    setStyling = function(rFrom=NULL, cFrom=NULL, rTo=NULL, cTo=NULL, rowNumbers=NULL, columnNumbers=NULL, cells=NULL,
+                          cellType=NULL, visible=NULL, baseStyleName=NULL, style=NULL, declarations=NULL) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rFrom, missing(rFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cFrom, missing(cFrom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
@@ -831,12 +835,14 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", rowNumbers, missing(rowNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", columnNumbers, missing(columnNumbers), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cells, missing(cells), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("list", "TableCell"), allowedListElementClasses="TableCell")
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", cellType, missing(cellType), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", allowedValues=c("root", "rowHeader", "columnHeader", "cell", "total"))
+        checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", visible, missing(visible), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
         checkArgument(private$p_argumentCheckMode, TRUE, "BasicTable", "setStyling", declarations, missing(declarations), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list", allowedListElementClasses=c("character", "integer", "numeric"))
       }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$setStyling", "Setting styling...")
-      if(missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of baseStyleName, style or declarations.", call. = FALSE) }
+      if(missing(cellType)&&missing(visible)&&missing(baseStyleName)&&missing(style)&&missing(declarations)) { stop("BasicTable$setStyling():  Please specify at least one of callType, visible, baseStyleName, style or declarations.", call. = FALSE) }
       # style a cell or list of cells
       if(!is.null(cells)) {
         if("TableCell" %in% class(cells)) {
@@ -846,6 +852,8 @@ BasicTable <- R6::R6Class("BasicTable",
           for(i in 1:length(cells)) {
             cell <- cells[[i]]
             if(!is.null(cell)) {
+              if(!missing(cellType)) { cell$cellType <- cellType }
+              if(!missing(visible)) { cell$visible <- visible }
               if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
               if(!missing(style)) { cell$style <- ifelse(is.null(style, NULL, style$getCopy())) }
               if((!missing(declarations))&&(!is.null(declarations))) {
@@ -910,6 +918,8 @@ BasicTable <- R6::R6Class("BasicTable",
           for(c in columnNumbers) {
             cell <- self$cells$getCell(r, c)
             if(!is.null(cell)) {
+              if(!missing(cellType)) { cell$cellType <- cellType }
+              if(!missing(visible)) { cell$visible <- visible }
               if(!missing(baseStyleName)) { cell$baseStyleName <- baseStyleName }
               if(!missing(style)) { cell$style <- ifelse(is.null(style), NULL, style$getCopy()) }
               if((!missing(declarations))&&(!is.null(declarations))) {

@@ -519,6 +519,8 @@ Apply styling to a set of cells in the table.
   rowNumbers = NULL,
   columnNumbers = NULL,
   cells = NULL,
+  cellType = NULL,
+  visible = NULL,
   baseStyleName = NULL,
   style = NULL,
   declarations = NULL
@@ -547,6 +549,12 @@ styling changes.}
 the styling changes.}
 
 \item{\code{cells}}{A list containing `TableCell` objects.}
+
+\item{\code{cellType}}{One of the following values that specifies the type of cell:
+root, rowHeader, columnHeader, cell, total.  The cellType controls the
+default styling that is applied to the cell.}
+
+\item{\code{visible}}{The cell visibility to apply (`TRUE` or `FALSE`).}
 
 \item{\code{baseStyleName}}{The name of a style to apply.}
 
