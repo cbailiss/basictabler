@@ -66,6 +66,7 @@ getDefaultTblTheme <- function(parentTable, themeName="default") {
   }
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(
+      "display"="table",
       "border-collapse"="collapse"
     ))
   TableStyles$addStyle(styleName="ColumnHeader", list(
@@ -130,6 +131,7 @@ getLargePlainTblTheme <- function(parentTable, themeName="largeplain") {
   }
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(
+      "display"="table",
       "border-collapse"="collapse"
     ))
   TableStyles$addStyle(styleName="ColumnHeader", list(
@@ -186,6 +188,7 @@ getCompactTblTheme <- function(parentTable, themeName="compact") {
   }
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(
+      "display"="table",
       "border-collapse"="collapse"
     ))
   TableStyles$addStyle(styleName="ColumnHeader", list(
@@ -285,6 +288,7 @@ getSimpleColoredTblTheme <- function(parentTable, themeName="coloredTheme", colo
   # build the theme
   TableStyles <- TableStyles$new(parentTable=parentTable, themeName=themeName)
   TableStyles$addStyle(styleName="Table", list(
+      "display"="table",
       "border-collapse"="collapse",
       "border"=paste0("2px solid ", colors$borderColor)
     ))
