@@ -25,7 +25,7 @@ A data frame with 4839 rows and 14 variables:
 }
 }
 \source{
-\url{http://www.recenttraintimes.co.uk/}
+\url{https://www.recenttraintimes.co.uk/}
 }
 \usage{
 bhmsummary

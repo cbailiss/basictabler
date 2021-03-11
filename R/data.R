@@ -24,7 +24,7 @@
 #'   \item{TotalArrivalDelayMinutes}{The total number of delay minutes for arrivals}
 #'   \item{TotalDepartureDelayMinutes}{The total number of delay minutes for departures}
 #' }
-#' @source \url{http://www.recenttraintimes.co.uk/}
+#' @source \url{https://www.recenttraintimes.co.uk/}
 "bhmsummary"
 
 
@@ -45,5 +45,5 @@
 #'   \item{Latitude}{Latitude of the station location}
 #'   \item{Longitude}{Longitude of the station location}
 #' }
-#' @source \url{http://www.recenttraintimes.co.uk/}
+#' @source \url{https://www.recenttraintimes.co.uk/}
 "trainstations"
