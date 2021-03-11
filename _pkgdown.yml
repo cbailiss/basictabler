@@ -2,3 +2,9 @@ destination: docs
 url: http://www.basictabler.org.uk
 home:
   title: Construct Rich Tables for Output to 'HTML'/'Excel'
+template:
+  params:
+    ganalytics: G-TYSS36ZXSR
+    docsearch:
+      api_key: e233acb7d07542f011339044757d75b8
+      index_name: basictabler
