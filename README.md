@@ -1,7 +1,7 @@
 basictabler
 ================
 
-[![Build Status](https://travis-ci.org/cbailiss/basictabler.svg?branch=master)](https://travis-ci.org/cbailiss/basictabler) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/basictabler)](https://cran.r-project.org/package=basictabler)
+[![R-CMD-check](https://github.com/cbailiss/basictabler/workflows/R-CMD-check/badge.svg)](https://github.com/cbailiss/basictabler/actions) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/basictabler)](https://cran.r-project.org/package=basictabler)
 
 The `basictabler` package enables rich tables to be created and rendered/exported with just a few lines of R.
 
