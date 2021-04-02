@@ -129,19 +129,24 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
     #' @param outputValuesAs Specify whether the raw or formatted values should
     #'   be written to the worksheet.  Value must be one of "rawValue",
     #'   "formattedValueAsText", "formattedValueAsNumber".
+    #' @param useFormattedValueIfRawValueIsNull `TRUE` to use the formatted cell value
+    #'   instead of the raw cell value if the raw value is `NULL`.
+    #'   `FALSE` to always use the raw value.  Default `TRUE`.
     #' @param applyStyles `TRUE` (default) to also set the styling of the cells,
     #'   `FALSE` to only write the value.
     #' @param mapStylesFromCSS `TRUE` (default) to map the basictabler CSS styles to
     #'   corresponding Excel styles, `FALSE` to apply only the specified xl
     #'   styles.
     #' @return No return value.
-    writeToWorksheet = function(wb=NULL, wsName=NULL, topRowNumber=NULL, leftMostColumnNumber=NULL, outputValuesAs="rawValue", applyStyles=TRUE, mapStylesFromCSS=TRUE) {
+    writeToWorksheet = function(wb=NULL, wsName=NULL, topRowNumber=NULL, leftMostColumnNumber=NULL,
+                                outputValuesAs="rawValue", useFormattedValueIfRawValueIsNull=TRUE, applyStyles=TRUE, mapStylesFromCSS=TRUE) {
       if(private$p_parentTable$argumentCheckMode > 0) {
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", wb, missing(wb), allowMissing=TRUE, allowNull=TRUE, allowedClasses="Workbook")
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", wsName, missing(wsName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", topRowNumber, missing(topRowNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", leftMostColumnNumber, missing(leftMostColumnNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", outputValuesAs, missing(outputValuesAs), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("rawValue", "formattedValueAsText", "formattedValueAsNumber"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", useFormattedValueIfRawValueIsNull, missing(useFormattedValueIfRawValueIsNull), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", applyStyles, missing(applyStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableOpenXlsxRenderer", "writeToWorksheet", mapStylesFromCSS, missing(mapStylesFromCSS), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       }
@@ -220,13 +225,19 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
           if(!is.null(cell$baseStyleName)) cs <- cell$baseStyleName
 
           # get value
-          if(outputValuesAs=="rawValue") value <- cell$rawValue
+          if(outputValuesAs=="rawValue") {
+            value <- cell$rawValue
+            if(is.null(value) && useFormattedValueIfRawValueIsNull) value <- cell$formattedValue
+          }
           else if(outputValuesAs=="formattedValueAsText") value <- cell$formattedValue
           else if(outputValuesAs=="formattedValueAsNumber") {
             value <- suppressWarnings(as.numeric(cell$formattedValue))
             if(!isNumericValue(value)) value <- cell$formattedValue
           }
-          else value <- cell$rawValue
+          else {
+            value <- cell$rawValue
+            if(is.null(value) && useFormattedValueIfRawValueIsNull) value <- cell$formattedValue
+          }
           if(is.factor(value)) value <- as.character(value)
 
           # write value

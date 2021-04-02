@@ -1,3 +1,13 @@
+basictabler 1.0.1
+================
+
+This release includes one small bug fix:  Tables exported to an Excel file would result in blank cells in the Excel worksheet for table cells which had a formatted value but no raw value (i.e. a raw value of `NULL`).  This can occur when exporting pivot tables from the `pivottabler` package for the row/column headings of totals and for row/column headings when multiple calculations are specified in the pivot table.
+
+The `bt$writeToExcelWorksheet()` function has new parameter `useFormattedValueIfRawValueIsNull` which has a default value of `TRUE` to automatically use the formatted value if the raw value is `NULL`.
+
+If required, the previous behaviour can be restored by specifying `useFormattedValueIfRawValueIsNull=FALSE`.
+
+
 basictabler 1.0.0
 ================
 

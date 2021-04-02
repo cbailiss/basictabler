@@ -1861,17 +1861,22 @@ BasicTable <- R6::R6Class("BasicTable",
     #' @param outputValuesAs Must be one of "rawValue" (default),
     #' "formattedValueAsText" or "formattedValueAsNumber" to specify
     #' how cell values are written into the Excel sheet.
+    #' @param useFormattedValueIfRawValueIsNull `TRUE` to use the formatted cell value
+    #'   instead of the raw cell value if the raw value is `NULL`.
+    #'   `FALSE` to always use the raw value.  Default `TRUE`.
     #' @param applyStyles Default `TRUE` to write styling information to the cell.
     #' @param mapStylesFromCSS Default `TRUE` to automatically convert CSS style
     #' declarations to their Excel equivalents.
     #' @return No return value.
-    writeToExcelWorksheet = function(wb=NULL, wsName=NULL, topRowNumber=NULL, leftMostColumnNumber=NULL, outputValuesAs="rawValue", applyStyles=TRUE, mapStylesFromCSS=TRUE) {
+    writeToExcelWorksheet = function(wb=NULL, wsName=NULL, topRowNumber=NULL, leftMostColumnNumber=NULL,
+                                     outputValuesAs="rawValue", useFormattedValueIfRawValueIsNull=TRUE, applyStyles=TRUE, mapStylesFromCSS=TRUE) {
       if(private$p_argumentCheckMode > 0) {
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", wb, missing(wb), allowMissing=TRUE, allowNull=TRUE, allowedClasses="Workbook")
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", wsName, missing(wsName), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", topRowNumber, missing(topRowNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", leftMostColumnNumber, missing(leftMostColumnNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", outputValuesAs, missing(outputValuesAs), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("rawValue", "formattedValueAsText", "formattedValueAsNumber"))
+        checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", useFormattedValueIfRawValueIsNull, missing(useFormattedValueIfRawValueIsNull), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", applyStyles, missing(applyStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "writeToExcelWorksheet", mapStylesFromCSS, missing(mapStylesFromCSS), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       }
@@ -1881,7 +1886,7 @@ BasicTable <- R6::R6Class("BasicTable",
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$writeToExcelWorksheet", "Writing to worksheet...")
       private$p_openxlsxRenderer$writeToWorksheet(wb=wb, wsName=wsName, topRowNumber=topRowNumber,
                                                   leftMostColumnNumber=leftMostColumnNumber,
-                                                  outputValuesAs=outputValuesAs,
+                                                  outputValuesAs=outputValuesAs, useFormattedValueIfRawValueIsNull=useFormattedValueIfRawValueIsNull,
                                                   applyStyles=applyStyles, mapStylesFromCSS=mapStylesFromCSS)
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$writeToExcelWorksheet", "Written to worksheet.")
     },
