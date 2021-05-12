@@ -129,6 +129,7 @@ Write a table to an Excel worksheet.
   topRowNumber = NULL,
   leftMostColumnNumber = NULL,
   outputValuesAs = "rawValue",
+  useFormattedValueIfRawValueIsNull = TRUE,
   applyStyles = TRUE,
   mapStylesFromCSS = TRUE
 )}\if{html}{\out{</div>}}
@@ -150,6 +151,10 @@ the table is to be written.}
 \item{\code{outputValuesAs}}{Specify whether the raw or formatted values should
 be written to the worksheet.  Value must be one of "rawValue",
 "formattedValueAsText", "formattedValueAsNumber".}
+
+\item{\code{useFormattedValueIfRawValueIsNull}}{`TRUE` to use the formatted cell value
+instead of the raw cell value if the raw value is `NULL`.
+`FALSE` to always use the raw value.  Default `TRUE`.}
 
 \item{\code{applyStyles}}{`TRUE` (default) to also set the styling of the cells,
 `FALSE` to only write the value.}

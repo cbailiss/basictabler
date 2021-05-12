@@ -1102,6 +1102,7 @@ the specified row-column location.
   topRowNumber = NULL,
   leftMostColumnNumber = NULL,
   outputValuesAs = "rawValue",
+  useFormattedValueIfRawValueIsNull = TRUE,
   applyStyles = TRUE,
   mapStylesFromCSS = TRUE
 )}\if{html}{\out{</div>}}
@@ -1125,6 +1126,10 @@ in the Excel worksheet to write the table.}
 \item{\code{outputValuesAs}}{Must be one of "rawValue" (default),
 "formattedValueAsText" or "formattedValueAsNumber" to specify
 how cell values are written into the Excel sheet.}
+
+\item{\code{useFormattedValueIfRawValueIsNull}}{`TRUE` to use the formatted cell value
+instead of the raw cell value if the raw value is `NULL`.
+`FALSE` to always use the raw value.  Default `TRUE`.}
 
 \item{\code{applyStyles}}{Default `TRUE` to write styling information to the cell.}
 
