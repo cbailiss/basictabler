@@ -257,8 +257,6 @@ TableOpenXlsxRenderer <- R6::R6Class("TableOpenXlsxRenderer",
           openxlsx::setColWidths(wb, sheet=wsName, cols=c, widths=private$p_minimumColumnWidths[c])
       }
 
-      # TRELLO NOTES
-
       # TableOpenXlsxStyles collection builds up a collection of styles defined
       # in the Excel document.  These can be reused as follows: Before rendering
       # begins, a TableOpenXlsxStyle object is created for each named style

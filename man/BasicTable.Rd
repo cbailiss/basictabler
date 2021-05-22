@@ -121,6 +121,7 @@ constructing the table, where the elapsed time > 0.1 seconds.}
 \item \href{#method-saveHtml}{\code{BasicTable$saveHtml()}}
 \item \href{#method-renderTable}{\code{BasicTable$renderTable()}}
 \item \href{#method-writeToExcelWorksheet}{\code{BasicTable$writeToExcelWorksheet()}}
+\item \href{#method-asFlexTable}{\code{BasicTable$asFlexTable()}}
 \item \href{#method-trace}{\code{BasicTable$trace()}}
 \item \href{#method-asList}{\code{BasicTable$asList()}}
 \item \href{#method-asJSON}{\code{BasicTable$asJSON()}}
@@ -1131,7 +1132,7 @@ how cell values are written into the Excel sheet.}
 instead of the raw cell value if the raw value is `NULL`.
 `FALSE` to always use the raw value.  Default `TRUE`.}
 
-\item{\code{applyStyles}}{Default `TRUE` to write styling information to the cell.}
+\item{\code{applyStyles}}{Default `TRUE` to write styling information to cells.}
 
 \item{\code{mapStylesFromCSS}}{Default `TRUE` to automatically convert CSS style
 declarations to their Excel equivalents.}
@@ -1144,6 +1145,33 @@ See the Excel Output vignette for more details.
 
 \subsection{Returns}{
 No return value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-asFlexTable"></a>}}
+\if{latex}{\out{\hypertarget{method-asFlexTable}{}}}
+\subsection{Method \code{asFlexTable()}}{
+Convert table to a flextable table..
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BasicTable$asFlexTable(applyStyles = TRUE, mapStylesFromCSS = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{applyStyles}}{Default `TRUE` to write styling information for cells.}
+
+\item{\code{mapStylesFromCSS}}{Default `TRUE` to automatically convert CSS style
+declarations to their flextable equivalents.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+See the Outputs vignette for more details.
+}
+
+\subsection{Returns}{
+A table from the flextable package.
 }
 }
 \if{html}{\out{<hr>}}

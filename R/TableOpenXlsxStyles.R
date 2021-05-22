@@ -43,7 +43,7 @@ TableOpenXlsxStyles <- R6::R6Class("TableOpenXlsxStyles",
     #' @return No return value.
     clearStyles = function() {
       if(private$p_parentTable$traceEnabled==TRUE) p
-      private$p_parentTable$trace("TableOpenXlsxStyles$clearStyles", "Clearin styles...")
+      private$p_parentTable$trace("TableOpenXlsxStyles$clearStyles", "Clearing styles...")
       private$p_styles <- list()
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableOpenXlsxStyles$clearStyles", "Cleared styles.")
     },
@@ -101,7 +101,7 @@ TableOpenXlsxStyles <- R6::R6Class("TableOpenXlsxStyles",
       # 1. When adding base styles (i.e. named styles in the table) to this collection.
       #    In this case, baseStyleName is the name of the style, isBaseStyle=TRUE (so matching is by name only) and style is the TableStyle object for the base style.
       # 2. When finding styles that have been applied to individual cells using the TableStyle object that is attached to each cell.
-      #    In this case,baseStyleName may or may not be present, isBaseStyle=FALSE and style and the style object is the TableStyle object from the cell.
+      #    In this case, baseStyleName may or may not be present, isBaseStyle=FALSE and style and the style object is the TableStyle object from the cell.
 
       # font name
       fontName <- NULL

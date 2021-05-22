@@ -619,6 +619,7 @@ parseCssBorder <- function(text) {
     }
   }
   if(!isTextValue(borderStyle)) return(NULL)
+  if(is.null(borderWidth)&&is.null(borderStyle)&&is.null(borderColor)) return(NULL)
   result <- list(width=borderWidth, style=borderStyle, color=borderColor)
   return(result)
 }
@@ -698,7 +699,7 @@ getXlBorderStyleFromCssBorder <- function(border) {
 }
 
 
-#' Convert CSS border values to those used by the openxlsx package.
+#' Convert CSS border style values to those used by the openxlsx package.
 #'
 #' \code{getXlBorderFromCssBorder} parses the CSS combined border declarations
 #' (i.e. border, border-left, border-right, border-top, border-bottom) and
@@ -712,7 +713,7 @@ getXlBorderFromCssBorder <- function(text) {
   cssBorder <- parseCssBorder(text)
   if(is.null(cssBorder)) return(NULL)
   xlBorderStyle <- getXlBorderStyleFromCssBorder(cssBorder)
-  if(is.null(cssBorder)) return(NULL)
+  if(is.null(xlBorderStyle)&&is.null(cssBorder[["color"]])) return(NULL)
   return(list(style=xlBorderStyle, color=cssBorder[["color"]]))
 }
 
@@ -725,6 +726,7 @@ getXlBorderFromCssBorder <- function(text) {
 #'
 #' @param text The border declaration to parse.
 #' @return A list containing two elements: style and color.
+
 
 parseXlBorder <- function(text) {
   # parses a combined border declaration,
@@ -802,6 +804,170 @@ parseXlBorder <- function(text) {
       if(!is.null(color)) borderColor <- color
     }
   }
+  if(is.null(xlBorderStyle)&&is.null(borderColor)) return(NULL)
   result <- list(style=borderStyle, color=borderColor)
+  return(result)
+}
+
+
+#' Convert CSS border style values to those used by the flextable package.
+#'
+#' \code{getFtBorderStyleFromCssBorder} takes border parameters expressed as a
+#' list (must contain an element named style) and returns a border style that
+#' is compatible with the flextable package.
+#'
+#' @param border A list containing an element named style.
+#' @return A flextable border style.
+
+getFtBorderStyleFromCssBorder <- function(border) {
+  # border is a return value from the parseCssBorder() function
+  if(!isTextValue(border)) return(NULL)
+  cssBorderStyle <- border[["style"]]
+  if(!isTextValue(cssBorderStyle)) return(NULL)
+  if(cssBorderStyle %in% c("none", "hidden", "initial", "inherit")) return(NULL)
+  if(cssBorderStyle %in% c("groove", "ridge", "inset", "outset")) cssBorderStyle <- "solid"
+  if(cssBorderStyle=="solid") return("solid")
+  else if(cssBorderStyle=="dotted") return("dotted")
+  else if(cssBorderStyle=="dashed") return("dashed")
+  else if(cssBorderStyle=="double") return("solid")
+  return(NULL)
+}
+
+
+#' Convert CSS border width to those used by the flextable package.
+#'
+#' \code{getFtBorderStyleFromCssBorder} takes border parameters expressed as a
+#' list (must contain an element named style) and returns a border style that
+#' is compatible with the flextable package.
+#'
+#' @param border A list containing an element named style.
+#' @return A flextable border style.
+
+getFtBorderWidthFromCssBorder <- function(border) {
+  # border is a return value from the parseCssBorder() function
+  if(!isTextValue(border)) return(NULL)
+  cssBorderWidth <- border[["width"]]
+  if(!isTextValue(cssBorderWidth)) return(NULL)
+  if(cssBorderWidth %in% c("none", "hidden", "initial", "inherit")) return(NULL)
+  if(cssBorderWidth=="thin") return(2)
+  else if(cssBorderWidth=="medium") return(4)
+  else if(cssBorderWidth=="thick") return(6)
+  else return(parseCssSizeToPx(cssBorderWidth))
+}
+
+
+#' Convert CSS border values to those used by the flextable package.
+#'
+#' \code{getXlBorderFromCssBorder} parses the CSS combined border declarations
+#' (i.e. border, border-left, border-right, border-top, border-bottom) and
+#' returns a list containing an openxlsx border style and color as separate
+#' elements.
+#'
+#' @param text The border declaration to parse.
+#' @return A list containing two elements: width, style and color.
+
+getFtBorderFromCssBorder <- function(text) {
+  cssBorder <- parseCssBorder(text)
+  if(is.null(cssBorder)) return(NULL)
+  ftBorderStyle <- getFtBorderStyleFromCssBorder(cssBorder)
+  ftBorderWidth <- getFtBorderWidthFromCssBorder(cssBorder)
+  if(is.null(ftBorderStyle)&&is.null(cssBorder[["color"]])&&is.null(ftBorderWidth)) return(NULL)
+  return(list(style=ftBorderStyle, color=cssBorder[["color"]], width=ftBorderWidth))
+}
+
+
+#' Parse an ft-border value.
+#'
+#' \code{parseFtBorder} parses the combined ft border declarations (i.e.
+#' ft-border, ft-border-left, ft-border-right, ft-border-top, ft-border-bottom)
+#' and returns a list containing width, style and color as separate elements.
+#'
+#' @param text The border declaration to parse.
+#' @return A list containing two elements: width, style and color.
+
+parseFtBorder <- function(text) {
+  # parses a combined border declaration,
+  # e.g. 1:  ft-border: thin solid #FF00BB
+  # e.g. 2:  ft-border-left: thin dotted red
+  # e.g. 3:  ft-border-left: medium dashed rgb(0, 255, 0)
+  # does not currently support specifying different values for different sides,
+  # e.g. (not supported): ft-border: thin thick red blue
+
+  cText <- trimws(text)
+  if(!isTextValue(cText)) return(NULL)
+
+  if(endsWith(cText, ";")) cText <- substr(cText, 1, nchar(cText)-1)
+  i <- 1
+  iEnd <- nchar(cText)
+  space <- gregexpr("[ \t\r\n]", cText)[[1]]
+  closeBracket <- gregexpr(")", cText, fixed=TRUE)[[1]]
+  ws <- c(" ", "\t", "\r", "\n")
+  parts <- list()
+  while (i <= iEnd) {
+    chr <- substr(cText, i, i)
+    # message(chr)
+    # skip past whitespace
+    if(chr %in% ws) {
+      i <- i + 1
+      next
+    }
+    else {
+      # find next space
+      j <- getNextPosition(space, i)
+      # message(paste0("sp=", j))
+      if(is.null(j)||(j<=0)) {
+        # malformed, just take the rest of the string and break out of the loop
+        parts[[length(parts)+1]] <- trimws(substr(cText, i, iEnd))
+        break
+      }
+      else {
+        word <- trimws(substr(cText, i, j-1))
+        if(startsWith(tolower(word), "rgb(")) {
+          k <- getNextPosition(closeBracket, i)
+          word <- trimws(substr(cText, i, k))
+          parts[[length(parts)+1]] <- word
+          i <- k + 1
+        }
+        else if(startsWith(tolower(word), "rgba(")) {
+          k <- getNextPosition(closeBracket, i)
+          word <- trimws(substr(cText, i, k))
+          parts[[length(parts)+1]] <- word
+          i <- k + 1
+        }
+        else {
+          parts[[length(parts)+1]] <- word
+          i <- j + 1
+        }
+      }
+    }
+  }
+  parts <- unlist(parts)
+  parts <- parts[nchar(parts)>0]
+
+  # get width, style and color
+  borderWidth <- NULL
+  borderStyle <- NULL
+  borderColor <- NULL
+  allowedStyles <- c("none", "solid", "dotted", "dashed")
+  for(i in 1:length(parts)) {
+    # examine each part
+    part <- tolower(cleanCssValue(parts[i]))
+    # width?
+    if(is.null(borderWidth)) {
+      numericalWidth <- suppressWarnings(as.numeric(part))
+      if(!is.null(numericalWidth)) borderWidth <- numericalWidth
+    }
+    # style
+    if(is.null(borderStyle)) {
+      if(part %in% allowedStyles) borderStyle <- part
+    }
+    # color
+    if(is.null(borderColor)) {
+      color <- parseColor(part)
+      if(!is.null(color)) borderColor <- color
+    }
+  }
+  if(is.null(borderWidth)&&is.null(borderStyle)&&is.null(borderColor)) return(NULL)
+  result <- list(width=borderWidth, style=borderStyle, color=borderColor)
   return(result)
 }
