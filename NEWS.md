@@ -1,3 +1,12 @@
+basictabler vNext
+================
+
+Bug Fixes
+----------------
+
+Resolved error "Error in columnValues[r - rowOffset] <- v : replacement has length zero" that sometimes occurred when executing bt$asDataFrame().
+
+
 basictabler 1.0.1
 ================
 

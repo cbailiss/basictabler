@@ -1706,6 +1706,7 @@ BasicTable <- R6::R6Class("BasicTable",
           else v <- cell$formattedValue
           if(is.null(v)) v <- NA
           else if(is.factor(v)) v <- as.character(v)
+          if(length(v)==0) next
           columnValues[r - rowOffset] <- v
         }
         dfColumns[[c - columnOffset]] <- columnValues
