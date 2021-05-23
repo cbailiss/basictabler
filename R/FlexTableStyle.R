@@ -1,7 +1,7 @@
 #' R6 class that specifies styling as used by the `flextable` package.
 #'
 #' @description
-#' The `TableFlexTblStyle` class specifies the styling for cells in a
+#' The `FlexTableStyle` class specifies the styling for cells in a
 #' table from the flextable package.
 #'
 #' @docType class
@@ -10,16 +10,12 @@
 #' @examples
 #' # This class should only be created by using the functions in the table.
 #' # It is not intended to be created by users outside of the table.
-#' library(basictabler)
-#' tbl <- qtbl(data.frame(a=1:2, b=3:4))
-#' library(flextable)
-#' flextbl <- tbl$asFlexTable()
 
-TableFlexTblStyle <- R6::R6Class("TableFlexTblStyle",
+FlexTableStyle <- R6::R6Class("FlexTableStyle",
   public = list(
 
     #' @description
-    #' Create a new `TableFlexTblStyle` object.
+    #' Create a new `FlexTableStyle` object.
     #' @param parentTable Owning table.
     #' @param baseStyleName The name of the base style in the table.
     #' @param isBaseStyle `TRUE` when this style is the equivalent of a named style in
@@ -61,39 +57,39 @@ TableFlexTblStyle <- R6::R6Class("TableFlexTblStyle",
                          borderAll=NULL, borderLeft=NULL, borderRight=NULL,
                          borderTop=NULL, borderBottom=NULL) {
       if(parentTable$argumentCheckMode > 0) {
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", baseStyleName, missing(baseStyleName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", isBaseStyle, missing(isBaseStyle), allowMissing=FALSE, allowNull=FALSE, allowedClasses="logical")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", fontName, missing(fontName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", fontSize, missing(fontSize), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"), minValue=4, maxValue=72)
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", bold, missing(bold), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", italic, missing(italic), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", bgColor, missing(bgColor), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", maxLength=7)
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", textColor, missing(textColor), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", maxLength=7)
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", hAlign, missing(hAlign), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", allowedValues=c("left", "center", "right"))
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", vAlign, missing(vAlign), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", allowedValues=c("top", "middle", "bottom"))
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", textRotation, missing(textRotation), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", paddingAll, missing(paddingAll), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", paddingLeft, missing(paddingLeft), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", paddingRight, missing(paddingRight), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", paddingTop, missing(paddingTop), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", paddingBottom, missing(paddingBottom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", borderAll, missing(borderAll), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", borderLeft, missing(borderLeft), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", borderRight, missing(borderRight), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", borderTop, missing(borderTop), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyle", "initialize", borderBottom, missing(borderBottom), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", baseStyleName, missing(baseStyleName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", isBaseStyle, missing(isBaseStyle), allowMissing=FALSE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", fontName, missing(fontName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", fontSize, missing(fontSize), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"), minValue=4, maxValue=72)
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", bold, missing(bold), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", italic, missing(italic), allowMissing=TRUE, allowNull=TRUE, allowedClasses="logical")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", bgColor, missing(bgColor), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", maxLength=7)
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", textColor, missing(textColor), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", maxLength=7)
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", hAlign, missing(hAlign), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", allowedValues=c("left", "center", "right"))
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", vAlign, missing(vAlign), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character", allowedValues=c("top", "center", "bottom"))
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", textRotation, missing(textRotation), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", paddingAll, missing(paddingAll), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", paddingLeft, missing(paddingLeft), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", paddingRight, missing(paddingRight), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", paddingTop, missing(paddingTop), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", paddingBottom, missing(paddingBottom), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("numeric", "integer"))
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", borderAll, missing(borderAll), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", borderLeft, missing(borderLeft), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", borderRight, missing(borderRight), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", borderTop, missing(borderTop), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyle", "initialize", borderBottom, missing(borderBottom), allowMissing=TRUE, allowNull=TRUE, allowedClasses="list")
      }
      private$p_parentTable <- parentTable
-     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyle$new", "Creating new Table Style...", list())
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyle$new", "Creating new Table Style...", list())
 
      if(!is.null(bgColor)) {
        check <- grep("#[0-9A-F]{6}", bgColor)
-       if((length(check)==0)||(check==FALSE)) stop("TableFlexTblStyle$initialize():  bgColor must be in the format #NNNNNN.", call. = FALSE)
+       if((length(check)==0)||(check==FALSE)) stop("FlexTableStyle$initialize():  bgColor must be in the format #NNNNNN.", call. = FALSE)
      }
      if(!is.null(textColor)) {
        check <- grep("#[0-9A-F]{6}", textColor)
-       if((length(check)==0)||(check==FALSE)) stop("TableFlexTblStyle$initialize():  textColor must be in the format #NNNNNN.", call. = FALSE)
+       if((length(check)==0)||(check==FALSE)) stop("FlexTableStyle$initialize():  textColor must be in the format #NNNNNN.", call. = FALSE)
      }
 
      allowedStyles <- c("none", "solid", "dotted", "dashed")
@@ -101,95 +97,95 @@ TableFlexTblStyle <- R6::R6Class("TableFlexTblStyle",
        borderStyle <- borderAll[["style"]]
        if(!is.null(borderStyle)) {
          if(!(borderStyle %in% allowedStyles)) {
-           stop(paste0("TableFlexTblStyle$initialize():  borderAll$style must be one of the following values: ",
+           stop(paste0("FlexTableStyle$initialize():  borderAll$style must be one of the following values: ",
                        paste(allowedStyles, collapse=", ")), call. = FALSE)
          }
        }
        borderColor <- borderAll[["color"]]
        if(!is.null(borderColor)) {
          check <- grep("#[0-9A-F]{6}", borderColor)
-         if((length(check)==0)||(check==FALSE)) stop("TableFlexTblStyle$initialize():  borderAll$color must be in the format #NNNNNN.", call. = FALSE)
+         if((length(check)==0)||(check==FALSE)) stop("FlexTableStyle$initialize():  borderAll$color must be in the format #NNNNNN.", call. = FALSE)
        }
        borderWidth <- borderAll[["width"]]
        if((!is.null(borderWidth)) && is.numeric(borderWidth)) {
          check <- suppressWarnings(as.numeric(borderWidth))
-         if(is.na(check)||(check<0)) stop("TableFlexTblStyle$initialize():  borderAll$width must be a number >= 0.", call. = FALSE)
+         if(is.na(check)||(check<0)) stop("FlexTableStyle$initialize():  borderAll$width must be a number >= 0.", call. = FALSE)
        }
      }
      if(!is.null(borderLeft)) {
        borderStyle <- borderLeft[["style"]]
        if(!is.null(borderStyle)) {
          if(!(borderStyle %in% allowedStyles)) {
-           stop(paste0("TableFlexTblStyle$initialize():  borderLeft$style must be one of the following values: ",
+           stop(paste0("FlexTableStyle$initialize():  borderLeft$style must be one of the following values: ",
                        paste(allowedStyles, collapse=", ")), call. = FALSE)
          }
        }
        borderColor <- borderLeft[["color"]]
        if(!is.null(borderColor)) {
          check <- grep("#[0-9A-F]{6}", borderColor)
-         if((length(check)==0)||(check==FALSE)) stop("TableFlexTblStyle$initialize():  borderLeft$color must be in the format #NNNNNN.", call. = FALSE)
+         if((length(check)==0)||(check==FALSE)) stop("FlexTableStyle$initialize():  borderLeft$color must be in the format #NNNNNN.", call. = FALSE)
        }
        borderWidth <- borderLeft[["width"]]
        if((!is.null(borderWidth)) && is.numeric(borderWidth)) {
          check <- suppressWarnings(as.numeric(borderWidth))
-         if(is.na(check)||(check<0)) stop("TableFlexTblStyle$initialize():  borderLeft$width must be a number >= 0.", call. = FALSE)
+         if(is.na(check)||(check<0)) stop("FlexTableStyle$initialize():  borderLeft$width must be a number >= 0.", call. = FALSE)
        }
      }
      if(!is.null(borderRight)) {
        borderStyle <- borderRight[["style"]]
        if(!is.null(borderStyle)) {
          if(!(borderStyle %in% allowedStyles)) {
-           stop(paste0("TableFlexTblStyle$initialize():  borderRight$style must be one of the following values: ",
+           stop(paste0("FlexTableStyle$initialize():  borderRight$style must be one of the following values: ",
                        paste(allowedStyles, collapse=", ")), call. = FALSE)
          }
        }
        borderColor <- borderRight[["color"]]
        if(!is.null(borderColor)) {
          check <- grep("#[0-9A-F]{6}", borderColor)
-         if((length(check)==0)||(check==FALSE)) stop("TableFlexTblStyle$initialize():  borderRight$color must be in the format #NNNNNN.", call. = FALSE)
+         if((length(check)==0)||(check==FALSE)) stop("FlexTableStyle$initialize():  borderRight$color must be in the format #NNNNNN.", call. = FALSE)
        }
        borderWidth <- borderRight[["width"]]
        if((!is.null(borderWidth)) && is.numeric(borderWidth)) {
          check <- suppressWarnings(as.numeric(borderWidth))
-         if(is.na(check)||(check<0)) stop("TableFlexTblStyle$initialize():  borderRight$width must be a number >= 0.", call. = FALSE)
+         if(is.na(check)||(check<0)) stop("FlexTableStyle$initialize():  borderRight$width must be a number >= 0.", call. = FALSE)
        }
      }
      if(!is.null(borderTop)) {
        borderStyle <- borderTop[["style"]]
        if(!is.null(borderStyle)) {
          if(!(borderStyle %in% allowedStyles)) {
-           stop(paste0("TableFlexTblStyle$initialize():  borderTop$style must be one of the following values: ",
+           stop(paste0("FlexTableStyle$initialize():  borderTop$style must be one of the following values: ",
                        paste(allowedStyles, collapse=", ")), call. = FALSE)
          }
        }
        borderColor <- borderTop[["color"]]
        if(!is.null(borderColor)) {
          check <- grep("#[0-9A-F]{6}", borderColor)
-         if((length(check)==0)||(check==FALSE)) stop("TableFlexTblStyle$initialize():  borderTop$color must be in the format #NNNNNN.", call. = FALSE)
+         if((length(check)==0)||(check==FALSE)) stop("FlexTableStyle$initialize():  borderTop$color must be in the format #NNNNNN.", call. = FALSE)
        }
        borderWidth <- borderTop[["width"]]
        if((!is.null(borderWidth)) && is.numeric(borderWidth)) {
          check <- suppressWarnings(as.numeric(borderWidth))
-         if(is.na(check)||(check<0)) stop("TableFlexTblStyle$initialize():  borderTop$width must be a number >= 0.", call. = FALSE)
+         if(is.na(check)||(check<0)) stop("FlexTableStyle$initialize():  borderTop$width must be a number >= 0.", call. = FALSE)
        }
      }
      if(!is.null(borderBottom)) {
        borderStyle <- borderBottom[["style"]]
        if(!is.null(borderStyle)) {
          if(!(borderStyle %in% allowedStyles)) {
-           stop(paste0("TableFlexTblStyle$initialize():  borderBottom$style must be one of the following values: ",
+           stop(paste0("FlexTableStyle$initialize():  borderBottom$style must be one of the following values: ",
                        paste(allowedStyles, collapse=", ")), call. = FALSE)
          }
        }
        borderColor <- borderBottom[["color"]]
        if(!is.null(borderColor)) {
          check <- grep("#[0-9A-F]{6}", borderColor)
-         if((length(check)==0)||(check==FALSE)) stop("TableFlexTblStyle$initialize():  borderBottom$color must be in the format #NNNNNN.", call. = FALSE)
+         if((length(check)==0)||(check==FALSE)) stop("FlexTableStyle$initialize():  borderBottom$color must be in the format #NNNNNN.", call. = FALSE)
        }
        borderWidth <- borderBottom[["width"]]
        if((!is.null(borderWidth)) && is.numeric(borderWidth)) {
          check <- suppressWarnings(as.numeric(borderWidth))
-         if(is.na(check)||(check<0)) stop("TableFlexTblStyle$initialize():  borderBottom$width must be a number >= 0.", call. = FALSE)
+         if(is.na(check)||(check<0)) stop("FlexTableStyle$initialize():  borderBottom$width must be a number >= 0.", call. = FALSE)
        }
      }
 
@@ -215,7 +211,7 @@ TableFlexTblStyle <- R6::R6Class("TableFlexTblStyle",
      private$p_borderTop <- borderTop
      private$p_borderBottom <- borderBottom
 
-     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyle$new", "Created new Table Style")
+     if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyle$new", "Created new Table Style")
    },
 
    #' @description

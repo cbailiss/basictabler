@@ -2,7 +2,7 @@
 #' package.
 #'
 #' @description
-#' The `TableFlexTblStyles` class stores a collection of `TableTableFlexTbl`
+#' The `FlexTableStyles` class stores a collection of `FlexTableStyle`
 #' style objects.
 #'
 #' @docType class
@@ -12,26 +12,22 @@
 #' # This class should not be used by end users.  It is an internal class
 #' # created only by the BasicTable class.  It is used when converting to a
 #' # flextable.
-#' library(basictabler)
-#' tbl <- qtbl(data.frame(a=1:2, b=3:4))
-#' library(flextable)
-#' flextbl <- tbl$asFlexTable()
 
-TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
+FlexTableStyles <- R6::R6Class("FlexTableStyles",
   public = list(
 
     #' @description
-    #' Create a new `TableFlexTblStyles` object.
+    #' Create a new `FlexTableStyles` object.
     #' @param parentTable Owning table.
     #' @return No return value.
     initialize = function(parentTable) {
       if(parentTable$argumentCheckMode > 0) {
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
       }
       private$p_parentTable <- parentTable
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$new", "Creating new Table FlexTbl Styles...")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$new", "Creating new Table FlexTbl Styles...")
       private$p_styles <- list()
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$new", "Created new Table FlexTbl Styles.")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$new", "Created new Table FlexTbl Styles.")
     },
 
     #' @description
@@ -39,9 +35,9 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
     #' @return No return value.
     clearStyles = function() {
       if(private$p_parentTable$traceEnabled==TRUE) p
-      private$p_parentTable$trace("TableFlexTblStyles$clearStyles", "Clearing styles...")
+      private$p_parentTable$trace("FlexTableStyles$clearStyles", "Clearing styles...")
       private$p_styles <- list()
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$clearStyles", "Cleared styles.")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$clearStyles", "Cleared styles.")
     },
 
     #' @description
@@ -51,9 +47,9 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
     #'   specified base style name or `NULL` otherwise.
     findNamedStyle = function(baseStyleName) {
       if(private$p_parentTable$argumentCheckMode > 0) {
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "initialize", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "initialize", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
       }
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$findNamedStyle", "Finding named style...")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$findNamedStyle", "Finding named style...")
 
       # This function is a slimmer version of the full function below
       matchedStyle <- NULL
@@ -65,7 +61,7 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
           }
       }
 
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$findNamedStyle", "Found named style.")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$findNamedStyle", "Found named style.")
       return(invisible(matchedStyle))
     },
 
@@ -85,13 +81,13 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
     #'   specified base style name or `NULL` otherwise.
     findOrAddStyle = function(action="findOrAdd", baseStyleName=NULL, isBaseStyle=NULL, style=NULL, mapFromCss=TRUE) {
       if(private$p_parentTable$argumentCheckMode > 0) {
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "findOrAddStyle", action, missing(action), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("find", "add", "findOrAdd"))
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "findOrAddStyle", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "findOrAddStyle", isBaseStyle, missing(isBaseStyle), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "findOrAddStyle", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "findOrAddStyle", mapFromCss, missing(mapFromCss), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "findOrAddStyle", action, missing(action), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character", allowedValues=c("find", "add", "findOrAdd"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "findOrAddStyle", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "findOrAddStyle", isBaseStyle, missing(isBaseStyle), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "findOrAddStyle", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "findOrAddStyle", mapFromCss, missing(mapFromCss), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       }
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$findOrAddStyle", "Finding and/or adding style...")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$findOrAddStyle", "Finding and/or adding style...")
 
       # This function is used in two different ways:
       # 1. When adding base styles (i.e. named styles in the table) to this collection.
@@ -196,16 +192,16 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
       ftStyleValue <- tolower(cleanCssValue(style$getPropertyValue("ft-v-align")))
       if(isTextValue(ftStyleValue)) {
         if(ftStyleValue=="top") vAlign <- "top"
-        else if(ftStyleValue=="middle") vAlign <- "middle"
+        else if(ftStyleValue=="middle") vAlign <- "center"
         else if(ftStyleValue=="bottom") vAlign <- "bottom"
       }
       else if(mapFromCss) {
         verticalAlign <- tolower(cleanCssValue(style$getPropertyValue("vertical-align")))
         if(isTextValue(verticalAlign)) {
           if(verticalAlign=="top") vAlign <- "top"
-          else if(verticalAlign=="top") vAlign <- "text-top"
-          else if(verticalAlign=="middle") vAlign <- "middle"
-          else if(verticalAlign=="bottom") vAlign <- "text-bottom"
+          else if(verticalAlign=="text-top") vAlign <- "top"
+          else if(verticalAlign=="middle") vAlign <- "center"
+          else if(verticalAlign=="text-bottom") vAlign <- "bottom"
           else if(verticalAlign=="bottom") vAlign <- "bottom"
         }
       }
@@ -223,18 +219,49 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
 
       # padding
       paddingAll <- NULL
+      paddingLeft <- NULL
+      paddingRight <- NULL
+      paddingTop <- NULL
+      paddingBottom <- NULL
+
+      # padding all
+      # padding can be expressed as 1-4 values:
+      # 4 values = top right bottom left
+      # 3 values = top left&right bottom
+      # 2 values = top&bottom left&right
+      # 1 values = top&bottom&left&right
       ftStyleValue <- cleanCssValue(style$getPropertyValue("ft-padding"))
-      if(isTextValue(ftStyleValue)) ftStyleValue <- suppressWarnings(max(min(as.numeric(ftStyleValue), 500), 0))
       if(mapFromCss && is.null(ftStyleValue)) {
         ftStyleValue <- style$getPropertyValue("padding")
-        if(!is.null(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
       }
-      if(isNumericValue(ftStyleValue)&&(ftStyleValue>0)) paddingAll <- ftStyleValue
+      if(!is.null(ftStyleValue)) {
+        ftStyleValue <- parseCssString(ftStyleValue, separator=" ")
+        if(length(ftStyleValue)==4) {
+          paddingTop <- parseCssSizeToPx(ftStyleValue[1])
+          paddingRight <- parseCssSizeToPx(ftStyleValue[2])
+          paddingBottom <- parseCssSizeToPx(ftStyleValue[3])
+          paddingLeft <- parseCssSizeToPx(ftStyleValue[4])
+        }
+        if(length(ftStyleValue)==3) {
+          paddingTop <- parseCssSizeToPx(ftStyleValue[1])
+          paddingLeft <- parseCssSizeToPx(ftStyleValue[2])
+          paddingRight <- parseCssSizeToPx(ftStyleValue[2])
+          paddingBottom <- parseCssSizeToPx(ftStyleValue[3])
+        }
+        if(length(ftStyleValue)==2) {
+          paddingTop <- parseCssSizeToPx(ftStyleValue[1])
+          paddingBottom <- parseCssSizeToPx(ftStyleValue[1])
+          paddingLeft <- parseCssSizeToPx(ftStyleValue[2])
+          paddingRight <- parseCssSizeToPx(ftStyleValue[2])
+        }
+        if(length(ftStyleValue)==1) {
+          paddingAll <- parseCssSizeToPx(ftStyleValue[1])
+        }
+      }
 
       # padding left
-      paddingLeft <- NULL
       ftStyleValue <- cleanCssValue(style$getPropertyValue("ft-padding-left"))
-      if(isTextValue(ftStyleValue)) ftStyleValue <- suppressWarnings(max(min(as.numeric(ftStyleValue), 500), 0))
+      if(isTextValue(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
       if(mapFromCss && is.null(ftStyleValue)) {
         ftStyleValue <- style$getPropertyValue("padding-left")
         if(!is.null(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
@@ -242,9 +269,8 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
       if(isNumericValue(ftStyleValue)&&(ftStyleValue>0)) paddingLeft <- ftStyleValue
 
       # padding right
-      paddingRight <- NULL
       ftStyleValue <- cleanCssValue(style$getPropertyValue("ft-padding-right"))
-      if(isTextValue(ftStyleValue)) ftStyleValue <- suppressWarnings(max(min(as.numeric(ftStyleValue), 500), 0))
+      if(isTextValue(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
       if(mapFromCss && is.null(ftStyleValue)) {
         ftStyleValue <- style$getPropertyValue("padding-right")
         if(!is.null(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
@@ -252,9 +278,8 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
       if(isNumericValue(ftStyleValue)&&(ftStyleValue>0)) paddingRight <- ftStyleValue
 
       # padding top
-      paddingTop <- NULL
       ftStyleValue <- cleanCssValue(style$getPropertyValue("ft-padding-top"))
-      if(isTextValue(ftStyleValue)) ftStyleValue <- suppressWarnings(max(min(as.numeric(ftStyleValue), 500), 0))
+      if(isTextValue(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
       if(mapFromCss && is.null(ftStyleValue)) {
         ftStyleValue <- style$getPropertyValue("padding-top")
         if(!is.null(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
@@ -262,14 +287,20 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
       if(isNumericValue(ftStyleValue)&&(ftStyleValue>0)) paddingTop <- ftStyleValue
 
       # padding bottom
-      paddingBottom <- NULL
       ftStyleValue <- cleanCssValue(style$getPropertyValue("ft-padding-bottom"))
-      if(isTextValue(ftStyleValue)) ftStyleValue <- suppressWarnings(max(min(as.numeric(ftStyleValue), 500), 0))
+      if(isTextValue(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
       if(mapFromCss && is.null(ftStyleValue)) {
         ftStyleValue <- style$getPropertyValue("padding-bottom")
         if(!is.null(ftStyleValue)) ftStyleValue <- parseCssSizeToPx(ftStyleValue)
       }
       if(isNumericValue(ftStyleValue)&&(ftStyleValue>0)) paddingBottom <- ftStyleValue
+
+      # padding limits
+      if(!is.null(paddingAll)) paddingAll <- suppressWarnings(max(min(as.numeric(paddingAll), 500), 0))
+      if(!is.null(paddingLeft)) paddingLeft <- suppressWarnings(max(min(as.numeric(paddingLeft), 500), 0))
+      if(!is.null(paddingRight)) paddingRight <- suppressWarnings(max(min(as.numeric(paddingRight), 500), 0))
+      if(!is.null(paddingTop)) paddingTop <- suppressWarnings(max(min(as.numeric(paddingTop), 500), 0))
+      if(!is.null(paddingBottom)) paddingBottom <- suppressWarnings(max(min(as.numeric(paddingBottom), 500), 0))
 
       # border all
       borderAll <- NULL
@@ -353,7 +384,7 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
 
       # create the new style?
       if(is.null(matchedStyle) && (action %in% c("add", "findOrAdd"))) {
-        matchedStyle <- TableFlexTblStyle$new(private$p_parentTable,
+        matchedStyle <- FlexTableStyle$new(private$p_parentTable,
                                         baseStyleName=baseStyleName, isBaseStyle=isBaseStyle,
                                         fontName=fontName, fontSize=fontSize, bold=bold,
                                         italic=italic, bgColor=bgColor, textColor=textColor,
@@ -366,7 +397,7 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
         private$p_styles[[length(private$p_styles)+1]] <- matchedStyle
       }
 
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$findOrAddStyle", "Found and/or added style.")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$findOrAddStyle", "Found and/or added style.")
       return(matchedStyle)
     },
 
@@ -379,16 +410,16 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
     #' @return No return value.
     addNamedStyles = function(mapFromCss=TRUE) {
       if(private$p_parentTable$argumentCheckMode > 0) {
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "addNamedStyles", mapFromCss, missing(mapFromCss), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "addNamedStyles", mapFromCss, missing(mapFromCss), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       }
 
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$addNamedStyles", "Adding named styles...")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$addNamedStyles", "Adding named styles...")
       for(i in 1:length(private$p_parentTable$styles$styles)) {
         style <- private$p_parentTable$styles$styles[[i]]
         if(!is.null(self$findNamedStyle(baseStyleName=style$name))) next
         FlexTblStyle <- self$findOrAddStyle(action="add", baseStyleName=style$name, isBaseStyle=TRUE, style=style, mapFromCss=TRUE)
       }
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblStyles$addNamedStyles", "Added named styles.")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableStyles$addNamedStyles", "Added named styles.")
     },
 
     #' @description
@@ -424,7 +455,7 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
     #' @return A character representation of various object properties.
     asString = function(seperator=", ") {
       if(private$p_parentTable$argumentCheckMode > 0) {
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblStyles", "asString", seperator, missing(seperator), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableStyles", "asString", seperator, missing(seperator), allowMissing=TRUE, allowNull=FALSE, allowedClasses="character")
        }
       cstr <- ""
        if(length(private$p_styles)>0) {
@@ -443,7 +474,7 @@ TableFlexTblStyles <- R6::R6Class("TableFlexTblStyles",
     #' @field count The number of styles in the collection.
     count = function(value) { return(invisible(length(private$p_styles))) },
 
-    #' @field styles A list of `TableFlexTblStyle` objects that comprise the collection.
+    #' @field styles A list of `FlexTableStyle` objects that comprise the collection.
     styles = function(value) { return(invisible(private$p_styles)) }
   ),
   private = list(

@@ -241,9 +241,9 @@ TableOpenXlsxStyles <- R6::R6Class("TableOpenXlsxStyles",
         verticalAlign <- tolower(cleanCssValue(style$getPropertyValue("vertical-align")))
         if(isTextValue(verticalAlign)) {
           if(verticalAlign=="top") vAlign <- "top"
-          else if(verticalAlign=="top") vAlign <- "text-top"
+          else if(verticalAlign=="text-top") vAlign <- "top"
           else if(verticalAlign=="middle") vAlign <- "middle"
-          else if(verticalAlign=="bottom") vAlign <- "text-bottom"
+          else if(verticalAlign=="text-bottom") vAlign <- "bottom"
           else if(verticalAlign=="bottom") vAlign <- "bottom"
         }
       }

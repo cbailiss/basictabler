@@ -21,6 +21,8 @@ Suggests:
     lubridate (>= 1.5.0),
     listviewer (>= 1.4.0),
     openxlsx (>= 4.0.17),
+    flextable (>= 0.6.6),
+    officer (>= 0.3.18),
     shiny,
     knitr,
     rmarkdown,

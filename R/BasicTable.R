@@ -114,7 +114,7 @@ BasicTable <- R6::R6Class("BasicTable",
       private$p_mergedCells <- TableCellRanges$new(self)
       private$p_htmlRenderer <- TableHtmlRenderer$new(parentTable=self)
       private$p_openxlsxRenderer <-TableOpenXlsxRenderer$new(parentTable=self)
-      private$p_flexTblRenderer <- TableFlexTblRenderer$new(parentTable=self)
+      private$p_flexTableRenderer <- FlexTableRenderer$new(parentTable=self)
       private$p_timings <- list()
       # apply theming and styles
       if(is.null(theme)) {
@@ -1906,11 +1906,14 @@ BasicTable <- R6::R6Class("BasicTable",
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "asFlexTable", applyStyles, missing(applyStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_argumentCheckMode, FALSE, "BasicTable", "asFlexTable", mapStylesFromCSS, missing(mapStylesFromCSS), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       }
-      if (!requireNamespace("openxlsx", quietly = TRUE)) {
+      if (!requireNamespace("flextable", quietly = TRUE)) {
         stop("BasicTable$asFlexTable():  The flextable package is needed to convert the table to a table from the flextable package.  Please install it.", call. = FALSE)
       }
+      if (!requireNamespace("officer", quietly = TRUE)) {
+        stop("BasicTable$asFlexTable():  The officer package is needed to convert the table to a table from the flextable package.  Please install it.", call. = FALSE)
+      }
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asFlexTable", "Converting to flextable table...")
-      ft <- private$p_flexTblRenderer$asFlexTable(applyStyles=applyStyles, mapStylesFromCSS=mapStylesFromCSS)
+      ft <- private$p_flexTableRenderer$asFlexTable(applyStyles=applyStyles, mapStylesFromCSS=mapStylesFromCSS)
       if(private$p_traceEnabled==TRUE) self$trace("BasicTable$asFlexTable", "Converted to flextable table.")
       return(ft)
     },
@@ -2120,7 +2123,7 @@ BasicTable <- R6::R6Class("BasicTable",
     p_mergedCells = NULL,
     p_htmlRenderer = NULL,
     p_openxlsxRenderer = NULL,
-    p_flexTblRenderer = NULL,
+    p_flexTableRenderer = NULL,
     p_compatibility = NULL,
     p_traceFile = NULL,
     p_timings = NULL,

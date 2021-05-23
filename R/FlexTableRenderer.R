@@ -1,7 +1,7 @@
 #' R6 class that converts a table to a flextable from the `flextabler` package.
 #'
 #' @description
-#' The `TableFlexTblRenderer` class creates a representation of a table using
+#' The `FlexTableRenderer` class creates a representation of a table using
 #' the `flextable` package.  See the Output vignette for more details.
 #'
 #' @docType class
@@ -11,26 +11,22 @@
 #' # This class should not be used by end users.  It is an internal class
 #' # created only by the BasicTable class.  It is used when converting to a
 #' # flextable.
-#' library(basictabler)
-#' tbl <- qtbl(data.frame(a=1:2, b=3:4))
-#' library(flextable)
-#' flextbl <- tbl$asFlexTable()
 
-TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
+FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
   public = list(
 
     #' @description
-    #' Create a new `TableFlexTblRenderer` object.
+    #' Create a new `FlexTableRenderer` object.
     #' @param parentTable Owning table.
     #' @return No return value.
     initialize = function(parentTable) {
       if(parentTable$argumentCheckMode > 0) {
-        checkArgument(parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
+        checkArgument(parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "initialize", parentTable, missing(parentTable), allowMissing=FALSE, allowNull=FALSE, allowedClasses="BasicTable")
       }
       private$p_parentTable <- parentTable
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblRenderer$new", "Creating new FlexTbl Renderer...")
-      private$p_styles <- TableFlexTblStyles$new(parentTable=private$p_parentTable)
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblRenderer$new", "Created new FlexTbl Renderer.")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$new", "Creating new FlexTbl Renderer...")
+      private$p_styles <- FlexTableStyles$new(parentTable=private$p_parentTable)
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$new", "Created new FlexTbl Renderer.")
     },
 
     #' @description
@@ -60,17 +56,17 @@ TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
     #' @return The updated flextable definition.
     writeToCell = function(ft=NULL, rowNumber=NULL, columnNumber=NULL, value=NULL, applyStyles=TRUE, baseStyleName=NULL, style=NULL, mapFromCss=TRUE, mergeRows=NULL, mergeColumns=NULL) {
        if(private$p_parentTable$argumentCheckMode > 0) {
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", rowNumber, missing(rowNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", columnNumber, missing(columnNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", value, missing(value), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "character", "Date", "POSIXct", "POSIXlt"))
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", applyStyles, missing(applyStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", mapFromCss, missing(mapFromCss), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", mergeRows, missing(mergeRows), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "writeToCell", mergeColumns, missing(mergeColumns), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", rowNumber, missing(rowNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", columnNumber, missing(columnNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", value, missing(value), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "character", "Date", "POSIXct", "POSIXlt"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", applyStyles, missing(applyStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", style, missing(style), allowMissing=TRUE, allowNull=TRUE, allowedClasses="TableStyle")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", mapFromCss, missing(mapFromCss), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", mergeRows, missing(mergeRows), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", mergeColumns, missing(mergeColumns), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("integer", "numeric"))
       }
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblRenderer$writeToWorksheet", "Writing to cell...")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$writeToWorksheet", "Writing to cell...")
       # write the value
       if(!missing(value)) ft <- flextable::compose(ft, i=rowNumber, j=columnNumber, value=flextable::as_paragraph(value))
       # merge cells
@@ -82,9 +78,7 @@ TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
         # just a base style (these were all already added to the FlexTblStyles collection, so can just do a find based on the name only)
         if(isTextValue(baseStyleName)&&is.null(style)) {
           ftStyle <- private$p_styles$findNamedStyle(baseStyleName)
-          if(is.null(ftStyle)) stop(paste0("TableFlexTblRenderer$writeToWorksheet(): Unable to find named style '", baseStyleName, "'."), call. = FALSE)
-          # if(isMergedCells) openxlsx::addStyle(wb, sheet=wsName, style=openxlsxStyle$openxlsxStyle, rows=mergeRows, cols=mergeColumns, gridExpand=TRUE)
-          # else openxlsx::addStyle(wb, sheet=wsName, style=openxlsxStyle$openxlsxStyle, rows=rowNumber, cols=columnNumber, gridExpand=TRUE)
+          if(is.null(ftStyle)) stop(paste0("FlexTableRenderer$writeToWorksheet(): Unable to find named style '", baseStyleName, "'."), call. = FALSE)
         }
         # base style and overlaid style, or just an overlaid style
         else if(!is.null(style)) {
@@ -96,9 +90,7 @@ TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
           }
           else fullStyle <- style
           ftStyle <- private$p_styles$findOrAddStyle(action="findOrAdd", baseStyleName=baseStyleName, isBaseStyle=FALSE, style=fullStyle, mapFromCss=mapFromCss)
-          if(is.null(ftStyle)) stop("TableFlexTblRenderer$writeToWorksheet(): Failed to find or add style.", call. = FALSE)
-          #if(isMergedCells) openxlsx::addStyle(wb, sheet=wsName, style=openxlsxStyle$openxlsxStyle, rows=mergeRows, cols=mergeColumns, gridExpand=TRUE)
-          #else openxlsx::addStyle(wb, sheet=wsName, style=openxlsxStyle$openxlsxStyle, rows=rowNumber, cols=columnNumber, gridExpand=TRUE)
+          if(is.null(ftStyle)) stop("FlexTableRenderer$writeToWorksheet(): Failed to find or add style.", call. = FALSE)
         }
         # style range
         styleRows <- ifelse(isMergedCells, mergeRows, rowNumber)
@@ -128,31 +120,11 @@ TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
         paddingSet <- paddingSet || !is.null(ftStyle$paddingRight)
         paddingSet <- paddingSet || !is.null(ftStyle$paddingTop)
         paddingSet <- paddingSet || !is.null(ftStyle$paddingBottom)
-        # TODO - the message below shows that when the padding is specified in the table theme in CSS as padding="2px 8px 2px 2px",
-        # then the padding is not being processed properly into the paddingLeft, paddingRight, paddingTop and paddingBottom.
-        # Need to add additional logic to TableFlexTblStyles$findOrAddStyle to handle this.
-        message(paste(ftStyle$paddingAll, ftStyle$paddingLeft, ftStyle$paddingRight, ftStyle$paddingTop, ftStyle$paddingBottom))
         if(paddingSet==TRUE) ft <- flextable::padding(ft, i=styleRows, j=styleCols, padding=ftStyle$paddingAll,
                                                 padding.left=ftStyle$paddingLeft, padding.right=ftStyle$paddingRight,
                                                 padding.top=ftStyle$paddingTop, padding.bottom=ftStyle$paddingBottom)
-        # borders
-        # TODO - need to use hline and vline functions to set borders.
-
-        # TODO - rename the files (and class names) to FlexTableStyle, FlexTableStyles and FlexTableRenderer.
-
-        # TODO - testing all of the properties when using setStyling, including setting both standard CSS styles and the ft styles.
-
-        # TODO - add flextable output to the outputs vignettes of both basictabler and pivottabler.
-
-        # TODO - update the readme to mention flextable (so allowing output to Word and PPT - include these in the outputs vignette for both basictabler and pivottabler).
-
-        # TODO - update the styling reference with details of the mappings between CSS and ft styles.
-
-        # TODO - update NEWS file.
-
-        # TODO - devtools::document()
       }
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblRenderer$writeToWorksheet", "Written to cell.")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$writeToWorksheet", "Written to cell.")
       return(ft)
     },
 
@@ -166,10 +138,10 @@ TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
     #' @return No return value.
     asFlexTable = function(applyStyles=TRUE, mapStylesFromCSS=TRUE) {
       if(private$p_parentTable$argumentCheckMode > 0) {
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "asFlexTable", applyStyles, missing(applyStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
-        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableFlexTblRenderer", "asFlexTable", mapStylesFromCSS, missing(mapStylesFromCSS), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "asFlexTable", applyStyles, missing(applyStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "asFlexTable", mapStylesFromCSS, missing(mapStylesFromCSS), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
       }
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblRenderer$asFlexTable", "Converting to flextable...")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$asFlexTable", "Converting to flextable...")
 
       # clear the styles
       private$p_styles$clearStyles()
@@ -213,9 +185,19 @@ TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
 
       # create the flextable (based on formatted values, since flextables store the data as dataframes, so don't support different data types in the same column)
       ft <- flextable::flextable(bt$asDataFrame(rawValue=FALSE))
-      ft <- flextable::autofit(ft)
       ft <- flextable::delete_part(ft, part="header")
       ft <- flextable::delete_part(ft, part="footer")
+      ft <- flextable::border_remove(ft)
+
+      # set the basic border settings based on the base styles
+      # default borders for entire table from the cell style
+      # TODO - add functionality to output cell border styles - depending on outcome of https://github.com/davidgohel/flextable/issues/322
+      ftStyle <- private$p_styles$findNamedStyle(cellStyle)
+      if(!is.null(ftStyle$borderAll)) {
+        ftb <- ftStyle$borderAll
+        ft <- flextable::border_inner(ft, border=officer::fp_border(color=ftb[["color"]], width=ftb[["width"]], style=ftb[["style"]]))
+        ft <- flextable::border_outer(ft, border=officer::fp_border(color=ftb[["color"]], width=ftb[["width"]], style=ftb[["style"]]))
+      }
 
       # render the rows
       for(r in 1:rowCount) {
@@ -252,18 +234,21 @@ TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
         }
       }
 
-      # TableFlexTblStyles collection builds up a collection of styles. This
+      # set as autofit
+      ft <- flextable::autofit(ft)
+
+      # FlexTableStyles collection builds up a collection of styles. This
       # follows the same pattern used by the OpenXlsx renderer - even though
       # the flextable package does not use a collection of styles (same
       # approach taken so that both renderers are consistent).
       # The styles are used as follows: Before rendering
-      # begins, a TableFlexTblStyle object is created for each named style
+      # begins, a FlexTableStyle object is created for each named style
       # defined in the table. As each cell is rendered to the workbook, if
       # a cell with a named style but no other style overrides is
       # encountered, then these styles are used.  If a cell is encountered
       # with overrides, then the styles collection is searched to find the
       # matching style.  If not found, then a new style is added which can be
-      # reused later. The TableFlexTblStyle object looks for styles named
+      # reused later. The FlexTableStyle object looks for styles named
       # "ft-".  If found, these are used.  These closely map to the formatting
       # options available in the flextable package.
       # If style settings named "ft-" are not found, then an attempt is made
@@ -276,7 +261,7 @@ TableFlexTblRenderer <- R6::R6Class("TableFlexTblRenderer",
       # border-bottom, etc have been mapped.  The very specific (e.g.
       # border-bottom-width, border-bottom-style, etc) have not been mapped.
 
-      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("TableFlexTblRenderer$asFlexTable", "Converted to flextable.")
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$asFlexTable", "Converted to flextable.")
       return(ft)
     }
   ),

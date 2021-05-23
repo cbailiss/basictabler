@@ -804,7 +804,7 @@ parseXlBorder <- function(text) {
       if(!is.null(color)) borderColor <- color
     }
   }
-  if(is.null(xlBorderStyle)&&is.null(borderColor)) return(NULL)
+  if(is.null(borderStyle)&&is.null(borderColor)) return(NULL)
   result <- list(style=borderStyle, color=borderColor)
   return(result)
 }
@@ -847,12 +847,11 @@ getFtBorderWidthFromCssBorder <- function(border) {
   # border is a return value from the parseCssBorder() function
   if(!isTextValue(border)) return(NULL)
   cssBorderWidth <- border[["width"]]
-  if(!isTextValue(cssBorderWidth)) return(NULL)
   if(cssBorderWidth %in% c("none", "hidden", "initial", "inherit")) return(NULL)
   if(cssBorderWidth=="thin") return(2)
   else if(cssBorderWidth=="medium") return(4)
   else if(cssBorderWidth=="thick") return(6)
-  else return(parseCssSizeToPx(cssBorderWidth))
+  else if(isNumericValue(cssBorderWidth)) return(cssBorderWidth)
 }
 
 
