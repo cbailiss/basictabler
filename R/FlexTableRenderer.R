@@ -120,9 +120,9 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
         paddingSet <- paddingSet || !is.null(ftStyle$paddingRight)
         paddingSet <- paddingSet || !is.null(ftStyle$paddingTop)
         paddingSet <- paddingSet || !is.null(ftStyle$paddingBottom)
-        if(paddingSet==TRUE) ft <- flextable::padding(ft, i=styleRows, j=styleCols, padding=ftStyle$paddingAll,
-                                                padding.left=ftStyle$paddingLeft, padding.right=ftStyle$paddingRight,
-                                                padding.top=ftStyle$paddingTop, padding.bottom=ftStyle$paddingBottom)
+        if(paddingSet==TRUE) ft <- flextable::padding(ft, i=styleRows, j=styleCols, padding=PxToPt(ftStyle$paddingAll),
+                                                padding.left=PxToPt(ftStyle$paddingLeft), padding.right=PxToPt(ftStyle$paddingRight),
+                                                padding.top=PxToPt(ftStyle$paddingTop), padding.bottom=PxToPt(ftStyle$paddingBottom))
       }
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$writeToWorksheet", "Written to cell.")
       return(ft)

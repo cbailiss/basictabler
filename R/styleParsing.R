@@ -315,6 +315,23 @@ parseCssSizeToPx <- function(size) {
 }
 
 
+#' Convert a number of pixels to points
+#'
+#' \code{PxToPt} converts pixels to points.
+#' 1inch = 72pt = 96px according to W3C.
+#' Ref:  https://www.w3.org/TR/css3-values/#absolute-lengths
+#'
+#' @param px The number of pixels convert.
+#' @return The corresponding number of points.
+PxToPt <- function(px) {
+  if(is.null(px)) {
+    return(NULL)
+  }
+  pt <- round(px * 72 / 96)
+  return(pt)
+}
+
+
 #' Convert a CSS colour into a hex based colour code.
 #'
 #' \code{parseColor} converts a colour value specified in CSS to a hex based
