@@ -54,10 +54,13 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
     #'   an integer or numeric vector specifying the column numbers of the
     #'   merged cell.  NULL (default) to not merge cells.
     #' @return The updated flextable definition.
-    writeToCell = function(ft=NULL, rowNumber=NULL, columnNumber=NULL, value=NULL, applyStyles=TRUE, baseStyleName=NULL, style=NULL, mapFromCss=TRUE, mergeRows=NULL, mergeColumns=NULL) {
+    writeToCell = function(ft=NULL, rowNumber=NULL, columnNumber=NULL, totalRowCount=NULL, totalColumnCount=NULL,
+                           value=NULL, applyStyles=TRUE, baseStyleName=NULL, style=NULL, mapFromCss=TRUE, mergeRows=NULL, mergeColumns=NULL) {
        if(private$p_parentTable$argumentCheckMode > 0) {
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", rowNumber, missing(rowNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", columnNumber, missing(columnNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", totalRowCount, missing(totalRowCount), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", totalColumnCount, missing(totalColumnCount), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", value, missing(value), allowMissing=TRUE, allowNull=TRUE, allowedClasses=c("logical", "integer", "numeric", "character", "Date", "POSIXct", "POSIXlt"))
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", applyStyles, missing(applyStyles), allowMissing=TRUE, allowNull=FALSE, allowedClasses="logical")
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeToCell", baseStyleName, missing(baseStyleName), allowMissing=TRUE, allowNull=TRUE, allowedClasses="character")
@@ -120,11 +123,96 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
         paddingSet <- paddingSet || !is.null(ftStyle$paddingRight)
         paddingSet <- paddingSet || !is.null(ftStyle$paddingTop)
         paddingSet <- paddingSet || !is.null(ftStyle$paddingBottom)
-        if(paddingSet==TRUE) ft <- flextable::padding(ft, i=styleRows, j=styleCols, padding=PxToPt(ftStyle$paddingAll),
-                                                padding.left=PxToPt(ftStyle$paddingLeft), padding.right=PxToPt(ftStyle$paddingRight),
-                                                padding.top=PxToPt(ftStyle$paddingTop), padding.bottom=PxToPt(ftStyle$paddingBottom))
+        if(paddingSet==TRUE) {
+          ft <- flextable::padding(ft, i=styleRows, j=styleCols, padding=PxToPt(ftStyle$paddingAll),
+                                   padding.left=PxToPt(ftStyle$paddingLeft), padding.right=PxToPt(ftStyle$paddingRight),
+                                   padding.top=PxToPt(ftStyle$paddingTop), padding.bottom=PxToPt(ftStyle$paddingBottom))
+        }
+
+        # border
+        borderSet <- FALSE
+        borderSet <- borderSet || !is.null(ftStyle$borderAll)
+        borderSet <- borderSet || !is.null(ftStyle$borderLeft)
+        borderSet <- borderSet || !is.null(ftStyle$borderRight)
+        borderSet <- borderSet || !is.null(ftStyle$borderTop)
+        borderSet <- borderSet || !is.null(ftStyle$borderBottom)
+        if(paddingSet==TRUE) {
+          ft <- self$writeBorder(ft, rowNumber=rowNumber, columnNumber=columnNumber, totalRowCount=totalRowCount, totalColumnCount=totalColumnCount,
+                                 border=ftStyle$borderAll, borderLeft=ftStyle$borderLeft, borderRight=ftStyle$borderRight, borderTop=ftStyle$borderTop, borderBottom=ftStyle$borderBottom)
+        }
       }
       if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$writeToWorksheet", "Written to cell.")
+      return(ft)
+    },
+
+    #' @description
+    #' Write the borders of a cell.
+    #' @param ft The flextable to write to.
+    #' @param rowNumber The row number of the cell where the border is to be
+    #'   written.
+    #' @param columnNumber The column number of the cell where the border is to be
+    #'   written.
+    #' @param totalRowCount The total number of rows in the table.
+    #' @param totalColumnCount The total number of columns in the table.
+    #' @param border The border to be applied to all sides of the cell (unless
+    #'   a border is specified using the other arguments).
+    #' @param borderLeft The border to apply to the left side of the cell.
+    #' @param borderRight The border to apply to the right side of the cell.
+    #' @param borderTop The border to apply to the top side of the cell.
+    #' @param borderBottom The border to apply to the bottom side of the cell.
+    #' @return The updated flextable definition.
+    writeBorder = function(ft=NULL, rowNumber=NULL, columnNumber=NULL, totalRowCount=NULL, totalColumnCount=NULL,
+                           border=NULL, borderLeft=NULL, borderRight=NULL, borderTop=NULL, borderBottom=NULL) {
+      if(private$p_parentTable$argumentCheckMode > 0) {
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeBorder", rowNumber, missing(rowNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+        checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "FlexTableRenderer", "writeBorder", columnNumber, missing(columnNumber), allowMissing=TRUE, allowNull=FALSE, allowedClasses=c("integer", "numeric"))
+      }
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$writeBorder", "Writing borders...")
+      # arrange arguments
+      if(!is.null(border)) {
+        if(is.null(borderLeft)) { borderLeft <- border }
+        if(is.null(borderRight)) { borderRight <- border }
+        if(is.null(borderTop)) { borderTop <- border }
+        if(is.null(borderBottom)) { borderBottom <- border }
+      }
+      # set left border (using public functions)
+      if(!is.null(borderLeft)) {
+        fpBorder = officer::fp_border(color=borderLeft$color, width=borderLeft$width, style=borderLeft$style)
+        if (columnNumber==1) {
+          ft <- flextable::vline_left(ft, i=rowNumber, border=fpBorder, part="body")
+        } else {
+          ft <- flextable::vline(ft, i=rowNumber, j=columnNumber-1, border=fpBorder, part="body")
+        }
+      }
+      # set right border (using public functions)
+      if(!is.null(borderRight)) {
+        fpBorder = officer::fp_border(color=borderRight$color, width=borderRight$width, style=borderRight$style)
+        if (columnNumber==totalColumnCount) {
+          ft <- flextable::vline_right(ft, i=rowNumber, border=fpBorder, part="body")
+        } else {
+          ft <- flextable::vline(ft, i=rowNumber, j=columnNumber, border=fpBorder, part="body")
+        }
+      }
+      # set top border (using public functions)
+      if(!is.null(borderTop)) {
+        fpBorder = officer::fp_border(color=borderTop$color, width=borderTop$width, style=borderTop$style)
+        if (rowNumber==1) {
+          ft <- flextable::hline_top(ft, j=columnNumber, border=fpBorder, part="body")
+        } else {
+          ft <- flextable::hline(ft, i=rowNumber-1, j=columnNumber, border=fpBorder, part="body")
+        }
+      }
+      # set bottom border (using public functions)
+      if(!is.null(borderBottom)) {
+        fpBorder = officer::fp_border(color=borderBottom$color, width=borderBottom$width, style=borderBottom$style)
+        if (rowNumber==totalRowCount) {
+          ft <- flextable::hline_bottom(ft, j=columnNumber, border=fpBorder, part="body")
+        } else {
+          ft <- flextable::hline(ft, i=rowNumber, j=columnNumber, border=fpBorder, part="body")
+        }
+      }
+      # done
+      if(private$p_parentTable$traceEnabled==TRUE) private$p_parentTable$trace("FlexTableRenderer$writeBorder", "Written.")
       return(ft)
     },
 
@@ -192,12 +280,12 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
       # set the basic border settings based on the base styles
       # default borders for entire table from the cell style
       # TODO - add functionality to output cell border styles - depending on outcome of https://github.com/davidgohel/flextable/issues/322
-      ftStyle <- private$p_styles$findNamedStyle(cellStyle)
-      if(!is.null(ftStyle$borderAll)) {
-        ftb <- ftStyle$borderAll
-        ft <- flextable::border_inner(ft, border=officer::fp_border(color=ftb[["color"]], width=ftb[["width"]], style=ftb[["style"]]))
-        ft <- flextable::border_outer(ft, border=officer::fp_border(color=ftb[["color"]], width=ftb[["width"]], style=ftb[["style"]]))
-      }
+      # ftStyle <- private$p_styles$findNamedStyle(cellStyle)
+      # if(!is.null(ftStyle$borderAll)) {
+      #   ftb <- ftStyle$borderAll
+      #   ft <- flextable::border_inner(ft, border=officer::fp_border(color=ftb[["color"]], width=ftb[["width"]], style=ftb[["style"]]))
+      #   ft <- flextable::border_outer(ft, border=officer::fp_border(color=ftb[["color"]], width=ftb[["width"]], style=ftb[["style"]]))
+      # }
 
       # render the rows
       for(r in 1:rowCount) {
@@ -228,8 +316,8 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
           if(!is.null(cell$baseStyleName)) cs <- cell$baseStyleName
 
           # write cell (value is omitted since it was set in the data frame used to create the flex table)
-          ft <- self$writeToCell(ft, rowNumber=r, columnNumber=c, applyStyles=applyStyles,
-                                 baseStyleName=cs, style=cell$style, mapFromCss=mapStylesFromCSS,
+          ft <- self$writeToCell(ft, rowNumber=r, columnNumber=c, totalRowCount=rowCount, totalColumnCount=columnCount,
+                                 applyStyles=applyStyles, baseStyleName=cs, style=cell$style, mapFromCss=mapStylesFromCSS,
                                  mergeRows=mergeRows, mergeColumns=mergeColumns)
         }
       }

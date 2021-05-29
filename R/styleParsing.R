@@ -744,7 +744,6 @@ getXlBorderFromCssBorder <- function(text) {
 #' @param text The border declaration to parse.
 #' @return A list containing two elements: style and color.
 
-
 parseXlBorder <- function(text) {
   # parses a combined border declaration,
   # e.g. 1:  xl-border: thin #FF00BB
