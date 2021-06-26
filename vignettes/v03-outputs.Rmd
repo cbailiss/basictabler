@@ -16,6 +16,9 @@ vignette: >
 * Output as Plain Text
 * Output as HTML
 * Output in Excel
+* Output as FlexTable
+* Output in Word
+* Output in PowerPoint
 * Output as an R Matrix
 * Output as an R Data Frame
 * Further Reading
@@ -115,6 +118,93 @@ cat(tbl$getCss())
 ## Output in Excel
 
 Please see the [Excel Export](v07-excelexport.html) vignette.
+
+## Output as FlexTable
+
+Converting a table from the `basictabler` package to a table from the `flextabler` package is possible:
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE, comment=""}
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+# convert to flextable
+library(flextable)
+ft <- tbl$asFlexTable()
+ft
+```
+
+## Output in Word
+
+Converting a table to a Word document is possible using the `flextabler` package:
+
+```{r, eval=FALSE}
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+# convert to flextable
+library(flextable)
+ft <- tbl$asFlexTable()
+
+# save word document
+library(officer)
+docx <- read_docx()
+docx <- body_add_par(docx, "Example Table")
+docx <- body_add_flextable(docx, value = ft)
+print(docx, target = "example_table_word.docx")
+```
+
+## Output in PowerPoint
+
+Converting a table to a PowerPoint document is possible using the `flextabler` package:
+
+```{r, eval=FALSE}
+# data for the table
+saleIds <- c(5334, 5336, 5338)
+items <- c("Apple", "Orange", "Banana")
+quantities <- c(5, 8, 6)
+prices <- c(0.34452354, 0.4732543, 1.3443243)
+
+# construct the table
+library(basictabler)
+tbl <- BasicTable$new()
+tbl$addData(data.frame(saleIds, items, quantities, prices), 
+            firstColumnAsRowHeaders=TRUE,
+            explicitColumnHeaders=c("Sale ID", "Item", "Quantity", "Price"),
+            columnFormats=list(NULL, NULL, NULL, "%.2f"))
+
+# convert to flextable
+library(flextable)
+ft <- tbl$asFlexTable()
+
+# save PowerPoint document
+library(officer)
+ppt <- read_pptx()
+ppt <- add_slide(ppt, layout = "Title and Content", master = "Office Theme")
+ppt <- ph_with(ppt, value = ft, location = ph_location_left()) 
+print(ppt, target = "example_table_powerpoint.pptx")
+```
 
 ## Output as an R Matrix
 

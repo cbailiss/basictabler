@@ -16,6 +16,8 @@ The tables are rendered as htmlwidgets or plain text. The HTML/text can be expor
 
 The tables can also be exported to Excel, including the styling/formatting. The formatting/styling is specified once and can then be used when rendering to both HTML and Excel - i.e. it is not necessary to specify the formatting/styling separately for each output format.
 
+Using the `flextabler` package it is also possible to output tables to Word and PowerPoint.
+
 `basictabler` is a companion package to the `pivottabler` package. `pivottabler` is focussed on generating pivot tables and can aggregate data. `basictabler` does not aggregate data but offers more control of table structure.
 
 For more information see <http://www.basictabler.org.uk/>.
@@ -80,6 +82,8 @@ qhtbl(tocsummary, firstColumnAsRowHeaders=TRUE,
 ```
 
 ![<http://cbailiss.me.uk/basictablerreadmeimgs/example1.png>](http://cbailiss.me.uk/basictablerreadmeimgs/example1.png)
+
+In the example above, the `qhtbl()` functions returns a html widget that is rendered immediately in the R-Studio viewer window.  An alternative is to use the `qtbl()` function which returns a BasicTable object that can be further manipulated.  The styling example further below demonstrates this.
 
 #### Changing a Table Example
 

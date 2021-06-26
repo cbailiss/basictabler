@@ -21,6 +21,7 @@ the `flextable` package.  See the Output vignette for more details.
 \itemize{
 \item \href{#method-new}{\code{FlexTableRenderer$new()}}
 \item \href{#method-writeToCell}{\code{FlexTableRenderer$writeToCell()}}
+\item \href{#method-writeBorder}{\code{FlexTableRenderer$writeBorder()}}
 \item \href{#method-asFlexTable}{\code{FlexTableRenderer$asFlexTable()}}
 \item \href{#method-clone}{\code{FlexTableRenderer$clone()}}
 }
@@ -55,6 +56,8 @@ Write a value to a cell, optionally with styling and cell merging.
   ft = NULL,
   rowNumber = NULL,
   columnNumber = NULL,
+  totalRowCount = NULL,
+  totalColumnCount = NULL,
   value = NULL,
   applyStyles = TRUE,
   baseStyleName = NULL,
@@ -99,6 +102,58 @@ cell.  NULL (default) to not merge cells.}
 \item{\code{mergeColumns}}{If the cell is to be merged with adjacent cells, then
 an integer or numeric vector specifying the column numbers of the
 merged cell.  NULL (default) to not merge cells.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated flextable definition.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-writeBorder"></a>}}
+\if{latex}{\out{\hypertarget{method-writeBorder}{}}}
+\subsection{Method \code{writeBorder()}}{
+Write the borders of a cell.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FlexTableRenderer$writeBorder(
+  ft = NULL,
+  rowNumber = NULL,
+  columnNumber = NULL,
+  totalRowCount = NULL,
+  totalColumnCount = NULL,
+  border = NULL,
+  borderLeft = NULL,
+  borderRight = NULL,
+  borderTop = NULL,
+  borderBottom = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{ft}}{The flextable to write to.}
+
+\item{\code{rowNumber}}{The row number of the cell where the border is to be
+written.}
+
+\item{\code{columnNumber}}{The column number of the cell where the border is to be
+written.}
+
+\item{\code{totalRowCount}}{The total number of rows in the table.}
+
+\item{\code{totalColumnCount}}{The total number of columns in the table.}
+
+\item{\code{border}}{The border to be applied to all sides of the cell (unless
+a border is specified using the other arguments).}
+
+\item{\code{borderLeft}}{The border to apply to the left side of the cell.}
+
+\item{\code{borderRight}}{The border to apply to the right side of the cell.}
+
+\item{\code{borderTop}}{The border to apply to the top side of the cell.}
+
+\item{\code{borderBottom}}{The border to apply to the bottom side of the cell.}
 }
 \if{html}{\out{</div>}}
 }

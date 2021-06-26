@@ -272,7 +272,7 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
       private$p_parentTable$applyCellMerges()
 
       # create the flextable (based on formatted values, since flextables store the data as dataframes, so don't support different data types in the same column)
-      ft <- flextable::flextable(bt$asDataFrame(rawValue=FALSE))
+      ft <- flextable::flextable(private$p_parentTable$asDataFrame(rawValue=FALSE))
       ft <- flextable::delete_part(ft, part="header")
       ft <- flextable::delete_part(ft, part="footer")
       ft <- flextable::border_remove(ft)

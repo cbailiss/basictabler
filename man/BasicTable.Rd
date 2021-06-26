@@ -536,7 +536,8 @@ Apply styling to a set of cells in the table.
   visible = NULL,
   baseStyleName = NULL,
   style = NULL,
-  declarations = NULL
+  declarations = NULL,
+  applyBorderToAdjacentCells = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -575,6 +576,10 @@ default styling that is applied to the cell.}
 
 \item{\code{declarations}}{CSS style declarations to apply in the form of a list,
 e.g. `list("font-weight"="bold", "color"="#0000FF")`}
+
+\item{\code{applyBorderToAdjacentCells}}{TRUE to override the border in
+neighbouring cells, e.g. the left border of the current cell becomes the
+right border of the cell to the left.}
 }
 \if{html}{\out{</div>}}
 }
