@@ -144,6 +144,48 @@ ft <- tbl$asFlexTable()
 ft
 ```
 
+When converting to a flextable, the styles used in the basictabler table are converted to their flextable equivalents where possible.  If you specify both a CSS and ft value, then the CSS value will be used when rendering to HTML and the ft value will be used when converting the table to a flex table.  The table below shows how the CSS style values are mapped to the equivalent style settings in the flextable package.
+
+| CSS Property       | FT Property         | FT Example              | Notes                                      | 
+|:-------------------|:--------------------|:------------------------|:-------------------------------------------|
+| font-family        | ft-font-name        | Arial                   | Only the first CSS font is used in Excel.  |
+| font-size          | ft-font-size        | 12                      | In Points (4-72).  See below for CSS units.|
+| font-weight        | ft-bold             | normal or bold          | XL bold is CSS font-weight >= 600.         |
+| font-style         | ft-italic           | normal or italic        | italic and oblique map to italic.          |
+| background-color   | ft-bg-color         | #FF0000                 | See below for supported CSS colours.       |
+| color              | ft-text-color       | #00FF00                 | See below for supported CSS colours.       |
+| text-align         | ft-h-align          | left or center or right |                                            |
+| vertical-align     | ft-v-align          | top or middle or bottom |                                            |
+|                    | ft-text-rotation    | lrtb tblr btlr number   | One of the constant values or 0 to 359.    |
+| padding            | ft-padding          | number (in px, pt, etc) | See below for supported padding values.    |
+| padding-left       | ft-padding-left     | number (in px, pt, etc) | See below for supported padding values.    |
+| padding-right      | ft-padding-right    | number (in px, pt, etc) | See below for supported padding values.    |
+| padding-top        | ft-padding-top      | number (in px, pt, etc) | See below for supported padding values.    |
+| padding-bottom     | ft-padding-bottom   | number (in px, pt, etc) | See below for supported padding values.    |
+| border             | ft-border           | thin black              | See below for supported CSS border values. |
+| border-left        | ft-border-left      | thin black              | See below for supported CSS border values. |
+| border-right       | ft-border-right     | thin black              | See below for supported CSS border values. |
+| border-top         | ft-border-top       | thin black              | See below for supported CSS border values. |
+| border-bottom      | ft-border-bottom    | thin black              | See below for supported CSS border values. |
+
+Notes:
+
+* For CSS font-size, only the following units are supported:  in, cm, mm, pt, pc, px, em, %.
+* For CSS background-color, CSS color and border colours, only hex colours, named colours, RGB() and RGBA() values are supported.  HLS() and HLSA() values are not supported.  Examples of supported CSS values:  #0080FF, rgb(0, 128, 255), rgba(0, 128, 255, 0.5), red, black, darkolivegreen, etc.
+* For padding, either use CSS padding / ft-padding to specify the same padding on all four sides of each cell.  Or use the side-specific versions, e.g. CSS padding-left / ft-padding-left.
+* For borders, either use CSS border / xl-border to specify the same border on all four sides of each cell.  Or use the side-specific versions, e.g. CSS border-left / xl-border-left.
+
+Examples of valid ft border values:
+
+* thin solid #FF00BB
+* 2px dotted red
+* medium dashed rgb(0, 255, 0)
+
+Note that the following CSS properties are NOT supported for automatic mapping to flextable values:
+
+* font - use font-family, font-size, etc. instead
+* Border side specific properties, e.g. border-left-style, border-top-color, etc.
+
 ## Output in Word
 
 Converting a table to a Word document is possible using the `flextabler` package:

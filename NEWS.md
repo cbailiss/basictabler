@@ -1,4 +1,4 @@
-basictabler vNext
+basictabler 1.0.2
 ================
 
 Improvements
