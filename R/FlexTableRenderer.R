@@ -272,7 +272,7 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
       private$p_parentTable$applyCellMerges()
 
       # create the flextable (based on formatted values, since flextables store the data as dataframes, so don't support different data types in the same column)
-      ft <- flextable::flextable(private$p_parentTable$asDataFrame(rawValue=FALSE))
+      ft <- flextable::flextable(private$p_parentTable$asDataFrame(rawValue=FALSE), cwidth=0, cheight=0)
       ft <- flextable::delete_part(ft, part="header")
       ft <- flextable::delete_part(ft, part="footer")
       ft <- flextable::border_remove(ft)
@@ -323,7 +323,8 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
       }
 
       # set as autofit
-      ft <- flextable::autofit(ft)
+      # removed since this can't be undone (and the caller could easily call this explicitly)
+      # ft <- flextable::autofit(ft)
 
       # FlexTableStyles collection builds up a collection of styles. This
       # follows the same pattern used by the OpenXlsx renderer - even though

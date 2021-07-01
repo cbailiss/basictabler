@@ -1,6 +1,11 @@
 basictabler 1.0.3
 ================
 
+Improvements
+----------------
+
+The default minimum column widths and row heights for flextables created by the `tbl$asFlexTable()` have been removed leading to more compact tables.  In addition, `flextable::autofit()` is no longer called as part of `tbl$asFlexTable()` allowing default sizing rules (e.g. in HTML) to determine row and column sizes. 
+
 Bug Fixes
 ----------------
 
@@ -13,7 +18,7 @@ basictabler 1.0.2
 Improvements
 ----------------
 
-Tables can now be exported to a wider variety of file formats using the flextabler package.  Supported formats including Microsoft Word, Microsoft PowerPoint and PDF.  See the Outputs vignette for more details. 
+Tables can now be exported to a wider variety of file formats using the `flextabler` package.  Supported formats including Microsoft Word, Microsoft PowerPoint and PDF.  See the Outputs vignette for more details. 
 
 It is now easier to format the borders for specific cells.  See the "Formatting cell borders for specific cells" section of the Styling vignette for more details.
 
