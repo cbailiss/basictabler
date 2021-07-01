@@ -1706,14 +1706,18 @@ BasicTable <- R6::R6Class("BasicTable",
       for(c in (1 + columnOffset):columnCount) {
         columnValues <- NA
         for(r in (1 + rowOffset):rowCount) {
-          if(length(private$p_cells$rows[[r]])==0) next
-          cell <- private$p_cells$getCell(r, c)
-          if(is.null(cell)) next
-          if(rawValue==TRUE) v <- cell$rawValue
-          else v <- cell$formattedValue
-          if(is.null(v)) v <- NA
-          else if(is.factor(v)) v <- as.character(v)
-          if(length(v)==0) next
+          if(length(private$p_cells$rows[[r]])==0) v <- NA
+          else {
+            cell <- private$p_cells$getCell(r, c)
+            if(is.null(cell)) v <- NA
+            else {
+              if(rawValue==TRUE) v <- cell$rawValue
+              else v <- cell$formattedValue
+              if(is.null(v)) v <- NA
+              else if(is.factor(v)) v <- as.character(v)
+            }
+          }
+          if(length(v)==0) v <- NA
           columnValues[r - rowOffset] <- v
         }
         dfColumns[[c - columnOffset]] <- columnValues

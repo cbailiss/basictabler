@@ -1,3 +1,12 @@
+basictabler 1.0.3
+================
+
+Bug Fixes
+----------------
+
+Resolved error "Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  : arguments imply differing number of rows" that sometimes occurred when converting a table to a data frame or when converting a table to a flextable.
+
+
 basictabler 1.0.2
 ================
 
