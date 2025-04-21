@@ -5,7 +5,7 @@
 \alias{TableStyles}
 \title{R6 class that defines a collection of styles.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `TableStyles` class defines all of the base styles needed to style/theme a
@@ -64,22 +64,22 @@ table.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TableStyles$new()}}
-\item \href{#method-isExistingStyle}{\code{TableStyles$isExistingStyle()}}
-\item \href{#method-getStyle}{\code{TableStyles$getStyle()}}
-\item \href{#method-addStyle}{\code{TableStyles$addStyle()}}
-\item \href{#method-copyStyle}{\code{TableStyles$copyStyle()}}
-\item \href{#method-asCSSRule}{\code{TableStyles$asCSSRule()}}
-\item \href{#method-asNamedCSSStyle}{\code{TableStyles$asNamedCSSStyle()}}
-\item \href{#method-asList}{\code{TableStyles$asList()}}
-\item \href{#method-asJSON}{\code{TableStyles$asJSON()}}
-\item \href{#method-asString}{\code{TableStyles$asString()}}
-\item \href{#method-clone}{\code{TableStyles$clone()}}
+\item \href{#method-TableStyles-new}{\code{TableStyles$new()}}
+\item \href{#method-TableStyles-isExistingStyle}{\code{TableStyles$isExistingStyle()}}
+\item \href{#method-TableStyles-getStyle}{\code{TableStyles$getStyle()}}
+\item \href{#method-TableStyles-addStyle}{\code{TableStyles$addStyle()}}
+\item \href{#method-TableStyles-copyStyle}{\code{TableStyles$copyStyle()}}
+\item \href{#method-TableStyles-asCSSRule}{\code{TableStyles$asCSSRule()}}
+\item \href{#method-TableStyles-asNamedCSSStyle}{\code{TableStyles$asNamedCSSStyle()}}
+\item \href{#method-TableStyles-asList}{\code{TableStyles$asList()}}
+\item \href{#method-TableStyles-asJSON}{\code{TableStyles$asJSON()}}
+\item \href{#method-TableStyles-asString}{\code{TableStyles$asString()}}
+\item \href{#method-TableStyles-clone}{\code{TableStyles$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TableStyles-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `TableStyles` object.
 \subsection{Usage}{
@@ -103,8 +103,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-isExistingStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-isExistingStyle}{}}}
+\if{html}{\out{<a id="method-TableStyles-isExistingStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-isExistingStyle}{}}}
 \subsection{Method \code{isExistingStyle()}}{
 Check whether a style with the specified name exists in the collection.
 \subsection{Usage}{
@@ -123,8 +123,8 @@ Check whether a style with the specified name exists in the collection.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-getStyle}{}}}
+\if{html}{\out{<a id="method-TableStyles-getStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-getStyle}{}}}
 \subsection{Method \code{getStyle()}}{
 Retrieve a style with the specified name from the collection.
 \subsection{Usage}{
@@ -143,8 +143,8 @@ A `TableStyle` object if a style with the specified name exists in the collectio
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-addStyle}{}}}
+\if{html}{\out{<a id="method-TableStyles-addStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-addStyle}{}}}
 \subsection{Method \code{addStyle()}}{
 Add a new style to the collection of styles.
 \subsection{Usage}{
@@ -166,8 +166,8 @@ The newly created `TableStyle` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copyStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-copyStyle}{}}}
+\if{html}{\out{<a id="method-TableStyles-copyStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-copyStyle}{}}}
 \subsection{Method \code{copyStyle()}}{
 Create a copy of an exist style.
 \subsection{Usage}{
@@ -188,8 +188,8 @@ The newly created `TableStyle` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asCSSRule"></a>}}
-\if{latex}{\out{\hypertarget{method-asCSSRule}{}}}
+\if{html}{\out{<a id="method-TableStyles-asCSSRule"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-asCSSRule}{}}}
 \subsection{Method \code{asCSSRule()}}{
 Generate a CSS style rule from the specified table style.
 \subsection{Usage}{
@@ -206,12 +206,12 @@ Generate a CSS style rule from the specified table style.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The CSS style rule, e.g. { text-align: center; color: red; }
+The CSS style rule, e.g. \{ text-align: center; color: red; \}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asNamedCSSStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-asNamedCSSStyle}{}}}
+\if{html}{\out{<a id="method-TableStyles-asNamedCSSStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-asNamedCSSStyle}{}}}
 \subsection{Method \code{asNamedCSSStyle()}}{
 Generate a named CSS style from the specified table style.
 \subsection{Usage}{
@@ -229,12 +229,12 @@ CSS styles, to avoid style name collisions where multiple tables exist.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The CSS style rule, e.g. cell { text-align: center; color: red; }
+The CSS style rule, e.g. cell \{ text-align: center; color: red; \}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asList"></a>}}
-\if{latex}{\out{\hypertarget{method-asList}{}}}
+\if{html}{\out{<a id="method-TableStyles-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-asList}{}}}
 \subsection{Method \code{asList()}}{
 Return the contents of this object as a list for debugging.
 \subsection{Usage}{
@@ -246,8 +246,8 @@ A list of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\if{html}{\out{<a id="method-TableStyles-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-asJSON}{}}}
 \subsection{Method \code{asJSON()}}{
 Return the contents of this object as JSON for debugging.
 \subsection{Usage}{
@@ -259,8 +259,8 @@ A JSON representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asString"></a>}}
-\if{latex}{\out{\hypertarget{method-asString}{}}}
+\if{html}{\out{<a id="method-TableStyles-asString"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-asString}{}}}
 \subsection{Method \code{asString()}}{
 Return the contents of this object as a string for debugging.
 \subsection{Usage}{
@@ -279,8 +279,8 @@ A character representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TableStyles-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TableStyles-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

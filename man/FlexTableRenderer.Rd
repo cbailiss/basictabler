@@ -5,7 +5,7 @@
 \alias{FlexTableRenderer}
 \title{R6 class that converts a table to a flextable from the `flextabler` package.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `FlexTableRenderer` class creates a representation of a table using
@@ -19,16 +19,16 @@ the `flextable` package.  See the Output vignette for more details.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FlexTableRenderer$new()}}
-\item \href{#method-writeToCell}{\code{FlexTableRenderer$writeToCell()}}
-\item \href{#method-writeBorder}{\code{FlexTableRenderer$writeBorder()}}
-\item \href{#method-asFlexTable}{\code{FlexTableRenderer$asFlexTable()}}
-\item \href{#method-clone}{\code{FlexTableRenderer$clone()}}
+\item \href{#method-FlexTableRenderer-new}{\code{FlexTableRenderer$new()}}
+\item \href{#method-FlexTableRenderer-writeToCell}{\code{FlexTableRenderer$writeToCell()}}
+\item \href{#method-FlexTableRenderer-writeBorder}{\code{FlexTableRenderer$writeBorder()}}
+\item \href{#method-FlexTableRenderer-asFlexTable}{\code{FlexTableRenderer$asFlexTable()}}
+\item \href{#method-FlexTableRenderer-clone}{\code{FlexTableRenderer$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-FlexTableRenderer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableRenderer-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `FlexTableRenderer` object.
 \subsection{Usage}{
@@ -47,8 +47,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-writeToCell"></a>}}
-\if{latex}{\out{\hypertarget{method-writeToCell}{}}}
+\if{html}{\out{<a id="method-FlexTableRenderer-writeToCell"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableRenderer-writeToCell}{}}}
 \subsection{Method \code{writeToCell()}}{
 Write a value to a cell, optionally with styling and cell merging.
 \subsection{Usage}{
@@ -78,6 +78,10 @@ written.}
 
 \item{\code{columnNumber}}{The column number of the cell where the value is to be
 written.}
+
+\item{\code{totalRowCount}}{Used when writing the cell border.}
+
+\item{\code{totalColumnCount}}{Used when writing the cell border.}
 
 \item{\code{value}}{The value to be written.  Since the flextable is created
 from a data frame, this argument can be omitted.}
@@ -110,8 +114,8 @@ The updated flextable definition.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-writeBorder"></a>}}
-\if{latex}{\out{\hypertarget{method-writeBorder}{}}}
+\if{html}{\out{<a id="method-FlexTableRenderer-writeBorder"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableRenderer-writeBorder}{}}}
 \subsection{Method \code{writeBorder()}}{
 Write the borders of a cell.
 \subsection{Usage}{
@@ -162,8 +166,8 @@ The updated flextable definition.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asFlexTable"></a>}}
-\if{latex}{\out{\hypertarget{method-asFlexTable}{}}}
+\if{html}{\out{<a id="method-FlexTableRenderer-asFlexTable"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableRenderer-asFlexTable}{}}}
 \subsection{Method \code{asFlexTable()}}{
 Convert table to a flextable table.
 \subsection{Usage}{
@@ -187,8 +191,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-FlexTableRenderer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableRenderer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

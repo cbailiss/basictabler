@@ -7,7 +7,7 @@
 #'
 #' @docType class
 #' @importFrom R6 R6Class
-#' @format \code{\link{R6Class}} object.
+#' @format \code{\link[R6]{R6Class}} object.
 #' @examples
 #' # TableCellRanges objects are never created outside of the BasicTable class.
 #' # For examples of working with merged cells, see the Introduction vignette.

@@ -5,7 +5,7 @@
 \alias{BasicTable}
 \title{R6 class that defines a basic table.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `BasicTable` class represents a table with styling and formatting that can
@@ -98,41 +98,40 @@ constructing the table, where the elapsed time > 0.1 seconds.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{BasicTable$new()}}
-\item \href{#method-getNextInstanceId}{\code{BasicTable$getNextInstanceId()}}
-\item \href{#method-addData}{\code{BasicTable$addData()}}
-\item \href{#method-addMatrix}{\code{BasicTable$addMatrix()}}
-\item \href{#method-mergeCells}{\code{BasicTable$mergeCells()}}
-\item \href{#method-unmergeCells}{\code{BasicTable$unmergeCells()}}
-\item \href{#method-applyCellMerges}{\code{BasicTable$applyCellMerges()}}
-\item \href{#method-formatValue}{\code{BasicTable$formatValue()}}
-\item \href{#method-addStyle}{\code{BasicTable$addStyle()}}
-\item \href{#method-createInlineStyle}{\code{BasicTable$createInlineStyle()}}
-\item \href{#method-setStyling}{\code{BasicTable$setStyling()}}
-\item \href{#method-mapStyling}{\code{BasicTable$mapStyling()}}
-\item \href{#method-resetCells}{\code{BasicTable$resetCells()}}
-\item \href{#method-getCells}{\code{BasicTable$getCells()}}
-\item \href{#method-findCells}{\code{BasicTable$findCells()}}
-\item \href{#method-print}{\code{BasicTable$print()}}
-\item \href{#method-asMatrix}{\code{BasicTable$asMatrix()}}
-\item \href{#method-asDataFrame}{\code{BasicTable$asDataFrame()}}
-\item \href{#method-getCss}{\code{BasicTable$getCss()}}
-\item \href{#method-getHtml}{\code{BasicTable$getHtml()}}
-\item \href{#method-saveHtml}{\code{BasicTable$saveHtml()}}
-\item \href{#method-renderTable}{\code{BasicTable$renderTable()}}
-\item \href{#method-writeToExcelWorksheet}{\code{BasicTable$writeToExcelWorksheet()}}
-\item \href{#method-asFlexTable}{\code{BasicTable$asFlexTable()}}
-\item \href{#method-trace}{\code{BasicTable$trace()}}
-\item \href{#method-asList}{\code{BasicTable$asList()}}
-\item \href{#method-asJSON}{\code{BasicTable$asJSON()}}
-\item \href{#method-viewJSON}{\code{BasicTable$viewJSON()}}
-\item \href{#method-finalize}{\code{BasicTable$finalize()}}
-\item \href{#method-clone}{\code{BasicTable$clone()}}
+\item \href{#method-BasicTable-new}{\code{BasicTable$new()}}
+\item \href{#method-BasicTable-getNextInstanceId}{\code{BasicTable$getNextInstanceId()}}
+\item \href{#method-BasicTable-addData}{\code{BasicTable$addData()}}
+\item \href{#method-BasicTable-addMatrix}{\code{BasicTable$addMatrix()}}
+\item \href{#method-BasicTable-mergeCells}{\code{BasicTable$mergeCells()}}
+\item \href{#method-BasicTable-unmergeCells}{\code{BasicTable$unmergeCells()}}
+\item \href{#method-BasicTable-applyCellMerges}{\code{BasicTable$applyCellMerges()}}
+\item \href{#method-BasicTable-formatValue}{\code{BasicTable$formatValue()}}
+\item \href{#method-BasicTable-addStyle}{\code{BasicTable$addStyle()}}
+\item \href{#method-BasicTable-createInlineStyle}{\code{BasicTable$createInlineStyle()}}
+\item \href{#method-BasicTable-setStyling}{\code{BasicTable$setStyling()}}
+\item \href{#method-BasicTable-mapStyling}{\code{BasicTable$mapStyling()}}
+\item \href{#method-BasicTable-resetCells}{\code{BasicTable$resetCells()}}
+\item \href{#method-BasicTable-getCells}{\code{BasicTable$getCells()}}
+\item \href{#method-BasicTable-findCells}{\code{BasicTable$findCells()}}
+\item \href{#method-BasicTable-print}{\code{BasicTable$print()}}
+\item \href{#method-BasicTable-asMatrix}{\code{BasicTable$asMatrix()}}
+\item \href{#method-BasicTable-asDataFrame}{\code{BasicTable$asDataFrame()}}
+\item \href{#method-BasicTable-getCss}{\code{BasicTable$getCss()}}
+\item \href{#method-BasicTable-getHtml}{\code{BasicTable$getHtml()}}
+\item \href{#method-BasicTable-saveHtml}{\code{BasicTable$saveHtml()}}
+\item \href{#method-BasicTable-renderTable}{\code{BasicTable$renderTable()}}
+\item \href{#method-BasicTable-writeToExcelWorksheet}{\code{BasicTable$writeToExcelWorksheet()}}
+\item \href{#method-BasicTable-asFlexTable}{\code{BasicTable$asFlexTable()}}
+\item \href{#method-BasicTable-trace}{\code{BasicTable$trace()}}
+\item \href{#method-BasicTable-asList}{\code{BasicTable$asList()}}
+\item \href{#method-BasicTable-asJSON}{\code{BasicTable$asJSON()}}
+\item \href{#method-BasicTable-viewJSON}{\code{BasicTable$viewJSON()}}
+\item \href{#method-BasicTable-clone}{\code{BasicTable$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-BasicTable-new"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `BasicTable` object.
 \subsection{Usage}{
@@ -197,8 +196,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getNextInstanceId"></a>}}
-\if{latex}{\out{\hypertarget{method-getNextInstanceId}{}}}
+\if{html}{\out{<a id="method-BasicTable-getNextInstanceId"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-getNextInstanceId}{}}}
 \subsection{Method \code{getNextInstanceId()}}{
 Get the next unique object instance identifier.
 \subsection{Usage}{
@@ -218,8 +217,8 @@ An integer instance id.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addData"></a>}}
-\if{latex}{\out{\hypertarget{method-addData}{}}}
+\if{html}{\out{<a id="method-BasicTable-addData"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-addData}{}}}
 \subsection{Method \code{addData()}}{
 Populate the table from a data frame, specifying headers and value
   formatting.
@@ -290,8 +289,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addMatrix"></a>}}
-\if{latex}{\out{\hypertarget{method-addMatrix}{}}}
+\if{html}{\out{<a id="method-BasicTable-addMatrix"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-addMatrix}{}}}
 \subsection{Method \code{addMatrix()}}{
 Populate the table from a matrix, specifying headers and value
   formatting.
@@ -349,8 +348,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mergeCells"></a>}}
-\if{latex}{\out{\hypertarget{method-mergeCells}{}}}
+\if{html}{\out{<a id="method-BasicTable-mergeCells"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-mergeCells}{}}}
 \subsection{Method \code{mergeCells()}}{
 Merge table cells by specifying either:\cr
 The top left cell (rFrom, cFrom) and the merged cell size (rSpan, cSpan) or,
@@ -395,8 +394,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-unmergeCells"></a>}}
-\if{latex}{\out{\hypertarget{method-unmergeCells}{}}}
+\if{html}{\out{<a id="method-BasicTable-unmergeCells"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-unmergeCells}{}}}
 \subsection{Method \code{unmergeCells()}}{
 Unmerge a set of merged cells by specifying any cell within the set of
 merged cells.
@@ -421,8 +420,8 @@ A new `TableCell` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-applyCellMerges"></a>}}
-\if{latex}{\out{\hypertarget{method-applyCellMerges}{}}}
+\if{html}{\out{<a id="method-BasicTable-applyCellMerges"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-applyCellMerges}{}}}
 \subsection{Method \code{applyCellMerges()}}{
 Internal method that sets the `isMerged` and `mergeIndex` properties on
 each cell based on the cell merges that have been specified.
@@ -435,8 +434,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-formatValue"></a>}}
-\if{latex}{\out{\hypertarget{method-formatValue}{}}}
+\if{html}{\out{<a id="method-BasicTable-formatValue"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-formatValue}{}}}
 \subsection{Method \code{formatValue()}}{
 Format a value using a variety of different methods.
 \subsection{Usage}{
@@ -464,8 +463,8 @@ converted to a character value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-addStyle}{}}}
+\if{html}{\out{<a id="method-BasicTable-addStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-addStyle}{}}}
 \subsection{Method \code{addStyle()}}{
 Add a new named style to the table.
 \subsection{Usage}{
@@ -487,8 +486,8 @@ The newly created `TableStyle` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-createInlineStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-createInlineStyle}{}}}
+\if{html}{\out{<a id="method-BasicTable-createInlineStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-createInlineStyle}{}}}
 \subsection{Method \code{createInlineStyle()}}{
 Create an inline style that can be used to override a base style.
 For general use cases, the `setStyling()` method provides a simpler
@@ -519,8 +518,8 @@ The newly created `TableStyle` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setStyling"></a>}}
-\if{latex}{\out{\hypertarget{method-setStyling}{}}}
+\if{html}{\out{<a id="method-BasicTable-setStyling"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-setStyling}{}}}
 \subsection{Method \code{setStyling()}}{
 Apply styling to a set of cells in the table.
 \subsection{Usage}{
@@ -607,8 +606,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mapStyling"></a>}}
-\if{latex}{\out{\hypertarget{method-mapStyling}{}}}
+\if{html}{\out{<a id="method-BasicTable-mapStyling"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-mapStyling}{}}}
 \subsection{Method \code{mapStyling()}}{
 Apply styling to table cells based on the value of each cell.
 \subsection{Usage}{
@@ -656,7 +655,7 @@ three forms:\cr
 (2) a list containing "from" and "to" vectors/lists, e.g.
 `list(from=c(0, 0.4, 0.8), to=c("red", "yellow", "green"))`.\cr
 (3) a custom mapping function that will be invoked once per cell, e.g.
-`function(v, cell) { if(isTRUE(v>0.8)) return("green") }`.\cr
+`function(v, cell) \{ if(isTRUE(v>0.8)) return("green") \}`.\cr
 Mappings must be specified in ascending order when valueType="range" or
 valueType="continuous".\cr
 If a custom mapping function is specified, then the valueType and mapType
@@ -700,8 +699,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetCells"></a>}}
-\if{latex}{\out{\hypertarget{method-resetCells}{}}}
+\if{html}{\out{<a id="method-BasicTable-resetCells"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-resetCells}{}}}
 \subsection{Method \code{resetCells()}}{
 Clear the cells of the table.
 \subsection{Usage}{
@@ -718,8 +717,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getCells"></a>}}
-\if{latex}{\out{\hypertarget{method-getCells}{}}}
+\if{html}{\out{<a id="method-BasicTable-getCells"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-getCells}{}}}
 \subsection{Method \code{getCells()}}{
 Retrieve cells by a combination of row and/or column numbers.
 See the "Finding and Formatting" vignette for graphical examples.
@@ -797,8 +796,8 @@ A list of `TableCell` objects.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-findCells"></a>}}
-\if{latex}{\out{\hypertarget{method-findCells}{}}}
+\if{html}{\out{<a id="method-BasicTable-findCells"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-findCells}{}}}
 \subsection{Method \code{findCells()}}{
 Find cells matching specified criteria.
 See the "Finding and Formatting" vignette for graphical examples.
@@ -885,8 +884,8 @@ A list of `TableCell` objects.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-BasicTable-print"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-print}{}}}
 \subsection{Method \code{print()}}{
 Outputs a plain text representation of the table to the console or
 returns a character representation of the table.
@@ -907,8 +906,8 @@ Plain text representation of the table.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asMatrix"></a>}}
-\if{latex}{\out{\hypertarget{method-asMatrix}{}}}
+\if{html}{\out{<a id="method-BasicTable-asMatrix"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-asMatrix}{}}}
 \subsection{Method \code{asMatrix()}}{
 Convert the table to a matrix, with or without headings.
 \subsection{Usage}{
@@ -942,8 +941,8 @@ A matrix.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asDataFrame"></a>}}
-\if{latex}{\out{\hypertarget{method-asDataFrame}{}}}
+\if{html}{\out{<a id="method-BasicTable-asDataFrame"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-asDataFrame}{}}}
 \subsection{Method \code{asDataFrame()}}{
 Convert the table to a data frame, with or without headings.
 \subsection{Usage}{
@@ -982,8 +981,8 @@ A matrix.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getCss"></a>}}
-\if{latex}{\out{\hypertarget{method-getCss}{}}}
+\if{html}{\out{<a id="method-BasicTable-getCss"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-getCss}{}}}
 \subsection{Method \code{getCss()}}{
 Get the CSS declarations for the table.
 \subsection{Usage}{
@@ -1007,8 +1006,8 @@ A character value containing the CSS style declaration.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getHtml"></a>}}
-\if{latex}{\out{\hypertarget{method-getHtml}{}}}
+\if{html}{\out{<a id="method-BasicTable-getHtml"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-getHtml}{}}}
 \subsection{Method \code{getHtml()}}{
 Generate a HTML representation of the table.
 \subsection{Usage}{
@@ -1033,8 +1032,8 @@ Convert this to a character variable using `as.character()`.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-saveHtml"></a>}}
-\if{latex}{\out{\hypertarget{method-saveHtml}{}}}
+\if{html}{\out{<a id="method-BasicTable-saveHtml"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-saveHtml}{}}}
 \subsection{Method \code{saveHtml()}}{
 Save a HTML representation of the table to file.
 \subsection{Usage}{
@@ -1067,8 +1066,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-renderTable"></a>}}
-\if{latex}{\out{\hypertarget{method-renderTable}{}}}
+\if{html}{\out{<a id="method-BasicTable-renderTable"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-renderTable}{}}}
 \subsection{Method \code{renderTable()}}{
 Render a HTML representation of the table as an HTML widget.
 \subsection{Usage}{
@@ -1096,8 +1095,8 @@ A HTML widget from the `htmlwidgets` package.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-writeToExcelWorksheet"></a>}}
-\if{latex}{\out{\hypertarget{method-writeToExcelWorksheet}{}}}
+\if{html}{\out{<a id="method-BasicTable-writeToExcelWorksheet"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-writeToExcelWorksheet}{}}}
 \subsection{Method \code{writeToExcelWorksheet()}}{
 Write the table into the specified workbook and worksheet at
 the specified row-column location.
@@ -1153,8 +1152,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asFlexTable"></a>}}
-\if{latex}{\out{\hypertarget{method-asFlexTable}{}}}
+\if{html}{\out{<a id="method-BasicTable-asFlexTable"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-asFlexTable}{}}}
 \subsection{Method \code{asFlexTable()}}{
 Convert table to a flextable table..
 \subsection{Usage}{
@@ -1180,8 +1179,8 @@ A table from the flextable package.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-trace"></a>}}
-\if{latex}{\out{\hypertarget{method-trace}{}}}
+\if{html}{\out{<a id="method-BasicTable-trace"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-trace}{}}}
 \subsection{Method \code{trace()}}{
 Capture a call for tracing purposes.
 This is an internal method.
@@ -1205,8 +1204,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asList"></a>}}
-\if{latex}{\out{\hypertarget{method-asList}{}}}
+\if{html}{\out{<a id="method-BasicTable-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-asList}{}}}
 \subsection{Method \code{asList()}}{
 Return the contents of the table as a list for debugging.
 \subsection{Usage}{
@@ -1218,8 +1217,8 @@ A list of various object properties..
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\if{html}{\out{<a id="method-BasicTable-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-asJSON}{}}}
 \subsection{Method \code{asJSON()}}{
 Return the contents of the table as JSON for debugging.
 \subsection{Usage}{
@@ -1231,8 +1230,8 @@ A JSON representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-viewJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-viewJSON}{}}}
+\if{html}{\out{<a id="method-BasicTable-viewJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-viewJSON}{}}}
 \subsection{Method \code{viewJSON()}}{
 Use the `listviewer` package to view the table as JSON for debugging.
 \subsection{Usage}{
@@ -1244,21 +1243,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-finalize}{}}}
-\subsection{Method \code{finalize()}}{
-Clean-up the table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{BasicTable$finalize()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-No return value.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-BasicTable-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-BasicTable-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

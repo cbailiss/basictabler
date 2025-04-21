@@ -5,7 +5,7 @@
 \alias{TableCell}
 \title{R6 class that represents a cell in a table.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `TableCell` class represents a cell in a table.  Both header cells and body
@@ -68,17 +68,17 @@ for this cell.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TableCell$new()}}
-\item \href{#method-updatePosition}{\code{TableCell$updatePosition()}}
-\item \href{#method-getCopy}{\code{TableCell$getCopy()}}
-\item \href{#method-asList}{\code{TableCell$asList()}}
-\item \href{#method-asJSON}{\code{TableCell$asJSON()}}
-\item \href{#method-clone}{\code{TableCell$clone()}}
+\item \href{#method-TableCell-new}{\code{TableCell$new()}}
+\item \href{#method-TableCell-updatePosition}{\code{TableCell$updatePosition()}}
+\item \href{#method-TableCell-getCopy}{\code{TableCell$getCopy()}}
+\item \href{#method-TableCell-asList}{\code{TableCell$asList()}}
+\item \href{#method-TableCell-asJSON}{\code{TableCell$asJSON()}}
+\item \href{#method-TableCell-clone}{\code{TableCell$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TableCell-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCell-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `TableCell` object.
 \subsection{Usage}{
@@ -134,8 +134,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updatePosition"></a>}}
-\if{latex}{\out{\hypertarget{method-updatePosition}{}}}
+\if{html}{\out{<a id="method-TableCell-updatePosition"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCell-updatePosition}{}}}
 \subsection{Method \code{updatePosition()}}{
 Set the cell location in the table.  Mainly exists for internal use.
 Typically used after rows/columns/cells are inserted or deleted (which
@@ -160,8 +160,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getCopy"></a>}}
-\if{latex}{\out{\hypertarget{method-getCopy}{}}}
+\if{html}{\out{<a id="method-TableCell-getCopy"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCell-getCopy}{}}}
 \subsection{Method \code{getCopy()}}{
 Stub only (ignore).
 \subsection{Usage}{
@@ -173,8 +173,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asList"></a>}}
-\if{latex}{\out{\hypertarget{method-asList}{}}}
+\if{html}{\out{<a id="method-TableCell-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCell-asList}{}}}
 \subsection{Method \code{asList()}}{
 Return the contents of this object as a list for debugging.
 \subsection{Usage}{
@@ -186,8 +186,8 @@ A list of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\if{html}{\out{<a id="method-TableCell-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCell-asJSON}{}}}
 \subsection{Method \code{asJSON()}}{
 Return the contents of this object as JSON for debugging.
 \subsection{Usage}{
@@ -199,8 +199,8 @@ A JSON representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TableCell-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCell-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

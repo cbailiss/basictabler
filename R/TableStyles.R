@@ -8,7 +8,7 @@
 #' @docType class
 #' @importFrom R6 R6Class
 #' @export
-#' @format \code{\link{R6Class}} object.
+#' @format \code{\link[R6]{R6Class}} object.
 #' @examples
 #' # Creating styles is part of defining a theme for a table.
 #' # Multiple styles must be created for each theme.
@@ -126,7 +126,7 @@ TableStyles <- R6::R6Class("TableStyles",
    #' Generate a CSS style rule from the specified table style.
    #' @param styleName The style name.
    #' @param selector The CSS selector name.  Default value `NULL`.
-   #' @return The CSS style rule, e.g. { text-align: center; color: red; }
+   #' @return The CSS style rule, e.g. \{ text-align: center; color: red; \}
     asCSSRule = function(styleName=NULL, selector=NULL) {
       if(private$p_parentTable$argumentCheckMode > 0) {
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyles", "asCSSRule", styleName, missing(styleName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")
@@ -144,7 +144,7 @@ TableStyles <- R6::R6Class("TableStyles",
    #' @param styleName The style name.
    #' @param styleNamePrefix A character variable specifying a prefix for all named
    #' CSS styles, to avoid style name collisions where multiple tables exist.
-   #' @return The CSS style rule, e.g. cell { text-align: center; color: red; }
+   #' @return The CSS style rule, e.g. cell \{ text-align: center; color: red; \}
     asNamedCSSStyle = function(styleName=NULL, styleNamePrefix=NULL) {
       if(private$p_parentTable$argumentCheckMode > 0) {
         checkArgument(private$p_parentTable$argumentCheckMode, FALSE, "TableStyles", "asNamedCSSStyle", styleName, missing(styleName), allowMissing=FALSE, allowNull=FALSE, allowedClasses="character")

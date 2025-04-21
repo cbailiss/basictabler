@@ -5,7 +5,7 @@
 \alias{TableOpenXlsxStyle}
 \title{R6 class that specifies Excel styling as used by the openxlsx package.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `TableOpenXlsxStyle` class specifies the styling for cells in an
@@ -97,19 +97,19 @@ for numeric values, use 0.00 etc.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TableOpenXlsxStyle$new()}}
-\item \href{#method-isBasicStyleNameMatch}{\code{TableOpenXlsxStyle$isBasicStyleNameMatch()}}
-\item \href{#method-isFullStyleDetailMatch}{\code{TableOpenXlsxStyle$isFullStyleDetailMatch()}}
-\item \href{#method-createOpenXslxStyle}{\code{TableOpenXlsxStyle$createOpenXslxStyle()}}
-\item \href{#method-asList}{\code{TableOpenXlsxStyle$asList()}}
-\item \href{#method-asJSON}{\code{TableOpenXlsxStyle$asJSON()}}
-\item \href{#method-asString}{\code{TableOpenXlsxStyle$asString()}}
-\item \href{#method-clone}{\code{TableOpenXlsxStyle$clone()}}
+\item \href{#method-TableOpenXlsxStyle-new}{\code{TableOpenXlsxStyle$new()}}
+\item \href{#method-TableOpenXlsxStyle-isBasicStyleNameMatch}{\code{TableOpenXlsxStyle$isBasicStyleNameMatch()}}
+\item \href{#method-TableOpenXlsxStyle-isFullStyleDetailMatch}{\code{TableOpenXlsxStyle$isFullStyleDetailMatch()}}
+\item \href{#method-TableOpenXlsxStyle-createOpenXslxStyle}{\code{TableOpenXlsxStyle$createOpenXslxStyle()}}
+\item \href{#method-TableOpenXlsxStyle-asList}{\code{TableOpenXlsxStyle$asList()}}
+\item \href{#method-TableOpenXlsxStyle-asJSON}{\code{TableOpenXlsxStyle$asJSON()}}
+\item \href{#method-TableOpenXlsxStyle-asString}{\code{TableOpenXlsxStyle$asString()}}
+\item \href{#method-TableOpenXlsxStyle-clone}{\code{TableOpenXlsxStyle$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxStyle-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxStyle-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `TableOpenXlsxStyle` object.
 \subsection{Usage}{
@@ -218,8 +218,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-isBasicStyleNameMatch"></a>}}
-\if{latex}{\out{\hypertarget{method-isBasicStyleNameMatch}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxStyle-isBasicStyleNameMatch"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxStyle-isBasicStyleNameMatch}{}}}
 \subsection{Method \code{isBasicStyleNameMatch()}}{
 Check if this style matches the specified base style name.
 \subsection{Usage}{
@@ -238,8 +238,8 @@ Check if this style matches the specified base style name.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-isFullStyleDetailMatch"></a>}}
-\if{latex}{\out{\hypertarget{method-isFullStyleDetailMatch}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxStyle-isFullStyleDetailMatch"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxStyle-isFullStyleDetailMatch}{}}}
 \subsection{Method \code{isFullStyleDetailMatch()}}{
 Check if this style matches the specified style properties.
 \subsection{Usage}{
@@ -332,8 +332,8 @@ Check if this style matches the specified style properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-createOpenXslxStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-createOpenXslxStyle}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxStyle-createOpenXslxStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxStyle-createOpenXslxStyle}{}}}
 \subsection{Method \code{createOpenXslxStyle()}}{
 Create the `openxlsx` style based on the specified style properties.
 \subsection{Usage}{
@@ -345,8 +345,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asList"></a>}}
-\if{latex}{\out{\hypertarget{method-asList}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxStyle-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxStyle-asList}{}}}
 \subsection{Method \code{asList()}}{
 Return the contents of this object as a list for debugging.
 \subsection{Usage}{
@@ -358,8 +358,8 @@ A list of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxStyle-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxStyle-asJSON}{}}}
 \subsection{Method \code{asJSON()}}{
 Return the contents of this object as JSON for debugging.
 \subsection{Usage}{
@@ -371,8 +371,8 @@ A JSON representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asString"></a>}}
-\if{latex}{\out{\hypertarget{method-asString}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxStyle-asString"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxStyle-asString}{}}}
 \subsection{Method \code{asString()}}{
 Return the contents of this object as a string for debugging.
 \subsection{Usage}{
@@ -384,8 +384,8 @@ A character representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxStyle-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxStyle-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

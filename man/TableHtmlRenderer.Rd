@@ -5,7 +5,7 @@
 \alias{TableHtmlRenderer}
 \title{R6 class that renders a table in HTML.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `TableHtmlRenderer` class creates a HTML representation of a table.
@@ -21,14 +21,14 @@ tbl$renderTable()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TableHtmlRenderer$new()}}
-\item \href{#method-getTableHtml}{\code{TableHtmlRenderer$getTableHtml()}}
-\item \href{#method-clone}{\code{TableHtmlRenderer$clone()}}
+\item \href{#method-TableHtmlRenderer-new}{\code{TableHtmlRenderer$new()}}
+\item \href{#method-TableHtmlRenderer-getTableHtml}{\code{TableHtmlRenderer$getTableHtml()}}
+\item \href{#method-TableHtmlRenderer-clone}{\code{TableHtmlRenderer$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TableHtmlRenderer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TableHtmlRenderer-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `TableHtmlRenderer` object.
 \subsection{Usage}{
@@ -47,8 +47,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getTableHtml"></a>}}
-\if{latex}{\out{\hypertarget{method-getTableHtml}{}}}
+\if{html}{\out{<a id="method-TableHtmlRenderer-getTableHtml"></a>}}
+\if{latex}{\out{\hypertarget{method-TableHtmlRenderer-getTableHtml}{}}}
 \subsection{Method \code{getTableHtml()}}{
 Generate a HTML representation of the table.
 \subsection{Usage}{
@@ -69,8 +69,8 @@ Convert this to a character variable using `as.character()`.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TableHtmlRenderer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TableHtmlRenderer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

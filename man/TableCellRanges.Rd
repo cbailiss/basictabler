@@ -5,7 +5,7 @@
 \alias{TableCellRanges}
 \title{R6 class that manages cell ranges (e.g. for merged cells).}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `TableCellRanges` class contains a list of cell ranges and provides
@@ -27,23 +27,23 @@ another list containing the range extent.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TableCellRanges$new()}}
-\item \href{#method-addRange}{\code{TableCellRanges$addRange()}}
-\item \href{#method-findIntersectingRange}{\code{TableCellRanges$findIntersectingRange()}}
-\item \href{#method-deleteRange}{\code{TableCellRanges$deleteRange()}}
-\item \href{#method-clear}{\code{TableCellRanges$clear()}}
-\item \href{#method-updateAfterRowInsert}{\code{TableCellRanges$updateAfterRowInsert()}}
-\item \href{#method-updateAfterRowDelete}{\code{TableCellRanges$updateAfterRowDelete()}}
-\item \href{#method-updateAfterColumnInsert}{\code{TableCellRanges$updateAfterColumnInsert()}}
-\item \href{#method-updateAfterColumnDelete}{\code{TableCellRanges$updateAfterColumnDelete()}}
-\item \href{#method-asList}{\code{TableCellRanges$asList()}}
-\item \href{#method-asJSON}{\code{TableCellRanges$asJSON()}}
-\item \href{#method-clone}{\code{TableCellRanges$clone()}}
+\item \href{#method-TableCellRanges-new}{\code{TableCellRanges$new()}}
+\item \href{#method-TableCellRanges-addRange}{\code{TableCellRanges$addRange()}}
+\item \href{#method-TableCellRanges-findIntersectingRange}{\code{TableCellRanges$findIntersectingRange()}}
+\item \href{#method-TableCellRanges-deleteRange}{\code{TableCellRanges$deleteRange()}}
+\item \href{#method-TableCellRanges-clear}{\code{TableCellRanges$clear()}}
+\item \href{#method-TableCellRanges-updateAfterRowInsert}{\code{TableCellRanges$updateAfterRowInsert()}}
+\item \href{#method-TableCellRanges-updateAfterRowDelete}{\code{TableCellRanges$updateAfterRowDelete()}}
+\item \href{#method-TableCellRanges-updateAfterColumnInsert}{\code{TableCellRanges$updateAfterColumnInsert()}}
+\item \href{#method-TableCellRanges-updateAfterColumnDelete}{\code{TableCellRanges$updateAfterColumnDelete()}}
+\item \href{#method-TableCellRanges-asList}{\code{TableCellRanges$asList()}}
+\item \href{#method-TableCellRanges-asJSON}{\code{TableCellRanges$asJSON()}}
+\item \href{#method-TableCellRanges-clone}{\code{TableCellRanges$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `TableCellRanges` object.
 \subsection{Usage}{
@@ -62,8 +62,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addRange"></a>}}
-\if{latex}{\out{\hypertarget{method-addRange}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-addRange"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-addRange}{}}}
 \subsection{Method \code{addRange()}}{
 Add a cell range to the list of cell ranges.  It is not
 necessary to specify all parameters. rFrom and cFrom must be specified.
@@ -102,8 +102,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-findIntersectingRange"></a>}}
-\if{latex}{\out{\hypertarget{method-findIntersectingRange}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-findIntersectingRange"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-findIntersectingRange}{}}}
 \subsection{Method \code{findIntersectingRange()}}{
 Find a cell range in the list of cell ranges that intersects with the
 specified cell range. It is not necessary to specify all parameters.
@@ -142,8 +142,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deleteRange"></a>}}
-\if{latex}{\out{\hypertarget{method-deleteRange}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-deleteRange"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-deleteRange}{}}}
 \subsection{Method \code{deleteRange()}}{
 Delete the cell range from the list that contains the specified cell.
 \subsection{Usage}{
@@ -164,8 +164,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clear"></a>}}
-\if{latex}{\out{\hypertarget{method-clear}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-clear"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-clear}{}}}
 \subsection{Method \code{clear()}}{
 Clear the list of cell ranges.
 \subsection{Usage}{
@@ -177,8 +177,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateAfterRowInsert"></a>}}
-\if{latex}{\out{\hypertarget{method-updateAfterRowInsert}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-updateAfterRowInsert"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-updateAfterRowInsert}{}}}
 \subsection{Method \code{updateAfterRowInsert()}}{
 Internal use only.
 \subsection{Usage}{
@@ -197,8 +197,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateAfterRowDelete"></a>}}
-\if{latex}{\out{\hypertarget{method-updateAfterRowDelete}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-updateAfterRowDelete"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-updateAfterRowDelete}{}}}
 \subsection{Method \code{updateAfterRowDelete()}}{
 Internal use only.
 \subsection{Usage}{
@@ -217,8 +217,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateAfterColumnInsert"></a>}}
-\if{latex}{\out{\hypertarget{method-updateAfterColumnInsert}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-updateAfterColumnInsert"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-updateAfterColumnInsert}{}}}
 \subsection{Method \code{updateAfterColumnInsert()}}{
 Internal use only.
 \subsection{Usage}{
@@ -237,8 +237,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateAfterColumnDelete"></a>}}
-\if{latex}{\out{\hypertarget{method-updateAfterColumnDelete}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-updateAfterColumnDelete"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-updateAfterColumnDelete}{}}}
 \subsection{Method \code{updateAfterColumnDelete()}}{
 Internal use only.
 \subsection{Usage}{
@@ -257,8 +257,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asList"></a>}}
-\if{latex}{\out{\hypertarget{method-asList}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-asList}{}}}
 \subsection{Method \code{asList()}}{
 Return the contents of this object as a list for debugging.
 \subsection{Usage}{
@@ -270,8 +270,8 @@ A list of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-asJSON}{}}}
 \subsection{Method \code{asJSON()}}{
 Return the contents of this object as JSON for debugging.
 \subsection{Usage}{
@@ -283,8 +283,8 @@ A JSON representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TableCellRanges-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCellRanges-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

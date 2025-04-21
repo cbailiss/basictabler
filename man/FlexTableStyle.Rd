@@ -5,7 +5,7 @@
 \alias{FlexTableStyle}
 \title{R6 class that specifies styling as used by the `flextable` package.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `FlexTableStyle` class specifies the styling for cells in a
@@ -74,18 +74,18 @@ border settings for the bottom border of each cell.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FlexTableStyle$new()}}
-\item \href{#method-isBasicStyleNameMatch}{\code{FlexTableStyle$isBasicStyleNameMatch()}}
-\item \href{#method-isFullStyleDetailMatch}{\code{FlexTableStyle$isFullStyleDetailMatch()}}
-\item \href{#method-asList}{\code{FlexTableStyle$asList()}}
-\item \href{#method-asJSON}{\code{FlexTableStyle$asJSON()}}
-\item \href{#method-asString}{\code{FlexTableStyle$asString()}}
-\item \href{#method-clone}{\code{FlexTableStyle$clone()}}
+\item \href{#method-FlexTableStyle-new}{\code{FlexTableStyle$new()}}
+\item \href{#method-FlexTableStyle-isBasicStyleNameMatch}{\code{FlexTableStyle$isBasicStyleNameMatch()}}
+\item \href{#method-FlexTableStyle-isFullStyleDetailMatch}{\code{FlexTableStyle$isFullStyleDetailMatch()}}
+\item \href{#method-FlexTableStyle-asList}{\code{FlexTableStyle$asList()}}
+\item \href{#method-FlexTableStyle-asJSON}{\code{FlexTableStyle$asJSON()}}
+\item \href{#method-FlexTableStyle-asString}{\code{FlexTableStyle$asString()}}
+\item \href{#method-FlexTableStyle-clone}{\code{FlexTableStyle$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-FlexTableStyle-new"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyle-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `FlexTableStyle` object.
 \subsection{Usage}{
@@ -178,8 +178,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-isBasicStyleNameMatch"></a>}}
-\if{latex}{\out{\hypertarget{method-isBasicStyleNameMatch}{}}}
+\if{html}{\out{<a id="method-FlexTableStyle-isBasicStyleNameMatch"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyle-isBasicStyleNameMatch}{}}}
 \subsection{Method \code{isBasicStyleNameMatch()}}{
 Check if this style matches the specified base style name.
 \subsection{Usage}{
@@ -198,8 +198,8 @@ Check if this style matches the specified base style name.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-isFullStyleDetailMatch"></a>}}
-\if{latex}{\out{\hypertarget{method-isFullStyleDetailMatch}{}}}
+\if{html}{\out{<a id="method-FlexTableStyle-isFullStyleDetailMatch"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyle-isFullStyleDetailMatch}{}}}
 \subsection{Method \code{isFullStyleDetailMatch()}}{
 Check if this style matches the specified style properties.
 \subsection{Usage}{
@@ -286,8 +286,8 @@ Check if this style matches the specified style properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asList"></a>}}
-\if{latex}{\out{\hypertarget{method-asList}{}}}
+\if{html}{\out{<a id="method-FlexTableStyle-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyle-asList}{}}}
 \subsection{Method \code{asList()}}{
 Return the contents of this object as a list for debugging.
 \subsection{Usage}{
@@ -299,8 +299,8 @@ A list of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\if{html}{\out{<a id="method-FlexTableStyle-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyle-asJSON}{}}}
 \subsection{Method \code{asJSON()}}{
 Return the contents of this object as JSON for debugging.
 \subsection{Usage}{
@@ -312,8 +312,8 @@ A JSON representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asString"></a>}}
-\if{latex}{\out{\hypertarget{method-asString}{}}}
+\if{html}{\out{<a id="method-FlexTableStyle-asString"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyle-asString}{}}}
 \subsection{Method \code{asString()}}{
 Return the contents of this object as a string for debugging.
 \subsection{Usage}{
@@ -325,8 +325,8 @@ A character representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-FlexTableStyle-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyle-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -6,7 +6,7 @@
 #'
 #' @docType class
 #' @importFrom R6 R6Class
-#' @format \code{\link{R6Class}} object.
+#' @format \code{\link[R6]{R6Class}} object.
 #' @examples
 #' # This class should only be created by using the functions in the table.
 #' # It is not intended to be created by users outside of the table.

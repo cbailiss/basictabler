@@ -6,7 +6,7 @@
 \title{R6 class that defines a collection of styles as used by the `flextable`
 package.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `FlexTableStyles` class stores a collection of `FlexTableStyle`
@@ -29,20 +29,20 @@ style objects.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FlexTableStyles$new()}}
-\item \href{#method-clearStyles}{\code{FlexTableStyles$clearStyles()}}
-\item \href{#method-findNamedStyle}{\code{FlexTableStyles$findNamedStyle()}}
-\item \href{#method-findOrAddStyle}{\code{FlexTableStyles$findOrAddStyle()}}
-\item \href{#method-addNamedStyles}{\code{FlexTableStyles$addNamedStyles()}}
-\item \href{#method-asList}{\code{FlexTableStyles$asList()}}
-\item \href{#method-asJSON}{\code{FlexTableStyles$asJSON()}}
-\item \href{#method-asString}{\code{FlexTableStyles$asString()}}
-\item \href{#method-clone}{\code{FlexTableStyles$clone()}}
+\item \href{#method-FlexTableStyles-new}{\code{FlexTableStyles$new()}}
+\item \href{#method-FlexTableStyles-clearStyles}{\code{FlexTableStyles$clearStyles()}}
+\item \href{#method-FlexTableStyles-findNamedStyle}{\code{FlexTableStyles$findNamedStyle()}}
+\item \href{#method-FlexTableStyles-findOrAddStyle}{\code{FlexTableStyles$findOrAddStyle()}}
+\item \href{#method-FlexTableStyles-addNamedStyles}{\code{FlexTableStyles$addNamedStyles()}}
+\item \href{#method-FlexTableStyles-asList}{\code{FlexTableStyles$asList()}}
+\item \href{#method-FlexTableStyles-asJSON}{\code{FlexTableStyles$asJSON()}}
+\item \href{#method-FlexTableStyles-asString}{\code{FlexTableStyles$asString()}}
+\item \href{#method-FlexTableStyles-clone}{\code{FlexTableStyles$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-new"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `FlexTableStyles` object.
 \subsection{Usage}{
@@ -61,8 +61,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clearStyles"></a>}}
-\if{latex}{\out{\hypertarget{method-clearStyles}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-clearStyles"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-clearStyles}{}}}
 \subsection{Method \code{clearStyles()}}{
 Clear the collection removing all styles.
 \subsection{Usage}{
@@ -74,8 +74,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-findNamedStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-findNamedStyle}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-findNamedStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-findNamedStyle}{}}}
 \subsection{Method \code{findNamedStyle()}}{
 Find a style in the collection matching the specified base style name.
 \subsection{Usage}{
@@ -95,8 +95,8 @@ A `TableTableFlexTbl` object that is the style matching the
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-findOrAddStyle"></a>}}
-\if{latex}{\out{\hypertarget{method-findOrAddStyle}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-findOrAddStyle"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-findOrAddStyle}{}}}
 \subsection{Method \code{findOrAddStyle()}}{
 Find a style in the collection matching the specified base style name and
 style properties.  If there is no matching style, then optionally add a
@@ -135,8 +135,8 @@ A `TableTableFlexTbl` object that is the style matching the
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addNamedStyles"></a>}}
-\if{latex}{\out{\hypertarget{method-addNamedStyles}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-addNamedStyles"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-addNamedStyles}{}}}
 \subsection{Method \code{addNamedStyles()}}{
 Populate the FlexTbl styles
   based on the styles defined in the table.
@@ -158,8 +158,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asList"></a>}}
-\if{latex}{\out{\hypertarget{method-asList}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-asList}{}}}
 \subsection{Method \code{asList()}}{
 Return the contents of this object as a list for debugging.
 \subsection{Usage}{
@@ -171,8 +171,8 @@ A list of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-asJSON}{}}}
 \subsection{Method \code{asJSON()}}{
 Return the contents of this object as JSON for debugging.
 \subsection{Usage}{
@@ -184,8 +184,8 @@ A JSON representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asString"></a>}}
-\if{latex}{\out{\hypertarget{method-asString}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-asString"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-asString}{}}}
 \subsection{Method \code{asString()}}{
 Return the contents of this object as a string for debugging.
 \subsection{Usage}{
@@ -204,8 +204,8 @@ A character representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-FlexTableStyles-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-FlexTableStyles-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

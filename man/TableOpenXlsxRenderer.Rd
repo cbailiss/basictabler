@@ -5,7 +5,7 @@
 \alias{TableOpenXlsxRenderer}
 \title{R6 class that renders a table into an Excel worksheet.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `TableOpenXlsxRenderer` class creates a representation of a table in an
@@ -28,15 +28,15 @@ tbl$writeToExcelWorksheet(wb=wb, wsName="Data",
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TableOpenXlsxRenderer$new()}}
-\item \href{#method-writeToCell}{\code{TableOpenXlsxRenderer$writeToCell()}}
-\item \href{#method-writeToWorksheet}{\code{TableOpenXlsxRenderer$writeToWorksheet()}}
-\item \href{#method-clone}{\code{TableOpenXlsxRenderer$clone()}}
+\item \href{#method-TableOpenXlsxRenderer-new}{\code{TableOpenXlsxRenderer$new()}}
+\item \href{#method-TableOpenXlsxRenderer-writeToCell}{\code{TableOpenXlsxRenderer$writeToCell()}}
+\item \href{#method-TableOpenXlsxRenderer-writeToWorksheet}{\code{TableOpenXlsxRenderer$writeToWorksheet()}}
+\item \href{#method-TableOpenXlsxRenderer-clone}{\code{TableOpenXlsxRenderer$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxRenderer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxRenderer-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `TableOpenXlsxRenderer` object.
 \subsection{Usage}{
@@ -55,8 +55,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-writeToCell"></a>}}
-\if{latex}{\out{\hypertarget{method-writeToCell}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxRenderer-writeToCell"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxRenderer-writeToCell}{}}}
 \subsection{Method \code{writeToCell()}}{
 Write a value to a cell, optionally with styling and cell merging.
 \subsection{Usage}{
@@ -118,8 +118,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-writeToWorksheet"></a>}}
-\if{latex}{\out{\hypertarget{method-writeToWorksheet}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxRenderer-writeToWorksheet"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxRenderer-writeToWorksheet}{}}}
 \subsection{Method \code{writeToWorksheet()}}{
 Write a table to an Excel worksheet.
 \subsection{Usage}{
@@ -170,8 +170,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TableOpenXlsxRenderer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TableOpenXlsxRenderer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

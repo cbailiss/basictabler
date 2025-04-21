@@ -1,3 +1,12 @@
+basictabler 1.0.4
+================
+
+Bug Fixes
+----------------
+
+Various small changes in response to CRAN notes.
+
+
 basictabler 1.0.3
 ================
 
@@ -165,8 +174,3 @@ basictabler 0.1.0
 
 Initial version.
 
-
-Earlier versions
-================
-
-No versions prior to 0.1.0 were released.

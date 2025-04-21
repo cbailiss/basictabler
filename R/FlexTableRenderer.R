@@ -6,7 +6,7 @@
 #'
 #' @docType class
 #' @importFrom R6 R6Class
-#' @format \code{\link{R6Class}} object.
+#' @format \code{\link[R6]{R6Class}} object.
 #' @examples
 #' # This class should not be used by end users.  It is an internal class
 #' # created only by the BasicTable class.  It is used when converting to a
@@ -36,6 +36,8 @@ FlexTableRenderer <- R6::R6Class("FlexTableRenderer",
     #'   written.
     #' @param columnNumber The column number of the cell where the value is to be
     #'   written.
+    #' @param totalRowCount Used when writing the cell border.
+    #' @param totalColumnCount Used when writing the cell border.
     #' @param value The value to be written.  Since the flextable is created
     #'   from a data frame, this argument can be omitted.
     #' @param applyStyles `TRUE` (default) to also set the styling of the cell,

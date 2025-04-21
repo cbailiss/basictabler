@@ -9,7 +9,7 @@
 #' @import htmlwidgets
 #' @import htmltools
 #' @export
-#' @format \code{\link{R6Class}} object.
+#' @format \code{\link[R6]{R6Class}} object.
 #' @examples
 #' # The package vignettes have many more examples of working with the
 #' # BasicTable class.
@@ -1019,7 +1019,7 @@ BasicTable <- R6::R6Class("BasicTable",
     #' (2) a list containing "from" and "to" vectors/lists, e.g.
     #' `list(from=c(0, 0.4, 0.8), to=c("red", "yellow", "green"))`.\cr
     #' (3) a custom mapping function that will be invoked once per cell, e.g.
-    #' `function(v, cell) { if(isTRUE(v>0.8)) return("green") }`.\cr
+    #' `function(v, cell) \{ if(isTRUE(v>0.8)) return("green") \}`.\cr
     #' Mappings must be specified in ascending order when valueType="range" or
     #' valueType="continuous".\cr
     #' If a custom mapping function is specified, then the valueType and mapType
@@ -1996,13 +1996,6 @@ BasicTable <- R6::R6Class("BasicTable",
         stop("BasicTable$asJSON():  The listviewer package is needed to view the internal structure of the BasicTable as JSON.  Please install it.", call. = FALSE)
       }
       listviewer::jsonedit(self$asList(), mode="code")
-    },
-
-    #' @description
-    #' Clean-up the table.
-    #' @return No return value.
-    finalize = function() {
-      if(!is.null(private$p_traceFile)) close(private$p_traceFile)
     }
   ),
   active = list(
@@ -2189,6 +2182,9 @@ BasicTable <- R6::R6Class("BasicTable",
         if (!is.null(xlBorder)) { self$setStyling(cells=cl, declarations=list("xl-border-right"=xlBorder)) }
         if (!is.null(xlBorderLeft)) { self$setStyling(cells=cl, declarations=list("xl-border-right"=xlBorderLeft)) }
       }
+    },
+    finalize = function() {
+      if(!is.null(private$p_traceFile)) close(private$p_traceFile)
     }
   )
 )

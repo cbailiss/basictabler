@@ -5,7 +5,7 @@
 \alias{TableCells}
 \title{R6 class that manages cells in a table.}
 \format{
-\code{\link{R6Class}} object.
+\code{\link[R6]{R6Class}} object.
 }
 \description{
 The `TableCells` manages the `TableCell` objects that comprise a
@@ -39,35 +39,35 @@ a `TableCell` object.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TableCells$new()}}
-\item \href{#method-reset}{\code{TableCells$reset()}}
-\item \href{#method-getCell}{\code{TableCells$getCell()}}
-\item \href{#method-getValue}{\code{TableCells$getValue()}}
-\item \href{#method-getRowValues}{\code{TableCells$getRowValues()}}
-\item \href{#method-getColumnValues}{\code{TableCells$getColumnValues()}}
-\item \href{#method-setCell}{\code{TableCells$setCell()}}
-\item \href{#method-setBlankCell}{\code{TableCells$setBlankCell()}}
-\item \href{#method-deleteCell}{\code{TableCells$deleteCell()}}
-\item \href{#method-setValue}{\code{TableCells$setValue()}}
-\item \href{#method-setRow}{\code{TableCells$setRow()}}
-\item \href{#method-setColumn}{\code{TableCells$setColumn()}}
-\item \href{#method-extendCells}{\code{TableCells$extendCells()}}
-\item \href{#method-moveCell}{\code{TableCells$moveCell()}}
-\item \href{#method-insertRow}{\code{TableCells$insertRow()}}
-\item \href{#method-deleteRow}{\code{TableCells$deleteRow()}}
-\item \href{#method-insertColumn}{\code{TableCells$insertColumn()}}
-\item \href{#method-deleteColumn}{\code{TableCells$deleteColumn()}}
-\item \href{#method-getCells}{\code{TableCells$getCells()}}
-\item \href{#method-findCells}{\code{TableCells$findCells()}}
-\item \href{#method-getColumnWidths}{\code{TableCells$getColumnWidths()}}
-\item \href{#method-asList}{\code{TableCells$asList()}}
-\item \href{#method-asJSON}{\code{TableCells$asJSON()}}
-\item \href{#method-clone}{\code{TableCells$clone()}}
+\item \href{#method-TableCells-new}{\code{TableCells$new()}}
+\item \href{#method-TableCells-reset}{\code{TableCells$reset()}}
+\item \href{#method-TableCells-getCell}{\code{TableCells$getCell()}}
+\item \href{#method-TableCells-getValue}{\code{TableCells$getValue()}}
+\item \href{#method-TableCells-getRowValues}{\code{TableCells$getRowValues()}}
+\item \href{#method-TableCells-getColumnValues}{\code{TableCells$getColumnValues()}}
+\item \href{#method-TableCells-setCell}{\code{TableCells$setCell()}}
+\item \href{#method-TableCells-setBlankCell}{\code{TableCells$setBlankCell()}}
+\item \href{#method-TableCells-deleteCell}{\code{TableCells$deleteCell()}}
+\item \href{#method-TableCells-setValue}{\code{TableCells$setValue()}}
+\item \href{#method-TableCells-setRow}{\code{TableCells$setRow()}}
+\item \href{#method-TableCells-setColumn}{\code{TableCells$setColumn()}}
+\item \href{#method-TableCells-extendCells}{\code{TableCells$extendCells()}}
+\item \href{#method-TableCells-moveCell}{\code{TableCells$moveCell()}}
+\item \href{#method-TableCells-insertRow}{\code{TableCells$insertRow()}}
+\item \href{#method-TableCells-deleteRow}{\code{TableCells$deleteRow()}}
+\item \href{#method-TableCells-insertColumn}{\code{TableCells$insertColumn()}}
+\item \href{#method-TableCells-deleteColumn}{\code{TableCells$deleteColumn()}}
+\item \href{#method-TableCells-getCells}{\code{TableCells$getCells()}}
+\item \href{#method-TableCells-findCells}{\code{TableCells$findCells()}}
+\item \href{#method-TableCells-getColumnWidths}{\code{TableCells$getColumnWidths()}}
+\item \href{#method-TableCells-asList}{\code{TableCells$asList()}}
+\item \href{#method-TableCells-asJSON}{\code{TableCells$asJSON()}}
+\item \href{#method-TableCells-clone}{\code{TableCells$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TableCells-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `TableCells` object.
 \subsection{Usage}{
@@ -86,8 +86,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reset"></a>}}
-\if{latex}{\out{\hypertarget{method-reset}{}}}
+\if{html}{\out{<a id="method-TableCells-reset"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-reset}{}}}
 \subsection{Method \code{reset()}}{
 Clear all cells from the table.
 \subsection{Usage}{
@@ -99,8 +99,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getCell"></a>}}
-\if{latex}{\out{\hypertarget{method-getCell}{}}}
+\if{html}{\out{<a id="method-TableCells-getCell"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-getCell}{}}}
 \subsection{Method \code{getCell()}}{
 Retrieve a specific `TableCell` object at the specified location in the
 table.
@@ -122,8 +122,8 @@ A `TableCell` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getValue"></a>}}
-\if{latex}{\out{\hypertarget{method-getValue}{}}}
+\if{html}{\out{<a id="method-TableCells-getValue"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-getValue}{}}}
 \subsection{Method \code{getValue()}}{
 Retrieve the value of a specific `TableCell` object at the specified
 location in the table.
@@ -149,8 +149,8 @@ The value of the cell.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getRowValues"></a>}}
-\if{latex}{\out{\hypertarget{method-getRowValues}{}}}
+\if{html}{\out{<a id="method-TableCells-getRowValues"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-getRowValues}{}}}
 \subsection{Method \code{getRowValues()}}{
 Get a vector or list of the values in a row for the entire row or a subset
 of columns.
@@ -190,8 +190,8 @@ A vector or list of the cell values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getColumnValues"></a>}}
-\if{latex}{\out{\hypertarget{method-getColumnValues}{}}}
+\if{html}{\out{<a id="method-TableCells-getColumnValues"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-getColumnValues}{}}}
 \subsection{Method \code{getColumnValues()}}{
 Get a vector or list of the values in a column for the entire column or a
 subset of rows.
@@ -231,8 +231,8 @@ A vector or list of the cell values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setCell"></a>}}
-\if{latex}{\out{\hypertarget{method-setCell}{}}}
+\if{html}{\out{<a id="method-TableCells-setCell"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-setCell}{}}}
 \subsection{Method \code{setCell()}}{
 Create a cell in the table and set the details of the cell.
 \subsection{Usage}{
@@ -288,8 +288,8 @@ A vector or list of the cell values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setBlankCell"></a>}}
-\if{latex}{\out{\hypertarget{method-setBlankCell}{}}}
+\if{html}{\out{<a id="method-TableCells-setBlankCell"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-setBlankCell}{}}}
 \subsection{Method \code{setBlankCell()}}{
 Create an empty cell in the table and set the details of the cell.
 \subsection{Usage}{
@@ -342,8 +342,8 @@ A vector or list of the cell values.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deleteCell"></a>}}
-\if{latex}{\out{\hypertarget{method-deleteCell}{}}}
+\if{html}{\out{<a id="method-TableCells-deleteCell"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-deleteCell}{}}}
 \subsection{Method \code{deleteCell()}}{
 Replace the `TableCell` object at the specified
 location in the table with a blank cell.
@@ -365,8 +365,8 @@ The `TableCell` object that is the new blank cell.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setValue"></a>}}
-\if{latex}{\out{\hypertarget{method-setValue}{}}}
+\if{html}{\out{<a id="method-TableCells-setValue"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-setValue}{}}}
 \subsection{Method \code{setValue()}}{
 Update the value of a cell in the table.
 \subsection{Usage}{
@@ -392,8 +392,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setRow"></a>}}
-\if{latex}{\out{\hypertarget{method-setRow}{}}}
+\if{html}{\out{<a id="method-TableCells-setRow"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-setRow}{}}}
 \subsection{Method \code{setRow()}}{
 Create multiple cells in one row of a table.
 \subsection{Usage}{
@@ -450,8 +450,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setColumn"></a>}}
-\if{latex}{\out{\hypertarget{method-setColumn}{}}}
+\if{html}{\out{<a id="method-TableCells-setColumn"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-setColumn}{}}}
 \subsection{Method \code{setColumn()}}{
 Create multiple cells in one column of a table.
 \subsection{Usage}{
@@ -508,8 +508,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-extendCells"></a>}}
-\if{latex}{\out{\hypertarget{method-extendCells}{}}}
+\if{html}{\out{<a id="method-TableCells-extendCells"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-extendCells}{}}}
 \subsection{Method \code{extendCells()}}{
 Enlarge a table to the specified size.
 \subsection{Usage}{
@@ -530,8 +530,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-moveCell"></a>}}
-\if{latex}{\out{\hypertarget{method-moveCell}{}}}
+\if{html}{\out{<a id="method-TableCells-moveCell"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-moveCell}{}}}
 \subsection{Method \code{moveCell()}}{
 Move a table cell to a different location in the table.
 \subsection{Usage}{
@@ -554,8 +554,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-insertRow"></a>}}
-\if{latex}{\out{\hypertarget{method-insertRow}{}}}
+\if{html}{\out{<a id="method-TableCells-insertRow"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-insertRow}{}}}
 \subsection{Method \code{insertRow()}}{
 Insert a new row in the table at the specified row number and shift existing cells on/below this row down by one row.
 \subsection{Usage}{
@@ -585,8 +585,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deleteRow"></a>}}
-\if{latex}{\out{\hypertarget{method-deleteRow}{}}}
+\if{html}{\out{<a id="method-TableCells-deleteRow"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-deleteRow}{}}}
 \subsection{Method \code{deleteRow()}}{
 Delete the row in the table at the specified row number and shift existing cells below this row up by one row.
 \subsection{Usage}{
@@ -605,8 +605,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-insertColumn"></a>}}
-\if{latex}{\out{\hypertarget{method-insertColumn}{}}}
+\if{html}{\out{<a id="method-TableCells-insertColumn"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-insertColumn}{}}}
 \subsection{Method \code{insertColumn()}}{
 Insert a new column in the table at the specified column number and shift existing cells in/to the right of this column across by one row.
 \subsection{Usage}{
@@ -636,8 +636,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deleteColumn"></a>}}
-\if{latex}{\out{\hypertarget{method-deleteColumn}{}}}
+\if{html}{\out{<a id="method-TableCells-deleteColumn"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-deleteColumn}{}}}
 \subsection{Method \code{deleteColumn()}}{
 Delete the column in the table at the specified column number and shift existing cells to the right of this column to the left by one column.
 \subsection{Usage}{
@@ -656,8 +656,8 @@ No return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getCells"></a>}}
-\if{latex}{\out{\hypertarget{method-getCells}{}}}
+\if{html}{\out{<a id="method-TableCells-getCells"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-getCells}{}}}
 \subsection{Method \code{getCells()}}{
 Retrieve cells by a combination of row and/or column numbers.
 See the "Finding and Formatting" vignette for graphical examples.
@@ -735,8 +735,8 @@ A list of `TableCell` objects.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-findCells"></a>}}
-\if{latex}{\out{\hypertarget{method-findCells}{}}}
+\if{html}{\out{<a id="method-TableCells-findCells"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-findCells}{}}}
 \subsection{Method \code{findCells()}}{
 Find cells matching specified criteria.
 See the "Finding and Formatting" vignette for graphical examples.
@@ -808,8 +808,8 @@ A list of `TableCell` objects.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getColumnWidths"></a>}}
-\if{latex}{\out{\hypertarget{method-getColumnWidths}{}}}
+\if{html}{\out{<a id="method-TableCells-getColumnWidths"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-getColumnWidths}{}}}
 \subsection{Method \code{getColumnWidths()}}{
 Retrieve the width of the longest value
   (in characters) in each column.
@@ -822,8 +822,8 @@ The width of the column in characters.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asList"></a>}}
-\if{latex}{\out{\hypertarget{method-asList}{}}}
+\if{html}{\out{<a id="method-TableCells-asList"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-asList}{}}}
 \subsection{Method \code{asList()}}{
 Return the contents of this object as a list for debugging.
 \subsection{Usage}{
@@ -835,8 +835,8 @@ A list of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-asJSON"></a>}}
-\if{latex}{\out{\hypertarget{method-asJSON}{}}}
+\if{html}{\out{<a id="method-TableCells-asJSON"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-asJSON}{}}}
 \subsection{Method \code{asJSON()}}{
 Return the contents of this object as JSON for debugging.
 \subsection{Usage}{
@@ -848,8 +848,8 @@ A JSON representation of various object properties.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TableCells-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCells-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

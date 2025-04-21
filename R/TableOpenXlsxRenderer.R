@@ -7,7 +7,7 @@
 #'
 #' @docType class
 #' @importFrom R6 R6Class
-#' @format \code{\link{R6Class}} object.
+#' @format \code{\link[R6]{R6Class}} object.
 #' @examples
 #' # This class is for internal use only.  It is
 #' # created only by the BasicTable class when rendering to Excel.
