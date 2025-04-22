@@ -9,12 +9,17 @@ http://r-pkgs.had.co.nz/
 
 ## Test environments
 
-* local OS (windows), R 4.5.0
-* win-builder, R-release, R-devel
+* local OS (windows), R 4.5.0.
+* Windows-latest, macOS-latest, Ubuntu-latest release+devel (via github actions), R-latest and R-devel.
+* win-builder, R-latest and R-devel
 
 ## R CMD check results
 
 ### Local R CMD check results
+
+0 errors | 0 warnings | 0 notes
+
+### GitHub Actions R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
